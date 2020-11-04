@@ -1,81 +1,102 @@
 import libtorrent as lt
-import os, shutil, time
+import os, shutil
+import time, datetime
 import threading
+import hashlib
+import math
 
 class Autolycus:
-    def __init__(self, default_path="/tmp"):
+    def __init__(self, default_save_path="/tmp"):
         self.session = lt.session()
-        self.default_path = default_path
+        self.default_save_path = default_save_path
         self.torrents = {}
-        os.makedirs(self.default_path, exist_ok=True)
-        threading.Thread(target=self.pause_when_finish).start()    
+        os.makedirs(self.default_save_path, exist_ok=True)
 
-    @property
-    def queue(self):
+    def active_torrents(self):
         return self.session.get_torrents()
     
-    @property
-    def num_connections(self):
-        return self.session.num_connections()
+    def get_hash(self, string):
+        return hashlib.sha1(string.encode()).hexdigest()
     
-    def pause_when_finish(self):
-        # this will prevent from seeding and eating bandwidth
-        while True:
-            try:
-                for t in self.torrents.values():
-                    if t.is_finished():
-                        t.pause()
-            except Exception as e:
-                print(e)
-
-            time.sleep(2)
-
-    def add_magnet_uri(self, magnet, save_path=None):
-        save_path = self.default_path if not save_path else save_path
-        if magnet in self.torrents: return ("already exist", 202)
-        self.torrents[magnet] = lt.add_magnet_uri(self.session, magnet, {"save_path": save_path})
-        return ("added", 200)
+    def remove_path(self, path):
+        if os.path.exists(path):
+            shutil.rmtree(path)
     
-    def remove_torrent(self, magnet):
-        if magnet not in self.torrents: return ("not found", 404)
-        self.session.remove_torrent(self.torrents[magnet])
-        del self.torrents[magnet]
-        return ("removed", 200)
+    def convert_size(self, size_bytes):
+        if size_bytes == 0: return "0B"
+        size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+        i = int(math.floor(math.log(size_bytes, 1024)))
+        p = math.pow(1024, i)
+        s = round(size_bytes / p, 2)
+        return "%s %s" % (s, size_name[i])
     
-    def torrent_status(self, magnet):
-        if magnet not in self.torrents: return ({"message": "not found"}, 404)
-        t = self.torrents[magnet]
-        s = t.status()
+    def convert_bandwidth(self, speed):
+        speed = speed / 1000.0
+        if speed > 1000.0:
+            speed = str(round(speed / 1024.0, 2))+" Mb/s"
+        else:
+            speed = str(round(speed, 2))+" Kb/s"
+        return speed
 
-        return ({
+    def add_magnet(self, magnet, save_path=None):
+        base_path = save_path or self.default_save_path
+        Hash = self.get_hash(magnet)
+        if Hash in self.torrents: return Hash
+        save_path = os.path.join(base_path, Hash)
+        os.makedirs(save_path, exist_ok=True)
+        self.torrents[Hash] = {"magnet": magnet, "path":save_path, "torrent": lt.add_magnet_uri(self.session, magnet, {"save_path": save_path})}
+        return Hash
+    
+    def remove_torrent(self, Hash):
+        if Hash not in self.torrents: return
+        try:
+            self.session.remove_torrent(self.torrents[Hash]["torrent"])
+            self.remove_path(self.torrents[Hash]["path"])
+            del self.torrents[Hash]
+            return True
+        except Exception as e:
+            print(e)
+    
+    def torrent_status(self, Hash):
+        if Hash not in self.torrents: return
+        t = self.torrents[Hash]["torrent"]; s = t.status()
+        return {
             "name": t.name(),
-            "added_time": s.added_time,
+            "added_time": datetime.datetime.fromtimestamp(s.added_time),
             "queue_position": t.queue_position(),
-            "save_path": s.save_path,
-            "hash": str(s.info_hash),
-            "progress": s.progress,
-            "total_bytes": s.total_wanted,
-            "downloaded_bytes": s.total_wanted_done,
-            "download_speed": s.download_rate,
-            "upload_speed": s.upload_rate,
+            "download_path": s.save_path,
+            "hash": Hash,
+            "progress": int(s.progress*100),
+            "total_bytes": self.convert_size(s.total_wanted),
+            "downloaded_bytes": self.convert_size(s.total_wanted_done),
+            "download_speed": self.convert_bandwidth(s.download_rate),
+            "upload_speed": self.convert_bandwidth(s.upload_rate),
             "num_peers": s.num_peers,
             "num_seeds": s.num_seeds,
             "num_trackers": len(t.trackers()),
             "num_connections": s.num_connections,
-            "is_valid": t.is_valid(),
             "is_paused": s.paused,
-            "is_seeding": t.is_seed(),
             "is_finished": t.is_finished()
-        
-        }, 200)
+        }
+    
+    def list_torrents(self, hashes=None):
+        torrents = []
+        for Hash in hashes or self.torrents:
+            status = self.torrent_status(Hash)
+            if not status: continue
+            torrents.append(status)
+        return torrents
 
 if __name__ == "__main__":
 
     al = Autolycus()
 
-    # {
-    #   "magnet": "magnet:?xt=urn:btih:123C7F0673A0EC7447B874FCE624898045CA91FC&dn=Win+Rar+v3.80+Pro+no+Cerial+Needed&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce"
-    # }
+# {
+#   "magnets": [
+#     "magnet:?xt=urn:btih:123C7F0673A0EC7447B874FCE624898045CA91FC&dn=Win+Rar+v3.80+Pro+no+Cerial+Needed&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce",
+#     "magnet:?xt=urn:btih:bb9a6234cc6fefbc2e50f3775c61d59fc5e767ea&dn=The+English+Tenses+Exercise+Book&xl=1323682&tr=udp%3A%2F%2Ftracker.coppersurfer.tk:6969/announce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org:6969/announce&tr=udp%3A%2F%2F9.rarbg.to:2710/announce&tr=udp%3A%2F%2Fexodus.desync.com:6969/announce&tr=udp%3A%2F%2Ftracker.uw0.xyz:6969/announce&tr=udp%3A%2F%2Fopen.stealth.si:80/announce&tr=udp%3A%2F%2Ftracker.tiny-vps.com:6969/announce&tr=udp%3A%2F%2Fopen.demonii.si:1337/announc4&tr=udp%3A%2F%2Fzephir.monocul.us:6969/announce&tr=udp%3A%2F%2Ftracker.torrent.eu.org:451/announce&tr=udp%3A%2F%2Ftracker.cyberia.is:6969/announce&tr=udp%3A%2F%2Ftracker.zum.bi:6969/announce&tr=udp%3A%2F%2Fopentracker.i2p.rocks:6969/announce"
+#   ]
+# }
 
     magnet_link1="magnet:?xt=urn:btih:bb9a6234cc6fefbc2e50f3775c61d59fc5e767ea&dn=The+English+Tenses+Exercise+Book&xl=1323682&tr=udp%3A%2F%2Ftracker.coppersurfer.tk:6969/announce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org:6969/announce&tr=udp%3A%2F%2F9.rarbg.to:2710/announce&tr=udp%3A%2F%2Fexodus.desync.com:6969/announce&tr=udp%3A%2F%2Ftracker.uw0.xyz:6969/announce&tr=udp%3A%2F%2Fopen.stealth.si:80/announce&tr=udp%3A%2F%2Ftracker.tiny-vps.com:6969/announce&tr=udp%3A%2F%2Fopen.demonii.si:1337/announc4&tr=udp%3A%2F%2Fzephir.monocul.us:6969/announce&tr=udp%3A%2F%2Ftracker.torrent.eu.org:451/announce&tr=udp%3A%2F%2Ftracker.cyberia.is:6969/announce&tr=udp%3A%2F%2Ftracker.zum.bi:6969/announce&tr=udp%3A%2F%2Fopentracker.i2p.rocks:6969/announce"
     magnet_link2="magnet:?xt=urn:btih:123C7F0673A0EC7447B874FCE624898045CA91FC&dn=Win+Rar+v3.80+Pro+no+Cerial+Needed&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce"
