@@ -1,13 +1,23 @@
 from flask import Flask, make_response, request
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+
 from autolycus import Autolycus
+from autolycus.config import config
+from autolycus.database import db
 
 app = Flask(__name__)
-seedr = Autolycus(default_save_path="/downloads")
+app.config['SQLALCHEMY_DATABASE_URI'] = config['URI']
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+CORS(app)
+
+db.init_app(app)
+with app.app_context(): db.create_all()
+seedr = Autolycus(app=app, db=db, default_save_path=config['DEFAULT_SAVE_PATH'])
 
 @app.route("/")
 def index():
     return make_response({"message": "success"}, 200)
-
 
 @app.route("/api/add", methods=["GET", "POST"])
 def add_torrent():
@@ -20,14 +30,13 @@ def add_torrent():
     
     elif request.method == "POST":
         magnets = request.get_json().get("magnets", None)
-        if not magnets: return make_response({"message": "key: 'magnets' not found in json"}, 400)
+        if (not magnets) or (not isinstance(magnets, list)): return make_response({"message": "magnets not found in json"}, 400)
         hashes = []
         for magnet in magnets:
             Hash = seedr.add_magnet(magnet)
             if not Hash: continue
             hashes.append(Hash)
         return make_response({"hash": hashes}, 200)
-
 
 @app.route("/api/remove", methods=["GET", "DELETE"])
 def remove_torrent():
@@ -48,7 +57,6 @@ def remove_torrent():
             removed.append(Hash)
         return make_response({"removed": removed}, 200)
 
-
 @app.route("/api/status", methods=["GET", "POST"])
 def torrent_status():
     if request.method == "GET":
@@ -63,6 +71,12 @@ def torrent_status():
         if not hashes: return make_response({"message": "key: 'hashes' not found in json"}, 400)
         return make_response({"torrents": seedr.list_torrents(hashes)}, 200)
 
-
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
+
+# {
+#   "magnets": [
+#     "magnet:?xt=urn:btih:123C7F0673A0EC7447B874FCE624898045CA91FC&dn=Win+Rar+v3.80+Pro+no+Cerial+Needed&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce",
+#     "magnet:?xt=urn:btih:bb9a6234cc6fefbc2e50f3775c61d59fc5e767ea&dn=The+English+Tenses+Exercise+Book&xl=1323682&tr=udp%3A%2F%2Ftracker.coppersurfer.tk:6969/announce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org:6969/announce&tr=udp%3A%2F%2F9.rarbg.to:2710/announce&tr=udp%3A%2F%2Fexodus.desync.com:6969/announce&tr=udp%3A%2F%2Ftracker.uw0.xyz:6969/announce&tr=udp%3A%2F%2Fopen.stealth.si:80/announce&tr=udp%3A%2F%2Ftracker.tiny-vps.com:6969/announce&tr=udp%3A%2F%2Fopen.demonii.si:1337/announc4&tr=udp%3A%2F%2Fzephir.monocul.us:6969/announce&tr=udp%3A%2F%2Ftracker.torrent.eu.org:451/announce&tr=udp%3A%2F%2Ftracker.cyberia.is:6969/announce&tr=udp%3A%2F%2Ftracker.zum.bi:6969/announce&tr=udp%3A%2F%2Fopentracker.i2p.rocks:6969/announce"
+#   ]
+# }
