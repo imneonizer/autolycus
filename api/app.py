@@ -5,6 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from autolycus import Autolycus
 from autolycus.config import config
 from autolycus.database import db
+from autolycus.users_schema import User
+from werkzeug.security import generate_password_hash, check_password_hash
+import secrets
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = config['URI']
@@ -17,6 +20,54 @@ seedr = Autolycus(app=app, db=db, default_save_path=config['DEFAULT_SAVE_PATH'])
 
 @app.route("/")
 def index():
+    return make_response({"message": "success"}, 200)
+
+@app.route("/api/signup", methods=['POST'])
+def signup ():
+    JSON = request.get_json()
+    email = JSON.get('email', None)
+    phone = JSON.get('phone', None)
+    name = JSON.get('name', None)
+    username = JSON.get('username', None)
+    password = JSON.get('password', None)
+
+    user = User.query.filter_by(email=email).first()
+    if user: return make_response({"message": "user already exists"}, 403)
+    
+    auth_token = secrets.token_urlsafe(100)
+    new_user = User(
+        name=name,
+        username=username,
+        email=email,
+        phone=phone,
+        auth_token=auth_token,
+        password=generate_password_hash(password, method='sha256'))
+    db.session.add(new_user)
+    db.session.commit()
+    return make_response({"message": "success"}, 200)
+
+@app.route("/api/login", methods=["POST"])
+def login():
+    JSON = request.get_json()
+    username = JSON.get('username', None)
+    password = JSON.get('password', None)
+    remember = True if JSON.get('remember', None) else False
+
+    user = User.query.filter_by(username=username).first()
+    if not user or not check_password_hash(user.password, password):
+        return make_response({"message": "invalid credentials"}, 401)
+    return make_response({"auth_token": user.auth_token}, 200)
+
+@app.route("/api/logout", methods=["POST"])
+def logout():
+    JSON = request.get_json()
+    username = JSON.get('username', None)
+    user = User.query.filter_by(username=username).first()
+    if not user: return make_response({"message": "no such username exists"}, 403)
+    
+    auth_token = secrets.token_urlsafe(100)
+    db.session.query(User).filter(User.username == username).update(dict(auth_token=auth_token))
+    db.session.commit()
     return make_response({"message": "success"}, 200)
 
 @app.route("/api/add", methods=["GET", "POST"])
