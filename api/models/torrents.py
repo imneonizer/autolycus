@@ -1,4 +1,4 @@
-from .database import db
+from shared.factories import db
 
 class Torrent(db.Model):
     __tablename__ = 'torrents'
