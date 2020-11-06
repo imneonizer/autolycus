@@ -2,7 +2,7 @@ from flask import request, make_response, current_app
 from flask_restful import Resource
 
 from shared.factories import db
-from shared.factories import seedr
+from torrentclient import seedr
 from shared.utils import json_utils as JU
 from models.torrents import Torrent
 
@@ -31,8 +31,8 @@ class RemoveTorrent(Resource):
         Hash = request.args.get('hash', None)
         if not Hash: return JU.make_response("parameter '?hash=' required", 400)
         status = seedr.remove_torrent(Hash)
-        if not status: return JU.make_response(f"hash '{Hash}' not found", 404)
-        return JU.make_response(f"hash '{Hash}' removed", 200)
+        if not status: return JU.make_response(f"torrent '{Hash}' not found", 404)
+        return JU.make_response(f"torrent '{Hash}' removed", 200)
     
     def post(self):
         hashes = JU.extract_keys(request.get_json(), "hashes")
@@ -51,7 +51,7 @@ class TorrentStatus(Resource):
         Hash = request.args.get('hash', None)
         if not Hash: return make_response({"torrents": seedr.list_torrents()}, 200)
         status = seedr.torrent_status(Hash)
-        if not status: return JU.make_response(f"hash '{Hash}' not found", 404)
+        if not status: return JU.make_response(f"torrent '{Hash}' not found", 404)
         return make_response(status, 200)
     
     def post(self):
