@@ -1,21 +1,34 @@
 from flask import Flask, Blueprint
 from flask_cors import CORS
 from flask_restful import Api
+from flask_jwt_extended import JWTManager
 
-from endpoints.auth import UserExists, Signup, Login, Logout, DeleteAccount, UserDetails
-from endpoints.torrents import AddTorrent, RemoveTorrent, TorrentStatus
+from endpoints.torrents import (
+    AddTorrent, RemoveTorrent,TorrentStatus
+)
+
+from endpoints.auth import (
+    UserExists, Signup, Login,
+    LogoutAccess, LogoutRefresh,
+    DeleteAccount, UserDetails,
+    TokenRefresh
+)
 
 from shared.factories import db
-from shared.config import config
+from config import config
 from shared.logger import logger
 from shared.utils import check_db
+from models.revoked_tokens import RevokedToken
+
 
 def create_app(config_name):
     app = Flask(__name__)
+    app.config['JWT_SECRET_KEY'] = config[config_name].JWT_SECRET_KEY
     app.config['SQLALCHEMY_DATABASE_URI'] = config[config_name].DATABASE_URI
+    app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = config[config_name].JWT_BLACKLIST_TOKEN_CHECKS
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     CORS(app)
-    
+
     api_bp = Blueprint('api', __name__)
     api = Api(api_bp)
     app.register_blueprint(api_bp, url_prefix='/api')
@@ -23,9 +36,11 @@ def create_app(config_name):
     api.add_resource(Signup, '/auth/signup')
     api.add_resource(UserExists, '/auth/exists')
     api.add_resource(Login, '/auth/login')
-    api.add_resource(Logout, '/auth/logout')
+    api.add_resource(LogoutAccess, '/auth/logout-access')
+    api.add_resource(LogoutRefresh, '/auth/logout-refresh')
     api.add_resource(DeleteAccount, '/auth/delete')
     api.add_resource(UserDetails, '/auth/details')
+    api.add_resource(TokenRefresh, '/auth/token-refresh')
 
     api.add_resource(AddTorrent, '/torrents/add')
     api.add_resource(RemoveTorrent, '/torrents/remove')
@@ -34,9 +49,16 @@ def create_app(config_name):
     db.app = app
     db.init_app(app)
     app = logger.init_app(app)
+    
+    jwt = JWTManager(app)
+    
+    @jwt.token_in_blacklist_loader
+    def check_if_token_in_blacklist(decrypted_token):
+        jti = decrypted_token['jti']
+        return RevokedToken.is_jti_blacklisted(jti)
+
     with app.app_context():
         if not check_db(db): exit(1)
-        db.create_all()
 
     return app
 
