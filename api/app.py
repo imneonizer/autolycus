@@ -2,7 +2,7 @@ from flask import Flask, Blueprint
 from flask_cors import CORS
 from flask_restful import Api
 
-from endpoints.auth import Exist, Signup, Login, Logout, DeleteAccount
+from endpoints.auth import UserExists, Signup, Login, Logout, DeleteAccount, UserDetails
 from endpoints.torrents import AddTorrent, RemoveTorrent, TorrentStatus
 
 from shared.factories import db
@@ -21,10 +21,11 @@ def create_app(config_name):
     app.register_blueprint(api_bp, url_prefix='/api')
 
     api.add_resource(Signup, '/auth/signup')
-    api.add_resource(Exist, '/auth/exist')
+    api.add_resource(UserExists, '/auth/exists')
     api.add_resource(Login, '/auth/login')
     api.add_resource(Logout, '/auth/logout')
     api.add_resource(DeleteAccount, '/auth/delete')
+    api.add_resource(UserDetails, '/auth/details')
 
     api.add_resource(AddTorrent, '/torrents/add')
     api.add_resource(RemoveTorrent, '/torrents/remove')

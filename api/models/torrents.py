@@ -31,8 +31,26 @@ class Torrent(db.Model):
     is_paused = db.Column(db.Boolean)
     is_finished = db.Column(db.Boolean)
 
+    @classmethod
+    def find_by_hash(self, Hash):
+        return self.query.filter_by(Hash=Hash).first()
+    
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    @classmethod
+    def update_to_db(self, fields, synchronize_session = False):
+        db.session.query(Torrent).filter(Torrent.Hash == self.Hash).update(
+            fields, synchronize_session=synchronize_session)
+        db.session.commit()
+
     @property
-    def json(self):
+    def JSON(self):
         return {
         "added_time": self.added_time,
         "download_path": self.download_path,
