@@ -1,17 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError
 from flask import make_response
-
-def check_db(db):
-    """Checks if DB Connection is successful"""
-    from flask import current_app
-    try:
-        db.session.execute("SELECT 1")
-        db.session.commit()
-        db.session.remove()
-    except SQLAlchemyError as se:
-        current_app.logger.error(str(se))
-        return False
-    return True
+import random, string
 
 class json_utils:
     @staticmethod
@@ -30,3 +19,19 @@ class json_utils:
     @staticmethod
     def make_response(message, code):
         return make_response({"message": message}, code)
+
+def random_string(length):
+    letters = string.ascii_letters
+    return ''.join(random.choice(letters) for i in range(length))
+
+def check_db(db):
+    """Checks if DB Connection is successful"""
+    from flask import current_app
+    try:
+        db.session.execute("SELECT 1")
+        db.session.commit()
+        db.session.remove()
+        db.create_all()
+    except SQLAlchemyError as se:
+        return False
+    return True
