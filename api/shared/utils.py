@@ -33,6 +33,5 @@ def check_db(db):
         db.session.remove()
         db.create_all()
     except SQLAlchemyError as se:
-        current_app.logger.error(str(se))
         return False
     return True

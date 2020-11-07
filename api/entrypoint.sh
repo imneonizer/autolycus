@@ -9,7 +9,8 @@ if [[ `pgrep gunicorn` ]];then kill -9 `pgrep gunicorn`;fi
 if [[ `pgrep tail` ]];then kill -9 `pgrep tail`;fi
 
 # start gunicorn workers as background process
-bash -c "gunicorn --bind $HOST:$PORT -w $WORKERS \
+bash -c "gunicorn --bind $HOST:$PORT --workers $WORKERS --threads $WORKERS \
+    --worker-class=gevent --worker-connections=1000 \
     --access-logfile $ACCESS_LOG  \
     --error-logfile $ERROR_LOG \
     app:app"&
