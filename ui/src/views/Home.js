@@ -7,6 +7,7 @@ function Home() {
         <div>
         <div className="home-section">
             <div className="carousel-section">carousel</div>
+            
             <div className="login-section">
                 <div className="login-form">
                     <Login />

@@ -6,8 +6,6 @@
   }
   
 .login-form {
-  /* border-color: 1px solid red; */
-  /* display: inline-block; */
   font-size: 12px;
   color: rgb(49, 49, 49);
   
@@ -49,7 +47,12 @@ input:focus {
   color: white;
   border-radius: 10px;
   background-color: #1b53f4;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2)
+}
 
+.login-submit-button:active {
+  transform: translateY(0.5px);
 }
 
 .password-forgot-combined {
@@ -61,7 +64,7 @@ input:focus {
   color: rgb(56, 135, 255);
 }
 
-/* Show border on login form on small screen */
+/* Show border around login form on small screen */
 @media screen and (min-width: 0px) and (max-width: 700px) {
   .login-card {box-shadow: 0px 6px 18px -9px rgba(0, 0, 0, 0.75);}
 }
