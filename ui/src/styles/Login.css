@@ -1,40 +1,67 @@
-.card {
-    margin: 10px;
+.login-card {
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0px 6px 18px -9px rgba(0, 0, 0, 0.75);
-    transition: transform 100ms ease-in;
-    cursor: pointer;
+    /* box-shadow: 0px 6px 18px -9px rgba(0, 0, 0, 0.75); */
+    padding: 20px;
   }
   
-  .card:hover {
-    transform: scale(1.07);
-  }
+.login-form {
+  /* border-color: 1px solid red; */
+  /* display: inline-block; */
+  font-size: 12px;
+  color: rgb(49, 49, 49);
   
-  .card > img {
-    object-fit: fill;
-    min-width: 300px;
-    min-height: 200px;
-    width: 100%;
-  }
-  
-  .card__info {
-      margin-top: -9px;
-      border-radius: 10px;
-      padding: 20px;
-      padding-top: 20px;
-      border: 1;
-    }
-  
-    .card__info > h2 {
-      font-size: 18px;
-      font-weight: 600;
-    }
-    
-    .card__info > h4 {
-      font-size: 14px;
-      font-weight: 300;
-      margin-top: 8px;
-      margin-bottom: 8px;
-    }
-  
+}
+
+.create-account {
+  text-align: center;
+}
+
+.create-account > a{
+  color: rgb(56, 135, 255);
+}
+
+.login-title {
+  font-size: 2em;
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  outline: none;
+  border: 0px;
+  background-color: #efefef;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+}
+
+.login-submit-button {
+  width: 100%;
+  padding: 12px 20px;
+  border: 0px;
+  outline: none;
+  color: white;
+  border-radius: 10px;
+  background-color: #1b53f4;
+
+}
+
+.password-forgot-combined {
+  display: flex;
+  justify-content: space-between;
+}
+
+.forgot-password {
+  color: rgb(56, 135, 255);
+}
+
+/* Show border on login form on small screen */
+@media screen and (min-width: 0px) and (max-width: 700px) {
+  .login-card {box-shadow: 0px 6px 18px -9px rgba(0, 0, 0, 0.75);}
+}
