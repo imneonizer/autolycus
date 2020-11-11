@@ -67,6 +67,8 @@ class Login(Resource):
         
         if JU.null_values(username, password):
             return JU.make_response("invalid data", 400)
+
+        print(username, password)
         
         user = User.find_by_username(username)
         
