@@ -7,6 +7,10 @@ function handleErrors(response) {
     return response;
 }
 
+function clearTokens(){
+    localStorage.setItem('autolycus-auth', undefined);
+}
+
 function AuthLogin(api_endpoint, username, password) {
     let password_box = document.getElementById("login-password-box");
     fetch(api_endpoint, {
@@ -25,12 +29,12 @@ function AuthLogin(api_endpoint, username, password) {
                     // var retrievedObject = localStorage.getItem('autolycus-auth');
                     // console.log('retrievedObject: ', JSON.parse(retrievedObject));
                 } else {
-                    localStorage.setItem('autolycus-auth', undefined);
+                    clearTokens();
                     password_box.style.border = "1px solid red";
                 };
             });
         }).catch(err => {
-            localStorage.setItem('autolycus-auth', undefined);
+            clearTokens();
             password_box.style.border = "1px solid red";
             console.log("[ERROR] in AuthLogin:", err);
         });
@@ -84,5 +88,6 @@ async function ValidateAuth () {
 export {
     AuthLogin,
     ValidateUsername,
-    ValidateAuth
+    ValidateAuth,
+    clearTokens
 }

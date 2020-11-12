@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {withRouter} from "react-router-dom";
 import '../styles/Login.css';
-import {AuthLogin, ValidateUsername, ValidateAuth} from '../services/LoginService';
+import {AuthLogin, ValidateUsername, clearTokens} from '../services/LoginService';
 
 class Login extends React.Component {
     constructor(props) {
