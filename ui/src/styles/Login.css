@@ -31,6 +31,7 @@ input[type=text], input[type=password] {
   outline: none;
   border: 0px;
   background-color: #efefef;
+  border: 1px solid #efefef;
   border-radius: 10px;
   box-sizing: border-box;
 }

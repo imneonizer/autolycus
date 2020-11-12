@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import {withRouter} from "react-router-dom";
 import '../styles/Login.css';
-import {AuthLogin, ValidateUsername} from '../services/LoginService';
+import {AuthLogin, ValidateUsername, ValidateAuth} from '../services/LoginService';
 
 class Login extends React.Component {
     constructor(props) {
@@ -19,9 +20,19 @@ class Login extends React.Component {
     }
 
     handleSubmit() {
-        const base_url = "http://192.168.0.179:5000/api/auth"; 
-        ValidateUsername(base_url+"/user-exists?username=", this.state.username);
-        AuthLogin(base_url+"/login", this.state.username, this.state.password);
+        const base_url = "http://192.168.0.179:5000/api/auth";
+        
+        if (!this.state.username){
+            document.getElementById("login-username-box").style.border = "1px solid red";
+        }
+        if (!this.state.password){
+            document.getElementById("login-password-box").style.border = "1px solid red";
+        }
+
+        if (this.state.username && this.state.password){
+            ValidateUsername(base_url+"/user-exists?username=", this.state.username);
+            AuthLogin(base_url+"/login", this.state.username, this.state.password);
+        }
     }
 
     render () {
@@ -52,4 +63,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default withRouter(Login);
