@@ -35,7 +35,7 @@ class Home extends Component {
             return (<Route component={Dashboard} />)
 
         } else {
-            clearTokens();
+            // clearTokens(); //if login page is loaded it will clear previous stored token.
             return (
                 <div>
                     <div className="home-section">
