@@ -11,7 +11,7 @@ class Dashboard extends Component {
       }
 
     componentDidMount() {
-        ValidateAuth(true, 2).then(authorized => {
+        ValidateAuth(true, 60).then(authorized => {
             if (authorized === true){
                     this.setState({ loading: false, authorized: true });
                 } else {

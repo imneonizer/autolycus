@@ -108,7 +108,7 @@ async function refreshAccessToken() {
                     response.json()
                     .then(response => {
                         authorized = true;
-                        console.log("access token refreshed")
+                        // console.log("access token refreshed")
                         auth.access_token = response.access_token;
                         localStorage.setItem('autolycus-auth', JSON.stringify(auth));
                     })
