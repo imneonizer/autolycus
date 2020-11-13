@@ -1,0 +1,114 @@
+.container-section {
+    display: flex;
+    /* flex-wrap: wrap; */
+    height: 100vh;
+    justify-content: space-between;
+}
+
+.left-section{
+    /* border: 1px solid red; */
+    /* background-color: #efefef; */
+    padding: 20px;
+    margin-right: 5px;
+    width: 20%;
+}
+
+.middle-section {
+    /* border: 1px solid red; */
+    background-color: #efefef;
+    /* border-radius: 20px; */
+    padding: 20px;
+    width: 70%;
+    /* margin-top: 20px; */
+    /* margin-bottom: 20px; */
+}
+
+.right-section{
+    /* border: 1px solid red; */
+    /* background-color: #efefef; */
+    padding: 20px;
+    margin-left: 5px;
+    width: 15%;
+}
+
+.left-section-menu {
+    /* border: 1px solid red; */
+    display: flex;
+    flex-direction: column;
+}
+
+.left-section-logo {
+    /* border: 1px solid red; */
+    display: flex;
+    /* padding-bottom: 20px; */
+}
+
+.left-section-logo-icon {
+    /* border: 1px solid red; */
+    margin-left: -5px;
+}
+
+.left-section-logo-text {
+    /* border: 1px solid red; */
+    padding: 7px 0px 0px 7px;
+}
+
+.left-section-menu-top {
+    /* border: 1px solid red; */
+    margin-bottom: 50px;
+}
+
+.left-section-menu-items {
+    display: flex;
+    margin-top: 15px;
+    /* padding: 10px; */
+    border-radius: 10px;
+    /* background-color: red; */
+}
+
+.left-section-menu-texts {
+    margin: 4px;
+}
+
+.left-section-menu-middle {
+    /* border: 1px solid red; */
+    margin-bottom: 50px;
+}
+
+.left-section-menu-bottom {
+    /* border: 1px solid red; */
+    /* display: flex; */
+    /* margin-top: 12px; */
+    padding: 10px;
+    border-radius: 10px;
+    background-color: red;
+}
+
+@media screen and (min-width: 0px) and (max-width: 900px) {
+     /* minimize left side banner */
+    .left-section {
+        width: 20px;
+    }
+
+    .middle-section {
+        /* border: 1px solid red; */
+        width: 100%;
+        margin-right: 5px;
+    }
+
+    .left-section-menu-bottom {
+        display: none;
+    }
+    
+    .right-section{
+        display: none;
+    }
+
+    .left-section-menu-texts {
+        display: none;
+    }
+
+    .left-section-logo-text {
+        display: none;
+    }
+  }
