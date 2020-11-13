@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import {withRouter} from "react-router-dom";
 import '../styles/Login.css';
 import {AuthLogin, ValidateUsername, clearTokens} from '../services/LoginService';
+import { DoesUserExists, DoesEmailExists, AuthSignup } from '../services/SignupService';
 
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {username: '', password: ''};
+        this.state = {username: '', email:'', password: ''};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleCreateAccount = this.handleCreateAccount.bind(this);
+        this.validateInputs = this.validateInputs.bind(this);
     }
 
     handleChange(key) {
@@ -20,16 +22,23 @@ class Login extends React.Component {
         }.bind(this);
     }
 
-    handleSubmit(e) {
-        const base_url = "http://192.168.0.179:5000/api/auth";
-        
+    validateInputs(reset=false){
+        let color = reset ? "1px solid #efefef":"1px solid red";
         if (!this.state.username){
-            document.getElementById("login-username-box").style.border = "1px solid red";
+            document.getElementById("login-username-box").style.border = color;
+        }
+        if (!this.state.email){
+            document.getElementById("signup-email-box").style.border = color;
         }
         if (!this.state.password){
-            document.getElementById("login-password-box").style.border = "1px solid red";
+            document.getElementById("login-password-box").style.border = color;
         }
+    }
 
+    handleSubmit(e) {
+        const base_url = "http://192.168.0.179:5000/api/auth";
+        this.validateInputs()
+    
         if (e.target.value === "login-account"){
             if (this.state.username && this.state.password){
                 ValidateUsername(base_url+"/user-exists?username=", this.state.username);
@@ -38,22 +47,30 @@ class Login extends React.Component {
         } else{
             console.log("Signup clicked")
             if (this.state.username && this.state.password){
-                // ValidateUsername(base_url+"/user-exists?username=", this.state.username);
-                // AuthLogin(base_url+"/login", this.state.username, this.state.password);
+                DoesUserExists(this.state.username)
+                DoesEmailExists(this.state.email)
+                AuthSignup(this.state.username, this.state.email, this.state.password)
+                // AuthLogin(this.state.username, this.state.password);
             }
         }
         
     }
 
     handleCreateAccount(e){
+        this.validateInputs(true);
+        
         if (e.target.id === "create-account-link"){
+            document.getElementById("signup-email-container").style.display = "block";
+            document.getElementById("forgot-password-text").style.display = "none";
             document.getElementsByClassName("login-title")[0].innerHTML = "Signup";
-            document.getElementById("create-account-text").innerHTML = "Already have an account?"
-            document.getElementById("create-account-link").innerHTML = "Login"
+            document.getElementById("create-account-text").innerHTML = "Already have an account?";
+            document.getElementById("create-account-link").innerHTML = "Login";
             let button = document.getElementById("login-submit-button");
             button.value = "create-account"; button.innerHTML = "Signup";
             document.getElementById("create-account-link").id = "login-account-link";
         } else {
+            document.getElementById("signup-email-container").style.display = "none";
+            document.getElementById("forgot-password-text").style.display = "block";
             document.getElementsByClassName("login-title")[0].innerHTML = "Login";
             document.getElementById("create-account-text").innerHTML = "Don't have an account yet?"
             document.getElementById("login-account-link").innerHTML = "Signup"
@@ -72,13 +89,17 @@ class Login extends React.Component {
                     <p>Username</p>
                     <input type="text" id="login-username-box" value={this.state.username} onChange={this.handleChange('username')} placeholder="Username" />
                     
+                    <div id="signup-email-container" style={{display: "none"}}>
+                        <p>Email</p>
+                        <input type="text" id="signup-email-box" value={this.state.email} onChange={this.handleChange('email')} placeholder="Email" />
+                    </div>
+                    
                     <div className="password-forgot-combined">
                         <p>Password</p>
-                        <a href="#" className="forgot-password">Forgot password ?</a>
+                        <a href="#" id="forgot-password-text" className="forgot-password">Forgot password ?</a>
                     </div>
 
                     <input type="password" id="login-password-box"value={this.state.password} onChange={this.handleChange('password')} placeholder="Password"></input>
-                    <br/>
                     <button type="submit" value="login-account" id="login-submit-button" onClick={this.handleSubmit} className="login-submit-button">Login</button>
                 </div>
 

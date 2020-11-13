@@ -22,8 +22,8 @@ function AuthLogin(api_endpoint, username, password) {
         .then(response => {
             response.json().then(json => {
                 if (response.status === 200){
-                    console.log("success json", json);
-                    password_box.style.border = "border: 1px solid #efefef;";
+                    // console.log("success json", json);
+                    password_box.style.border = "border: 1px solid #efefef";
                     localStorage.setItem('autolycus-auth', JSON.stringify(json));
                     window.location.reload(true);
                     // var retrievedObject = localStorage.getItem('autolycus-auth');
@@ -73,7 +73,7 @@ function ValidateUsername(api_endpoint, username){
         .then(response => {
             if (response.status === 200){
                 // console.log("user "+username+" exists");
-                usernamebox.style.border = "1px solid #efefef;";
+                usernamebox.style.border = "1px solid #efefef";
             } else {
                 // console.error("user "+username+" doesn't exists");
                 usernamebox.style.border = "1px solid red";
@@ -82,6 +82,7 @@ function ValidateUsername(api_endpoint, username){
             console.log("[ERROR] in AuthLogin:", err);
         });
     }
+
 
 async function refreshAccessToken() {
         let base_url = "http://192.168.0.179:5000/api/auth";

@@ -48,6 +48,7 @@ input:focus {
 .login-submit-button {
   width: 100%;
   padding: 12px 20px;
+  margin-top: 5px;;
   border: 0px;
   outline: none;
   color: white;
