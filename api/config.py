@@ -12,8 +12,8 @@ class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY", "super_secret")
     JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
     JWT_BLACKLIST_ENABLED = True
-    JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(minutes=15)
-    JWT_REFRESH_TOKEN_EXPIRES = datetime.timedelta(days=30)
+    JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(minutes=5)
+    JWT_REFRESH_TOKEN_EXPIRES = datetime.timedelta(days=15)
 
     DEFAULT_SAVE_PATH = "/downloads"
     DEBUG = False

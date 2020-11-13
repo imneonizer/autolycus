@@ -1,0 +1,84 @@
+.login-card {
+    border-radius: 10px;
+    overflow: hidden;
+    /* box-shadow: 0px 6px 18px -9px rgba(0, 0, 0, 0.75); */
+    padding: 20px;
+  }
+  
+.login-form {
+  font-size: 12px;
+  color: rgb(49, 49, 49);
+  
+}
+
+.create-account {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+  justify-content: center;
+}
+
+.create-account > .create-account-link {
+  padding-left: 5px;
+  color: rgb(56, 135, 255);
+  cursor: pointer;
+}
+
+.login-title {
+  font-size: 2em;
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  outline: none;
+  border: 0px;
+  background-color: #efefef;
+  border: 1px solid #efefef;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+}
+
+.login-submit-button {
+  width: 100%;
+  padding: 12px 20px;
+  margin-top: 5px;;
+  border: 0px;
+  outline: none;
+  color: white;
+  border-radius: 10px;
+  background-color: #1b53f4;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.login-submit-button:active {
+  transform: translateY(1px);
+}
+
+.password-forgot-combined {
+  display: flex;
+  justify-content: space-between;
+}
+
+.forgot-password {
+  color: rgb(56, 135, 255);
+}
+
+.username-error {
+  border: 1px solid red;
+}
+
+/* Show border around login form on small screen */
+@media screen and (min-width: 0px) and (max-width: 700px) {
+  .login-card {
+    box-shadow: 0px 6px 18px -9px rgba(0, 0, 0, 0.75);
+    background-color: white;
+  }
+}
