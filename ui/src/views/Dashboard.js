@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from "react-router-dom";
-import {ValidateAuth} from "../services/LoginService";
+import {ValidateAuth, refreshAccessToken, AuthLogout} from "../services/LoginService";
 import ThreeDotLoader from "../components/ThreeDotLoader";
 import Home from './Home';
 
@@ -11,20 +11,31 @@ class Dashboard extends Component {
       }
 
     componentDidMount() {
-        ValidateAuth().then(authorized => {
+        ValidateAuth(true, 2).then(authorized => {
             if (authorized === true){
                     this.setState({ loading: false, authorized: true });
+                } else {
+                    refreshAccessToken().then(authorized => {
+                        if (authorized === true){
+                            this.setState({ loading: false, authorized: true });
+                        } else {
+                            this.setState({ loading: false, authorized: false });
+                        }
+                    })
                 }
-            }).catch(err => {
-                console.log("[ERROR] from ValidateAuth: ", err);
-                this.setState({ loading: false, authorized: false });
-            })
+            }
+        )
     }
       
     render() {
         if (this.state.loading){return (<ThreeDotLoader/>)}
         if (this.state.authorized) {
-            return (<p>authorized: true</p>)
+            return (
+                <div>
+                    <p>authorized: true</p>
+                    <button onClick={AuthLogout}>Logout</button>
+                </div>
+            )
         } else {
             return (<Route component={Home} />)
         }

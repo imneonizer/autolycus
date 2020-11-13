@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Route} from "react-router-dom";
 import '../styles/Home.css';
 import Login from '../components/Login'
-import {ValidateAuth, clearTokens} from "../services/LoginService";
+import {ValidateAuth, clearTokens, refreshAccessToken} from "../services/LoginService";
 import ThreeDotLoader from "../components/ThreeDotLoader";
 import Dashboard from "./Dashboard";
 
@@ -21,11 +21,17 @@ class Home extends Component {
         ValidateAuth().then(authorized => {
             if (authorized === true){
                     this.setState({ loading: false, authorized: true });
+                } else {
+                    refreshAccessToken().then(authorized => {
+                        if (authorized === true){
+                            this.setState({ loading: false, authorized: true });
+                        } else {
+                            this.setState({ loading: false, authorized: false });
+                        }
+                    })
                 }
-            }).catch(err => {
-                console.log("[ERROR] from ValidateAuth: ", err);
-                this.setState({ loading: false, authorized: false });
-            })
+            }
+        )
     }
 
     render () {
@@ -35,7 +41,7 @@ class Home extends Component {
             return (<Route component={Dashboard} />)
 
         } else {
-            // clearTokens(); //if login page is loaded it will clear previous stored token.
+            // clearTokens(); //if login page is loaded after fallback, it will clear previous stored token.
             return (
                 <div>
                     <div className="home-section">
