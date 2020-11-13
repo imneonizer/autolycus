@@ -15,8 +15,8 @@ from endpoints.torrents import (
 )
 
 from endpoints.auth import (
-    UserExists, Signup, Login, Logout,
-    RevokeAccessToken, RevokeRefreshToken,
+    UserExists, EmailExists, Signup, Login,
+    Logout, RevokeAccessToken, RevokeRefreshToken,
     DeleteAccount, UserDetails, TokenRefresh
 )
 
@@ -33,6 +33,7 @@ def create_app(config_name):
     api.add_resource(Login, '/auth/login')
     api.add_resource(Logout, '/auth/logout')
     api.add_resource(UserExists, '/auth/user-exists')
+    api.add_resource(EmailExists, '/auth/email-exists')
     api.add_resource(UserDetails, '/auth/user-details')
     api.add_resource(DeleteAccount, '/auth/delete-acount')
 

@@ -24,6 +24,14 @@ class UserExists(Resource):
             return JU.make_response(f"username '{username}' exists", 200)
         return JU.make_response(f"username '{username}' doesn't exists", 404)
 
+class EmailExists(Resource):
+    def get(self):
+        email = request.args.get('email', None)
+        if not email: return JU.make_response(f"parameter '?email=' required", 400)
+        if User.find_by_email(email):
+            return JU.make_response(f"email '{email}' exists", 200)
+        return JU.make_response(f"email '{email}' doesn't exists", 404)
+
 class Signup(Resource):
     def post(self):
         name, username, email, password = JU.extract_keys(
