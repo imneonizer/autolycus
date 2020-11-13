@@ -12,11 +12,16 @@
 }
 
 .create-account {
+  display: flex;
+  flex-wrap: wrap;
   text-align: center;
+  justify-content: center;
 }
 
-.create-account > a {
+.create-account > .create-account-link {
+  padding-left: 5px;
   color: rgb(56, 135, 255);
+  cursor: pointer;
 }
 
 .login-title {
