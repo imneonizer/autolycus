@@ -18,9 +18,20 @@
     background-color: #efefef;
     /* border-radius: 20px; */
     padding: 20px;
-    width: 70%;
+    width: 80%;
+    overflow-y: scroll;
     /* margin-top: 20px; */
     /* margin-bottom: 20px; */
+}
+
+.middle-section::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+.middle-section {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 
 .right-section{
@@ -46,12 +57,13 @@
 
 .left-section-logo-icon {
     /* border: 1px solid red; */
-    margin-left: -5px;
+    margin-top: 5px;
 }
 
 .left-section-logo-text {
     /* border: 1px solid red; */
     padding: 7px 0px 0px 7px;
+    margin-top: 5px;
 }
 
 .left-section-menu-top {
@@ -61,9 +73,10 @@
 
 .left-section-menu-items {
     display: flex;
-    margin-top: 15px;
+    margin-top: 10px;
     padding: 10px;
     border-radius: 10px;
+    cursor: pointer;
     /* background-color: red; */
 }
 
@@ -86,7 +99,11 @@
     background-color: red;
 }
 
-@media screen and (min-width: 0px) and (max-width: 900px) {
+#HomeNavButton {
+    background-color: rgb(42 154 245 / 10%);
+}
+
+@media screen and (min-width: 0px) and (max-width: 800px) {
     .left-section-logo {
         /* border: 1px solid red; */
         display: none;
@@ -98,6 +115,7 @@
 
     .middle-section {
         width: 100%;
+        margin-bottom: 40px;;
     }
     
     .left-section{
@@ -116,7 +134,7 @@
         justify-content: space-between;
         /* margin-left: 50px; */
         margin-right: 20px;
-        height: 40px;;
+        height: 40px;
     }
 
 
@@ -134,5 +152,9 @@
 
     .left-section-menu-texts {
         display: none;
+    }
+
+    #HomeNavButton {
+        background-color: transparent;
     }
 }
