@@ -19,45 +19,39 @@ class FileManager extends Component {
                 <div className="container-section">
                     <div className="left-section">
                         <div className="left-section-menu">
+
                             <div className="left-section-logo">
                                 <img className="left-section-logo-icon" width="35px" src="favicon.svg"/>
                                 <h3 className="left-section-logo-text">Autolycus</h3>
                             </div>
 
-                                <div className="left-section-menu-top">
-                                    <div className="left-section-menu-items">
-                                        <img className="left-section-menu-icons" src="icons/bx-cloud-lightning.svg"/>
-                                        <p className="left-section-menu-texts">My cloud</p>
-                                    </div>
+                            <div className="left-section-menu-items">
+                                <img className="left-section-menu-icons" src="icons/bx-cloud-lightning.svg"/>
+                                <p className="left-section-menu-texts">My cloud</p>
+                            </div>
                                 
 
-                                    <div className="left-section-menu-items">
-                                        <img className="left-section-menu-icons" src="icons/bx-star.svg"/>
-                                        <p className="left-section-menu-texts">Starred</p>
-                                    </div>
+                            <div className="left-section-menu-items">
+                                <img className="left-section-menu-icons" src="icons/bx-star.svg"/>
+                                <p className="left-section-menu-texts">Starred</p>
+                            </div>
                                 
-                                    <div className="left-section-menu-items">
-                                        <img className="left-section-menu-icons" src="icons/bx-trash.svg"/>
-                                        <p className="left-section-menu-texts">Recycle bin</p>
-                                    </div>
-                                </div>
+                            <div className="left-section-menu-items">
+                                <img className="left-section-menu-icons" src="icons/bx-trash.svg"/>
+                                <p className="left-section-menu-texts">Recycle bin</p>
+                            </div>
+                        
+                            <div className="left-section-menu-items">
+                                <img className="left-section-menu-icons" src="icons/bx-help-circle.svg"/>
+                                <p className="left-section-menu-texts">Help</p>
+                            </div>
 
-                                <div className="left-section-menu-middle">
-                                    <div className="left-section-menu-items">
-                                        <img className="left-section-menu-icons" src="icons/bx-help-circle.svg"/>
-                                        <p className="left-section-menu-texts">Help</p>
-                                    </div>
+                            <div className="left-section-menu-items">
+                                <img className="left-section-menu-icons" src="icons/bx-slider-alt.svg"/>
+                                <p className="left-section-menu-texts">Settings</p>
+                            </div>
 
-                                    <div className="left-section-menu-items">
-                                        <img className="left-section-menu-icons" src="icons/bx-slider-alt.svg"/>
-                                        <p className="left-section-menu-texts">Settings</p>
-                                    </div>
-                                </div>
-                                
-
-                                <div className="left-section-menu-bottom">
-                                    <p>Upgrade</p>
-                                </div>
+                            {/* <p>Upgrade</p> */}
 
                         </div>
                     </div>

@@ -8,7 +8,7 @@
 .left-section{
     /* border: 1px solid red; */
     /* background-color: #efefef; */
-    padding: 20px;
+    padding: 10px;
     margin-right: 5px;
     width: 20%;
 }
@@ -28,7 +28,7 @@
     /* background-color: #efefef; */
     padding: 20px;
     margin-left: 5px;
-    width: 15%;
+    width: 20%;
 }
 
 .left-section-menu {
@@ -40,6 +40,7 @@
 .left-section-logo {
     /* border: 1px solid red; */
     display: flex;
+    padding: 10px;
     /* padding-bottom: 20px; */
 }
 
@@ -61,13 +62,14 @@
 .left-section-menu-items {
     display: flex;
     margin-top: 15px;
-    /* padding: 10px; */
+    padding: 10px;
     border-radius: 10px;
     /* background-color: red; */
 }
 
 .left-section-menu-texts {
     margin: 4px;
+    padding-top: 2px;;
 }
 
 .left-section-menu-middle {
@@ -85,30 +87,52 @@
 }
 
 @media screen and (min-width: 0px) and (max-width: 900px) {
-     /* minimize left side banner */
-    .left-section {
-        width: 20px;
+    .left-section-logo {
+        /* border: 1px solid red; */
+        display: none;
+    }
+
+    .right-section{
+        display: none;
     }
 
     .middle-section {
-        /* border: 1px solid red; */
         width: 100%;
-        margin-right: 5px;
-    }
-
-    .left-section-menu-bottom {
-        display: none;
     }
     
-    .right-section{
-        display: none;
+    .left-section{
+        /* border: 1px solid red; */
+        position: fixed;
+        background-color: #ffffff;
+        width: 100%;
+        left: 0;
+        bottom: 0;
+    
+    }
+
+    .left-section-menu {
+        /* border: 1px solid red; */
+        flex-direction: row;
+        justify-content: space-between;
+        /* margin-left: 50px; */
+        margin-right: 20px;
+        height: 40px;;
+    }
+
+
+    .left-section-menu-items {
+        /* border: 1px solid black; */
+        margin-top: 0px;
+        padding: 0px;
+        margin: auto;
+    }
+
+    .left-section-menu-icons {
+        /* border: 1px solid red; */
+        width: 25px;
     }
 
     .left-section-menu-texts {
         display: none;
     }
-
-    .left-section-logo-text {
-        display: none;
-    }
-  }
+}
