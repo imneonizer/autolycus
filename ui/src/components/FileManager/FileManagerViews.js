@@ -25,7 +25,7 @@ class FileManagerViews extends Component {
 
     render() {
         if (this.props.view === "Home"){
-            return (<Home/>)
+            return (<Home torrents={this.props.torrents}/>)
         } else if  (this.props.view === "Starred"){
             return (<Starred/>)
         } else if (this.props.view === "RecycleBin"){

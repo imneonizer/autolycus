@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "../styles/AddMagnet.css"
-import SendMagnet from "../../../services/TorrentService";
+import { SendMagnet } from "../services/TorrentService";
 
 class AddMagnet extends Component {
     constructor(props) {

@@ -1,10 +1,26 @@
 let base_url = "http://192.168.0.179:5000/api/torrents";
 
-function SendMagnet(element_id, magnet){
+function getAuthToken(){
     let auth = localStorage.getItem('autolycus-auth');
     if (auth !== "undefined"){
         auth = JSON.parse(auth)
     }
+    return auth;
+}
+
+function getAuthHeader(method="POST"){
+    let auth = getAuthToken();
+    return { 
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth.access_token}
+        }
+}
+
+
+function SendMagnet(element_id, magnet){
+    let auth = getAuthToken();
 
     if (auth){
         fetch(base_url+"/add?magnet="+magnet, {
@@ -24,7 +40,7 @@ function SendMagnet(element_id, magnet){
 
                 setTimeout(() => {
                     element.placeholder = placeholder;
-                }, 1000);
+                }, 2000);
 
             }
         })
@@ -34,4 +50,15 @@ function SendMagnet(element_id, magnet){
     }
 }
 
-export default SendMagnet;
+function FetchTorrents(){
+    let auth = getAuthToken();
+    if (auth){
+        return fetch(base_url+"/status", getAuthHeader("GET"))
+    }
+    
+}
+
+export {
+    SendMagnet,
+    FetchTorrents
+};

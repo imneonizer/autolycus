@@ -1,14 +1,39 @@
 import React, { Component } from 'react';
-import { Route } from "react-router-dom";
 import "../../styles/FileManager.css";
 import FileManagerViews from "./FileManagerViews";
+import { FetchTorrents } from "./services/TorrentService";
 
 class FileManager extends Component {
     constructor(props) {
         super(props);
-        this.state = {view: "Home"};
+        this.state = {view: "Home", torrents: []};
         this.username = JSON.parse(localStorage.getItem('autolycus-auth')).username;
         this.updateView = this.updateView.bind(this);
+
+        this.timer = null;
+        this.updateTorrents = this.updateTorrents.bind(this);
+    }
+
+    componentDidMount() {
+        this.timer = setInterval(this.updateTorrents, 1000)
+      }
+      
+    componentWillUnmount() {
+        clearInterval(this.timer);
+      }
+
+    updateTorrents(){
+        let Fetch = FetchTorrents();
+        if (Fetch){
+            Fetch.then(response => {
+                response.json().then(json => {
+                    this.setState({torrents: json.torrents})
+                })
+            })
+            .catch(err => {
+                console.log("[ERROR] in FetchTorrents:",err);
+            })
+        }
     }
 
     updateView(view){
@@ -67,7 +92,7 @@ class FileManager extends Component {
                     </div>
 
                     <div className="middle-section">
-                        <FileManagerViews username={this.username} view={this.state.view}/>
+                        <FileManagerViews username={this.username} view={this.state.view} torrents={this.state.torrents}/>
                     </div>
                         
                     <div className="right-section">

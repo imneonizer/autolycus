@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import AddMagnet from "./AddMagnet";
+import TorrentCard from "./TorrentCard";
+import "../styles/Home.css"
 
 class Home extends Component {
     constructor(props) {
@@ -10,7 +12,7 @@ class Home extends Component {
         return(
             <div>
                 <AddMagnet/>
-                <p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>Home</p><p>End</p>
+                {this.props.torrents.map((data) => {return <TorrentCard data={data}/>})}
             </div>
         )
     }

@@ -73,3 +73,6 @@ class Torrent(db.Model):
         
     def __repr__(self):
        return str(self.json)
+
+if __name__ == "__main__":
+    print(Torrent.query.all())

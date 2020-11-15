@@ -34,7 +34,7 @@ class Dashboard extends Component {
             return (
                 <div>
                     <FileManager />
-                    {/* <button onClick={AuthLogout}>Logout</button> */}
+                    <button onClick={AuthLogout}>Logout</button>
                 </div>
             )
         } else {
