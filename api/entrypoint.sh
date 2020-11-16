@@ -4,9 +4,6 @@ HOST="0.0.0.0"; PORT="5000"; WORKERS="4";
 ACCESS_LOG="/var/log/gunicorn-access.log";
 ERROR_LOG="/var/log/gunicorn-error.log";
 
-#start memcached service
-service memcached start
-
 # kill previous running process, if any
 if [[ `pgrep gunicorn` ]];then kill -9 `pgrep gunicorn`;fi
 if [[ `pgrep tail` ]];then kill -9 `pgrep tail`;fi
