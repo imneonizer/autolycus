@@ -23,7 +23,8 @@ function AuthLogin(api_endpoint, username, password) {
             response.json().then(json => {
                 if (response.status === 200){
                     // console.log("success json", json);
-                    password_box.style.border = "border: 1px solid #efefef";
+                    password_box.style.border = "1px solid #efefef";
+                    json["username"] = username;
                     localStorage.setItem('autolycus-auth', JSON.stringify(json));
                     window.location.reload(true);
                     // var retrievedObject = localStorage.getItem('autolycus-auth');

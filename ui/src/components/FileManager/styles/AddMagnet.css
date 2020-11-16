@@ -1,0 +1,31 @@
+.add-magnet-div {
+    /* border: 1px solid red; */
+    display: flex;
+}
+
+#add-magnet-box {
+    border: 0px solid red;
+    padding: 20px;
+    margin: 0px;
+    margin-bottom: 10px;
+    border-radius: 10px 0px 0px 10px;
+    background-color: #ffffff;
+}
+
+.add-magnet-icon {
+    /* border: 1px solid red; */
+    margin-left: -1px;
+    margin-top: 1px;
+    margin-bottom: 11px;
+    padding: 10px;
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 0px 10px 10px 0px;
+    background-color: rgb(42, 154, 245);
+    cursor: pointer;
+}
+
+.add-magnet-icon:active {
+    background-color: rgb(43, 135, 211);
+}

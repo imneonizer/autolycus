@@ -35,6 +35,10 @@ class Torrent(db.Model):
     def find_by_hash(self, Hash):
         return self.query.filter_by(Hash=Hash).first()
     
+    @classmethod
+    def find_by_magnet(self, Hash):
+        return self.query.filter_by(magnet=magnet).first()
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
@@ -44,9 +48,8 @@ class Torrent(db.Model):
         db.session.commit()
 
     @classmethod
-    def update_to_db(self, fields, synchronize_session = False):
-        db.session.query(Torrent).filter(Torrent.Hash == self.Hash).update(
-            fields, synchronize_session=synchronize_session)
+    def update_to_db(self, Hash, fields, synchronize_session = False):
+        torrent = Torrent.query.filter_by(Hash=Hash).update(fields)
         db.session.commit()
 
     @property
@@ -72,4 +75,7 @@ class Torrent(db.Model):
         }
         
     def __repr__(self):
-       return str(self.json)
+       return str(self.JSON)
+
+if __name__ == "__main__":
+    print(Torrent.query.all())

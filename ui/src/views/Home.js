@@ -11,7 +11,7 @@ class Home extends Component {
         super(props);
         this.state = {loading: true, authorized: false};
     }
-    
+
     componentDidMount() {
         let auth = localStorage.getItem('autolycus-auth');
         if (!auth){
