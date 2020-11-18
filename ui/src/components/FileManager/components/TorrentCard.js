@@ -13,6 +13,8 @@ class TorrentCard extends Component {
     }
 
     humanFileSize(size) {
+        if (!size){return "0 Bytes"}
+
         var i = Math.floor( Math.log(size) / Math.log(1024) );
         return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
     };
@@ -50,8 +52,11 @@ class TorrentCard extends Component {
         return(
             <div className="torrent-card">
                 <div className="torrent-card-info">
-                    <p>{this.props.data.name}</p>
-                    <p>{this.humanFileSize(this.props.data.total_bytes)}</p>
+                    <img src="icons/mac-folder-icon.svg"/>
+                    <div className="torrent-card-wrapper">
+                        <p className="torrent-card-info-name">{this.props.data.name}</p>
+                        <p className="torrent-card-info-size">{this.humanFileSize(this.props.data.total_bytes)}</p>
+                    </div>
                 </div>
 
                 <div className="torrent-card-menu">
@@ -62,13 +67,40 @@ class TorrentCard extends Component {
                     </div>
                     {this.state.threeDotMenuVisible && (
                         <div className="torrent-card-menu-contents">
-                            <p>Download</p>
-                            <p>Copy Download Link</p>
-                            <p>Rename</p>
-                            <p>Copy</p>
-                            <p>Cut</p>
-                            <p>Paste</p>
-                            <p onClick={this.handleDelete}>Delete</p>
+                            <div className="torrent-card-menu-contents-items">
+                                <img src="icons/bxs-cloud-download.svg"/>
+                                <p>Download</p>
+                            </div>
+                            
+                            <div className="torrent-card-menu-contents-items">
+                                <img src="icons/bx-link-alt.svg"/>
+                                <p>Copy Link</p>
+                            </div>
+
+                            <div className="torrent-card-menu-contents-items">
+                                <img src="icons/bx-edit-alt.svg"/>
+                                <p>Rename</p>
+                            </div>
+
+                            <div className="torrent-card-menu-contents-items">
+                                <img src="icons/bx-copy-alt.svg"/>
+                                <p>Copy</p>
+                            </div>
+
+                            <div className="torrent-card-menu-contents-items">
+                                <img src="icons/bx-cut.svg"/>
+                                <p>Cut</p>
+                            </div>
+
+                            <div className="torrent-card-menu-contents-items">
+                                <img src="icons/bx-paste.svg"/>
+                                <p>Paste</p>
+                            </div>
+
+                            <div className="torrent-card-menu-contents-items">
+                                <img src="icons/bx-trash.svg"/>
+                                <p onClick={this.handleDelete}>Delete</p>
+                            </div>
                         </div>
                     )}
                 </div>

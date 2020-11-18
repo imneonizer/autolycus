@@ -27,17 +27,16 @@ class TorrentClient:
                 try:
                     for t in self.lt_session.get_torrents():
                         s = t.status()
-                        torrent = Torrent.find_by_hash(str(s.info_hash).lower())
-
-                        if not torrent: continue
                         Hash = str(s.info_hash).lower()
+                        torrent = Torrent.find_by_hash(Hash)
+                        if not torrent: continue
 
                         torrent.update_to_db(Hash, dict(
                             download_speed=s.download_rate,
                             downloaded_bytes=s.total_wanted_done,
                             is_finished=t.is_finished(),
                             is_paused=s.paused,
-                            name=t.name() if t.name() else "NA",
+                            name=t.name() if t.name() else "Unknown",
                             num_connections=s.num_connections,
                             num_peers=s.num_peers,
                             num_seeds=s.num_seeds,
@@ -87,15 +86,16 @@ class TorrentClient:
         if os.path.exists(path):
             shutil.rmtree(path)
 
-    def add_magnet(self, magnet, save_path=None):
+    def add_magnet(self, magnet, username=None, save_path=None):
         save_path = save_path or self.default_save_path
         magnet = urllib.parse.unquote(magnet)
         Hash = self.get_info_hash(magnet)
 
         if not Hash: return
-        if Torrent.find_by_hash(Hash): return Hash
+        if Torrent.find_by_hash(Hash):
+            return Hash
 
-        save_path = os.path.join(save_path, Hash)
+        save_path = os.path.join(save_path, username, Hash)
         os.makedirs(save_path, exist_ok=True)
         
         t = self.add_torrent(magnet, save_path)
@@ -110,9 +110,10 @@ class TorrentClient:
             downloaded_bytes=0,
             Hash=Hash,
             magnet=magnet,
+            username=username,
             is_finished=False,
             is_paused=False,
-            name="NA",
+            name="Unknown",
             num_connections=0,
             num_peers=0,
             num_seeds=0,
@@ -125,21 +126,26 @@ class TorrentClient:
 
         return Hash
     
-    def remove_torrent(self, Hash):
-        torrent = Torrent.find_by_hash(Hash)
+    def remove_torrent(self, Hash, username=None):
+        torrent = Torrent.find_by_hash_and_username(Hash, username)
         if not torrent: return
         try:
+            for t in self.lt_session.get_torrents():
+                s = t.status()
+                info_hash = str(s.info_hash).lower()
+                if info_hash == Hash:
+                    self.lt_session.remove_torrent(t)
             self.remove_path(torrent.download_path)
             torrent.delete_from_db()
             return True
         except Exception as e:
             print(e)
     
-    def torrent_status(self, Hash):
-        torrent = Torrent.find_by_hash(Hash)
+    def torrent_status(self, Hash, username):
+        torrent = Torrent.find_by_hash_and_username(Hash, username)
         return torrent.JSON if torrent else None
 
-    def list_torrents(self, hashes=None):
+    def list_torrents(self, hashes=None, username=None):
         if hashes:
-            return [self.torrent_status(Hash) for Hash in hashes if Torrent.find_by_hash(Hash)]
-        return [t.JSON for t in Torrent.query.all()]
+            return [self.torrent_status(Hash, username) for Hash in hashes if self.torrent_status(Hash, username)]
+        return [t.JSON for t in Torrent.find_by_username(username)]

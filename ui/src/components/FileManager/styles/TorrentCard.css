@@ -8,6 +8,27 @@
     background-color: white
 }
 
+.torrent-card-info {
+    display: flex;
+    align-items: center;
+}
+
+.torrent-card-wrapper {
+    /* border: 1px solid red; */
+    margin-left: 10px;
+    /* display: flex; */
+    
+}
+
+.torrent-card-info-name {
+    /* border: 1px solid green; */
+    /* margin-left: 10px; */
+}
+
+.torrent-card-info-size{
+    /* border: 1px solid blue; */
+}
+
 .torrent-card-menu {
     /* border: 1px solid red; */
     position: relative;
@@ -15,7 +36,7 @@
 
 .torrent-card-menu-dot-wrapper{
     /* border: 1px solid blue; */
-    padding: 0px 0px 5px 5px;
+    padding: 0px 0px 15px 15px;
     cursor: pointer;
 }
 
@@ -32,22 +53,28 @@
     /* border: 1px solid blue; */
     background-color: rgb(255, 255, 255);
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    /* padding: 10px; */
-    border-radius: 10px;
+    padding: 10px;
+    padding-bottom: 25px;;
+    border-radius: 5px;
     position: absolute;
     width: 175px;
     height: 220px;
-    margin-left: -170px;
+    margin-left: -180px;
     z-index: 1;
     cursor: pointer;
 }
 
-.torrent-card-menu-contents > p {
-    /* border: 1px solid red; */
-    padding-bottom: 12px;
-    padding: 6px 10px 6px 10px;
+.torrent-card-menu-contents-items {
+    display: flex;
+    align-items: center;
+    padding: 5px;
 }
 
-.torrent-card-menu-contents > p:hover {
+.torrent-card-menu-contents-items > p {
+    padding-left: 5px;
+}
+
+.torrent-card-menu-contents-items:hover {
     background-color: rgb(42 154 245 / 10%);
+    border-radius: 5px;
 }

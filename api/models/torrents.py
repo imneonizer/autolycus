@@ -10,6 +10,7 @@ class Torrent(db.Model):
     download_path = db.Column(db.String)
     magnet = db.Column(db.String)
     Hash = db.Column(db.String)
+    username = db.Column(db.String)
 
     # File size related information
     total_bytes = db.Column(db.Integer) #Bytes
@@ -36,8 +37,16 @@ class Torrent(db.Model):
         return self.query.filter_by(Hash=Hash).first()
     
     @classmethod
+    def find_by_username(self, username):
+        return self.query.filter_by(username=username)
+    
+    @classmethod
     def find_by_magnet(self, Hash):
         return self.query.filter_by(magnet=magnet).first()
+    
+    @classmethod
+    def find_by_hash_and_username(self, Hash, username):
+        return Torrent.query.filter(Torrent.username == username, Torrent.Hash == Hash).one()
 
     def save_to_db(self):
         db.session.add(self)

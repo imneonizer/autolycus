@@ -15,7 +15,7 @@ class FileManager extends Component {
     }
 
     componentDidMount() {
-        this.timer = setInterval(this.updateTorrents, 1000)
+        this.timer = setInterval(this.updateTorrents, 2000)
       }
       
     componentWillUnmount() {
