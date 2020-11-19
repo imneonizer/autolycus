@@ -5,12 +5,13 @@
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 5px;
-    background-color: white
+    background-color: white;
 }
 
 .torrent-card-info {
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .torrent-card-wrapper {
@@ -27,6 +28,7 @@
 
 .torrent-card-info-size{
     /* border: 1px solid blue; */
+    font-size: small;
 }
 
 .torrent-card-menu {

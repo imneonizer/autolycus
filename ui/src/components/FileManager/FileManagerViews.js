@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import Home from "./components/Home";
+import {AuthLogout} from "../../services/LoginService";
 
 function Starred(){
     return(<p>Starred</p>)
@@ -15,7 +16,12 @@ function Help(){
 }
 
 function Settings(){
-    return(<p>Settings</p>)
+    return(
+        <div>
+            <p>Settings</p>
+            <button onClick={AuthLogout}>Logout</button>
+        </div>
+    )
 }
 
 class FileManagerViews extends Component {
@@ -25,7 +31,7 @@ class FileManagerViews extends Component {
 
     render() {
         if (this.props.view === "Home"){
-            return (<Home torrents={this.props.torrents}/>)
+            return (<Home torrents={this.props.torrents} tFetcher={this.props.tFetcher}/>)
         } else if  (this.props.view === "Starred"){
             return (<Starred/>)
         } else if (this.props.view === "RecycleBin"){

@@ -5,11 +5,12 @@ import {DeleteTorrent} from "../services/TorrentService";
 class TorrentCard extends Component {
     constructor(props) {
         super(props);
-        this.state = {threeDotMenuVisible: false}
+        this.state = {threeDotMenuVisible: false, explorerCard: null}
         this.humanFileSize = this.humanFileSize.bind(this);
         this.handleDotMenu = this.handleDotMenu.bind(this);
         this.handleOutsideClick = this.handleOutsideClick.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.trimString = this.trimString.bind(this);
     }
 
     humanFileSize(size) {
@@ -48,13 +49,21 @@ class TorrentCard extends Component {
         })
       }
 
+    trimString(string, length){
+        let postfix = ""
+        if (string.length > length){
+            postfix = "..."
+        }
+        return string.slice(0, length).trim()+postfix;
+    }
+
     render(){
         return(
             <div className="torrent-card">
-                <div className="torrent-card-info">
+                <div className="torrent-card-info" onClick={() => this.props.cardHandler(this.props.data)}>
                     <img src="icons/mac-folder-icon.svg"/>
                     <div className="torrent-card-wrapper">
-                        <p className="torrent-card-info-name">{this.props.data.name}</p>
+                        <p className="torrent-card-info-name">{this.trimString(this.props.data.name, 30)}</p>
                         <p className="torrent-card-info-size">{this.humanFileSize(this.props.data.total_bytes)}</p>
                     </div>
                 </div>
