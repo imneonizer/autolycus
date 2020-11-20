@@ -19,5 +19,9 @@ function getAuthHeader(method="POST"){
 }
 
 function getFileDetails(Hash){
-    //
+    return fetch(base_url+"/files?hash="+Hash, getAuthHeader("GET"))
+}
+
+export {
+    getFileDetails
 }

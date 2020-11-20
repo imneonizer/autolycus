@@ -2,7 +2,7 @@ from flask import request, make_response, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 
-from shared.factories import db
+from shared.factories import db, fs
 from torrentclient import seedr
 from shared.utils import json_utils as JU
 from models.torrents import Torrent
@@ -66,3 +66,17 @@ class TorrentStatus(Resource):
         if JU.null_values(hashes):
             return JU.make_response("invalid data", 400)
         return make_response({"torrents": seedr.list_torrents(hashes)}, 200)
+
+class FileStructure(Resource):
+    @jwt_required
+    def get(self):
+        Hash = request.args.get('hash', None)
+        if not Hash: return JU.make_response("parameter '?hash=' required", 400)
+        
+        torrent = Torrent.find_by_hash_and_username(Hash, username=get_jwt_identity())
+        if not torrent: return JU.make_response("torrent not found", 404)
+
+        structure = fs.json_tree(torrent.download_path)
+        if not structure: return JU.make_response("download path error", 404)
+
+        return make_response(structure, 200)

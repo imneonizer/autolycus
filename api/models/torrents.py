@@ -46,7 +46,14 @@ class Torrent(db.Model):
     
     @classmethod
     def find_by_hash_and_username(self, Hash, username):
-        return Torrent.query.filter(Torrent.username == username, Torrent.Hash == Hash).one()
+        torrent = None
+        try:
+            torrent = self.query.filter_by(Hash=Hash).first()
+            if not torrent.username == username:
+                torrent = None
+        except Exception as e:
+            print(e)
+        return torrent
 
     def save_to_db(self):
         db.session.add(self)
@@ -73,6 +80,7 @@ class Torrent(db.Model):
         "is_finished": self.is_finished,
         "is_paused": self.is_paused,
         "name": self.name,
+        "username": self.username,
         "num_connections": self.num_connections,
         "num_peers": self.num_peers,
         "num_seeds": self.num_seeds,

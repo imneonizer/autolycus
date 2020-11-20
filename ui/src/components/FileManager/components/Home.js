@@ -3,11 +3,12 @@ import AddMagnet from "./AddMagnet";
 import TorrentCard from "./TorrentCard";
 import FileCard from "./FileCard";
 import "../styles/Home.css";
+import {getFileDetails} from "../services/FileService";
 
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.state = {card: null}
+        this.state = {card: null, data:null}
         this.cardHandler = this.cardHandler.bind(this);
         this.goHome = this.goHome.bind(this);
     }
@@ -20,12 +21,21 @@ class Home extends Component {
         this.props.tFetcher(false);
     }
 
-    cardHandler(data){
-        this.setState({card: data})
+    cardHandler(card){
+        getFileDetails(card.hash)
+        .then( response => {
+            if (response.ok){
+                response.json().then(json => {
+                    this.setState({card:card, data:json})
+                })
+            }
+        }).catch( err => {
+            console.log("[ERROR] from getFileDetails:", err)
+        })
     }
 
     goHome(){
-        this.setState({card: null})
+        this.setState({card: null, data: null})
     }
 
     render(){
@@ -33,8 +43,7 @@ class Home extends Component {
             return (
                 <div>
                     <AddMagnet/>
-                    <button onClick={this.goHome}>Back</button>
-                    <FileCard card={this.state.card} tFetcher={this.props.tFetcher}/>
+                    <FileCard card={this.state.card} data={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goHome}/>
                 </div>
             )
         } else {
@@ -44,7 +53,7 @@ class Home extends Component {
                     {this.props.torrents.map((data) => {return <TorrentCard data={data} cardHandler={this.cardHandler}/>})}
                 </div>
             )
-            }
+        }
     }
 
 }

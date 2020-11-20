@@ -50,11 +50,17 @@ class TorrentCard extends Component {
       }
 
     trimString(string, length){
-        let postfix = ""
-        if (string.length > length){
-            postfix = "..."
+        let w = window.innerWidth;
+        
+        if ( w >= 800){
+            return string;
+        }else {
+            let postfix = "";
+            if (string.length > length){
+                postfix = "...";
+            }
+            return string.slice(0, length).trim()+postfix;
         }
-        return string.slice(0, length).trim()+postfix;
     }
 
     render(){
