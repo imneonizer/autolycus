@@ -7,7 +7,7 @@
 
 .left-section{
     /* border: 1px solid red; */
-    /* background-color: #efefef; */
+    background-color: white;
     padding: 10px;
     margin-right: 5px;
     width: 20%;
@@ -115,7 +115,7 @@
 
     .middle-section {
         width: 100%;
-        margin-bottom: 40px;;
+        margin-bottom: 40px;
     }
     
     .left-section{
@@ -125,6 +125,7 @@
         width: 100%;
         left: 0;
         bottom: 0;
+        z-index: 1;
     
     }
 

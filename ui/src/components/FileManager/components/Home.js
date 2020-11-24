@@ -8,9 +8,10 @@ import {getFileDetails} from "../services/FileService";
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.state = {card: null, data:null}
+        this.state = {card: null, data:null, parent_items: []}
         this.cardHandler = this.cardHandler.bind(this);
-        this.goHome = this.goHome.bind(this);
+        this.goBack = this.goBack.bind(this);
+        this.updateCard = this.updateCard.bind(this);
     }
 
     componentDidMount() {
@@ -34,16 +35,27 @@ class Home extends Component {
         })
     }
 
-    goHome(){
-        this.setState({card: null, data: null})
+    goBack(){
+        let previous_item = this.state.parent_items.slice(-1)[0];
+        this.setState({data: previous_item, parent_items: this.state.parent_items.filter(i => i !== previous_item)});
+    }
+
+    updateCard(data, previous_item){
+        if (data.type === "directory"){
+            this.setState({ data: data, parent_items: this.state.parent_items.concat([previous_item]) })
+        }else {
+            if ([".mkv", ".mp4"].includes(data.ext)){
+                console.log("video file clicked");
+            }
+        }
     }
 
     render(){
-        if (this.state.card){
+        if (this.state.data){
             return (
                 <div>
                     <AddMagnet/>
-                    <FileCard card={this.state.card} data={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goHome}/>
+                    <FileCard data={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goBack} updateCard={this.updateCard}/>
                 </div>
             )
         } else {
