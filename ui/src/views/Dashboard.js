@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from "react-router-dom";
-import {ValidateAuth, refreshAccessToken, AuthLogout} from "../services/LoginService";
+import {ValidateAuth, refreshAccessToken} from "../services/LoginService";
 import FileManager from "../components/FileManager/FileManager";
 import ThreeDotLoader from "../components/ThreeDotLoader";
 import Home from './Home';
@@ -34,7 +34,6 @@ class Dashboard extends Component {
             return (
                 <div>
                     <FileManager />
-                    <button onClick={AuthLogout}>Logout</button>
                 </div>
             )
         } else {

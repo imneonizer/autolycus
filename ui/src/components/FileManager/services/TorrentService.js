@@ -31,10 +31,10 @@ function SendMagnet(element_id, magnet){
             }
         })
         .then(response => {
-            if (response.ok){
-                let element = document.getElementById(element_id);
+            let element = document.getElementById(element_id);
+
+            if (response.ok){    
                 element.value = "";
-                
                 let placeholder = element.placeholder;
                 element.placeholder = "Magnet Added!";
 
@@ -42,6 +42,14 @@ function SendMagnet(element_id, magnet){
                     element.placeholder = placeholder;
                 }, 2000);
 
+            } else {
+                element.value = "";
+                let placeholder = element.placeholder;
+                element.placeholder = "Invalid Magnet!";
+
+                setTimeout(() => {
+                    element.placeholder = placeholder;
+                }, 2000);
             }
         })
         .catch(err => {
@@ -58,7 +66,16 @@ function FetchTorrents(){
     
 }
 
+function DeleteTorrent(Hash){
+    let auth = getAuthToken();
+    if (auth){
+        return fetch(base_url+"/remove?hash="+Hash, getAuthHeader("GET"))
+    }
+    
+}
+
 export {
     SendMagnet,
-    FetchTorrents
+    FetchTorrents,
+    DeleteTorrent
 };

@@ -11,7 +11,12 @@ from shared.utils import check_db
 from models.revoked_tokens import RevokedToken
 
 from endpoints.torrents import (
-    AddTorrent, RemoveTorrent,TorrentStatus
+    AddTorrent, RemoveTorrent,TorrentStatus,
+    FileStructure
+)
+
+from endpoints.files import (
+    SendFileByToken
 )
 
 from endpoints.auth import (
@@ -45,6 +50,9 @@ def create_app(config_name):
     api.add_resource(RemoveTorrent, '/torrents/remove')
     api.add_resource(TorrentStatus, '/torrents/status')
     
+    api.add_resource(FileStructure, '/torrents/files')
+    api.add_resource(SendFileByToken, '/torrent-files')
+
     db.app = app
     db.init_app(app)
     logger.init_app(app)

@@ -1,4 +1,4 @@
-.torrent-card{
+.file-card{
     /* border: 1px solid red; */
     display: flex;
     justify-content: space-between;
@@ -8,26 +8,21 @@
     background-color: white;
 }
 
-.torrent-card-info {
+.file-card-info {
     display: flex;
     align-items: center;
+    overflow-x: hidden;
+}
+
+.file-card-wrapper {
+    margin-left: 10px;
+}
+
+.file-card-info-name {
     cursor: pointer;
 }
 
-.torrent-card-wrapper {
-    /* border: 1px solid red; */
-    margin-left: 10px;
-    /* display: flex; */
-    
-}
-
-.torrent-card-info-name {
-    /* border: 1px solid green; */
-    /* margin-left: 10px; */
-}
-
-.torrent-card-info-size{
-    /* border: 1px solid blue; */
+.file-card-info-size{
     font-size: small;
 }
 
@@ -61,7 +56,7 @@
     position: absolute;
     width: 175px;
     height: 220px;
-    margin-left: -180px;
+    margin-left: -185px;
     z-index: 1;
     cursor: pointer;
 }
@@ -79,4 +74,8 @@
 .torrent-card-menu-contents-items:hover {
     background-color: rgb(42 154 245 / 10%);
     border-radius: 5px;
+}
+
+@media screen and (min-width: 0px) and (max-width: 800px) {
+
 }

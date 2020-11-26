@@ -12,15 +12,16 @@ class FileManager extends Component {
 
         this.timer = null;
         this.updateTorrents = this.updateTorrents.bind(this);
+        this.tFetcher = this.tFetcher.bind(this);
     }
 
-    componentDidMount() {
-        this.timer = setInterval(this.updateTorrents, 1000)
-      }
-      
-    componentWillUnmount() {
-        clearInterval(this.timer);
-      }
+    tFetcher(fetch=null){
+        if (fetch){
+            this.timer = setInterval(this.updateTorrents, 2000)
+        } else {
+            clearInterval(this.timer);
+        }
+    }
 
     updateTorrents(){
         let Fetch = FetchTorrents();
@@ -92,7 +93,7 @@ class FileManager extends Component {
                     </div>
 
                     <div className="middle-section">
-                        <FileManagerViews username={this.username} view={this.state.view} torrents={this.state.torrents}/>
+                        <FileManagerViews username={this.username} view={this.state.view} torrents={this.state.torrents} tFetcher={this.tFetcher}/>
                     </div>
                         
                     <div className="right-section">
