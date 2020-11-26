@@ -32,7 +32,7 @@ class SendFileByToken(Resource):
         if os.path.isdir(path):
             return JU.make_response("this is a directory's path", 400)
         elif os.path.exists(path):
-            return send_file(path)
+            return send_file(path, mimetype='application/octet-stream', attachment_filename=os.path.basename(path), as_attachment=True)
 
 
 #http://localhost:5000/api/torrent-files?path=L2Rvd25sb2Fkcy9yYWkvOTZiZjUyOWEwYjg3NWVkOTZkNDA2MTYyMzAyNjcwM2QyM2NiN2Y5OC9MYXhtaWkgQm9tYiAoMjAyMCkgSGluZGkgNzIwcCBXRUJETCB4MjY0IEFBQy4gRVN1Yi5ta3Y=&auth=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDYzOTE4MDQsIm5iZiI6MTYwNjM5MTgwNCwianRpIjoiMDAyYzY4ZWUtZmFmZi00ODFiLTlmNGMtYmUwMTg3YjVmZGNjIiwiZXhwIjoxNjA2Mzk1NDA0LCJpZGVudGl0eSI6InJhaSIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.zyEcvFxozuavTJv3074VZ139B1Q-9eDZIlyAFpHstV0
