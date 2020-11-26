@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import "../styles/FileCard.css";
 import "../styles/TorrentCard.css";
-import {downloadFile} from "../services/FileService";
+import {downloadFileUrl} from "../services/FileService";
 
 class FileCard extends Component {
     constructor(props) {
         super(props);
-        this.state = {data: null, threeDotMenuVisible: ""};
+        this.state = {data: null, threeDotMenuVisible: "", MenuTranslateY: "0px"};
         this.humanFileSize = this.humanFileSize.bind(this);
         this.trimString = this.trimString.bind(this);
         this.getFileIcon = this.getFileIcon.bind(this);
@@ -56,12 +56,27 @@ class FileCard extends Component {
         }
     }
 
-    handleDotMenu(name){
+    handleDotMenu(e, name){
+        let windowH = window.innerHeight-30;
+        let menuH = 220;
+
         if (!this.state.threeDotMenuVisible){
             this.setState({threeDotMenuVisible: name});
             document.addEventListener('click', this.handleOutsideClick, false);
+            
+            try{
+                menuH = e.clientY+menuH;
+                if (menuH > windowH){
+                    let adjust = 50;
+                    if (window.innerWidth < 800){
+                        adjust = 100;
+                    }
+                    this.setState({MenuTranslateY: windowH-adjust-menuH+"px"});
+                }
+            } catch(err){}
+
         }else {
-            this.setState({threeDotMenuVisible: ""});
+            this.setState({threeDotMenuVisible: "", MenuTranslateY: "0px"});
             document.removeEventListener('click', this.handleOutsideClick, false);
         }
     }
@@ -72,95 +87,85 @@ class FileCard extends Component {
         }
     }
 
-    handleDownload(path, name){
-        downloadFile(path)
-        .then(response => {
-            if(response.ok){
-               console.log(response);
-               response.blob().then(blob => {
-                var hiddenElement = document.createElement('a');
-                hiddenElement.href = window.URL.createObjectURL(blob);
-                hiddenElement.target = '_blank';
-                hiddenElement.download = name;
-                hiddenElement.click();
-               })
-            }
-        }).catch(err => {
-            console.log("[ERROR] in handleDownload:", err)
-        })
+    handleDownload(path, filename){
+        let url = downloadFileUrl(path);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
     }
 
     render(){
-            return(
-                <div>
-                    <div className="file-card" style={{cursor: "pointer"}} onClick={() => this.props.goBack()}><p>...</p></div>
-                    {this.props.data.children &&
-                    this.props.data.children.map((item) => {
-                        return (
-                            <div className="file-card">
-                                <div className="file-card-info">
-                                    {item.type === "directory" && <img src="icons/mac-folder-icon.svg"/>}
-                                    {item.type === "file" && <img style={{width:"32px"}} src={this.getFileIcon(item.ext)}/>}
+        return(
+            <div>
+                <div className="file-card" style={{cursor: "pointer"}} onClick={() => this.props.goBack()}><p>...</p></div>
+                {this.props.data.children &&
+                this.props.data.children.map((item) => {
+                    return (
+                        <div className="file-card">
+                            <div className="file-card-info">
+                                {item.type === "directory" && <img src="icons/mac-folder-icon.svg"/>}
+                                {item.type === "file" && <img style={{width:"32px"}} src={this.getFileIcon(item.ext)}/>}
 
-                                    <div className="file-card-wrapper">
-                                        <p className="file-card-info-name" onClick={() => this.props.updateCard(item, this.props.data)}>{this.trimString(item.name, 30)}</p>
-                                        {item.type === "file" && <p className="file-card-info-size">{this.humanFileSize(item.size)}</p>}
-                                    </div>
+                                <div className="file-card-wrapper">
+                                    <p className="file-card-info-name" onClick={() => this.props.updateCard(item, this.props.data)}>{this.trimString(item.name, 30)}</p>
+                                    {item.type === "file" && <p className="file-card-info-size">{this.humanFileSize(item.size)}</p>}
                                 </div>
-
-
-                                <div className="torrent-card-menu">
-                                    <div className="torrent-card-menu-dot-wrapper" onClick={() => this.handleDotMenu(item.name)}>
-                                        <div className="torrent-card-menu-dot" />
-                                        <div className="torrent-card-menu-dot" />
-                                        <div className="torrent-card-menu-dot" />
-                                    </div>
-                                    {this.state.threeDotMenuVisible === item.name && (
-                                        <div className="torrent-card-menu-contents">
-                                            <div className="torrent-card-menu-contents-items">
-                                                <img src="icons/bxs-cloud-download.svg"/>
-                                                <p onClick={() => this.handleDownload(item.path, item.name)}>Download</p>
-                                            </div>
-                                            
-                                            <div className="torrent-card-menu-contents-items">
-                                                <img src="icons/bx-link-alt.svg"/>
-                                                <p>Copy Link</p>
-                                            </div>
-
-                                            <div className="torrent-card-menu-contents-items">
-                                                <img src="icons/bx-edit-alt.svg"/>
-                                                <p>Rename</p>
-                                            </div>
-
-                                            <div className="torrent-card-menu-contents-items">
-                                                <img src="icons/bx-copy-alt.svg"/>
-                                                <p>Copy</p>
-                                            </div>
-
-                                            <div className="torrent-card-menu-contents-items">
-                                                <img src="icons/bx-cut.svg"/>
-                                                <p>Cut</p>
-                                            </div>
-
-                                            <div className="torrent-card-menu-contents-items">
-                                                <img src="icons/bx-paste.svg"/>
-                                                <p>Paste</p>
-                                            </div>
-
-                                            <div className="torrent-card-menu-contents-items">
-                                                <img src="icons/bx-trash.svg"/>
-                                                <p onClick={this.handleDelete}>Delete</p>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-
                             </div>
-                        )
-                    })}
-                </div>
-            )
-        }
+
+
+                            <div className="torrent-card-menu">
+                                <div className="torrent-card-menu-dot-wrapper" onClick={(e) => this.handleDotMenu(e, item.name)}>
+                                    <div className="torrent-card-menu-dot" />
+                                    <div className="torrent-card-menu-dot" />
+                                    <div className="torrent-card-menu-dot" />
+                                </div>
+                                {this.state.threeDotMenuVisible === item.name && (
+                                    <div style={{transform: "translate(0px, "+this.state.MenuTranslateY+")"}} className="torrent-card-menu-contents">
+                                        <div className="torrent-card-menu-contents-items">
+                                            <img src="icons/bxs-cloud-download.svg"/>
+                                            <p onClick={() => this.handleDownload(item.path, item.name)}>Download</p>
+                                        </div>
+                                        
+                                        <div className="torrent-card-menu-contents-items">
+                                            <img src="icons/bx-link-alt.svg"/>
+                                            <p>Copy Link</p>
+                                        </div>
+
+                                        <div className="torrent-card-menu-contents-items">
+                                            <img src="icons/bx-edit-alt.svg"/>
+                                            <p>Rename</p>
+                                        </div>
+
+                                        <div className="torrent-card-menu-contents-items">
+                                            <img src="icons/bx-copy-alt.svg"/>
+                                            <p>Copy</p>
+                                        </div>
+
+                                        <div className="torrent-card-menu-contents-items">
+                                            <img src="icons/bx-cut.svg"/>
+                                            <p>Cut</p>
+                                        </div>
+
+                                        <div className="torrent-card-menu-contents-items">
+                                            <img src="icons/bx-paste.svg"/>
+                                            <p>Paste</p>
+                                        </div>
+
+                                        <div className="torrent-card-menu-contents-items">
+                                            <img src="icons/bx-trash.svg"/>
+                                            <p onClick={this.handleDelete}>Delete</p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                        </div>
+                    )
+                })}
+            </div>
+        )
+    }
 }
 
 export default FileCard;

@@ -24,16 +24,13 @@ function getFileDetails(Hash){
 
 
 
-function downloadFile(path){
+function downloadFileUrl(path, name){
     let auth = getAuthToken();
     let b64 = btoa(unescape(encodeURIComponent(path)));
-    return fetch(
-        base_url+"/api/torrent-files?path="+b64+"&auth="+auth.access_token,
-        getAuthHeader("GET")
-    )
+    return base_url+"/api/torrent-files?path="+b64+"&auth="+auth.access_token;
 }
 
 export {
     getFileDetails,
-    downloadFile
+    downloadFileUrl
 }
