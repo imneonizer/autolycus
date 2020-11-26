@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "../styles/FileCard.css";
 import "../styles/TorrentCard.css";
+import {downloadFile} from "../services/FileService";
 
 class FileCard extends Component {
     constructor(props) {
@@ -11,6 +12,7 @@ class FileCard extends Component {
         this.getFileIcon = this.getFileIcon.bind(this);
         this.handleDotMenu = this.handleDotMenu.bind(this);
         this.handleOutsideClick = this.handleOutsideClick.bind(this);
+        this.handleDownload = this.handleDownload.bind(this);
     }
 
     componentDidMount() {
@@ -70,6 +72,24 @@ class FileCard extends Component {
         }
     }
 
+    handleDownload(path, name){
+        downloadFile(path)
+        .then(response => {
+            if(response.ok){
+               console.log(response);
+               response.blob().then(blob => {
+                var hiddenElement = document.createElement('a');
+                hiddenElement.href = window.URL.createObjectURL(blob);
+                hiddenElement.target = '_blank';
+                hiddenElement.download = name;
+                hiddenElement.click();
+               })
+            }
+        }).catch(err => {
+            console.log("[ERROR] in handleDownload:", err)
+        })
+    }
+
     render(){
             return(
                 <div>
@@ -99,7 +119,7 @@ class FileCard extends Component {
                                         <div className="torrent-card-menu-contents">
                                             <div className="torrent-card-menu-contents-items">
                                                 <img src="icons/bxs-cloud-download.svg"/>
-                                                <p>Download</p>
+                                                <p onClick={() => this.handleDownload(item.path, item.name)}>Download</p>
                                             </div>
                                             
                                             <div className="torrent-card-menu-contents-items">

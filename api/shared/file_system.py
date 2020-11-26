@@ -10,9 +10,11 @@ class FileSystem:
                 d = {'name': os.path.basename(path)}
                 if os.path.isdir(path):
                     d['type'] = "directory"
+                    d['path'] = os.path.realpath(path)
                     d['children'] = [path_to_dict(os.path.join(path,x)) for x in os.listdir(path)]
                 else:
                     d['type'] = "file"
+                    d['path'] = os.path.realpath(path)
                     d['ext'] = os.path.splitext(path)[1]
                     d['size'] = os.stat(path).st_size
                 return d

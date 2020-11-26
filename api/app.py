@@ -15,6 +15,10 @@ from endpoints.torrents import (
     FileStructure
 )
 
+from endpoints.files import (
+    SendFileByToken
+)
+
 from endpoints.auth import (
     UserExists, EmailExists, Signup, Login,
     Logout, RevokeAccessToken, RevokeRefreshToken,
@@ -47,7 +51,8 @@ def create_app(config_name):
     api.add_resource(TorrentStatus, '/torrents/status')
     
     api.add_resource(FileStructure, '/torrents/files')
-    
+    api.add_resource(SendFileByToken, '/torrent-files')
+
     db.app = app
     db.init_app(app)
     logger.init_app(app)
