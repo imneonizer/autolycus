@@ -53,6 +53,8 @@ class FileCard extends Component {
             return "icons/video-file-icon.svg";
         }else if ([".txt", ".srt", ".md", ".docx"].includes(ext)){
             return "icons/doc-file-icon.svg";
+        }else{
+            return "icons/unknown-file-icon.svg";
         }
     }
 
@@ -69,6 +71,7 @@ class FileCard extends Component {
                 if (menuH > windowH){
                     let adjust = 50;
                     if (window.innerWidth < 800){
+                        // adjust overflow menu
                         adjust = 100;
                     }
                     this.setState({MenuTranslateY: windowH-adjust-menuH+"px"});
@@ -87,12 +90,24 @@ class FileCard extends Component {
         }
     }
 
-    handleDownload(path, filename){
+    handleDownload(path, filename, copyLink=false){
         let url = downloadFileUrl(path);
-        let a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.click();
+
+        if (copyLink){
+            // copy link to clipboard
+            const el = document.createElement('textarea');
+            el.value = url;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        }else{
+            // download file
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click(); a.remove();
+        }
     }
 
     render(){
@@ -129,7 +144,7 @@ class FileCard extends Component {
                                         
                                         <div className="torrent-card-menu-contents-items">
                                             <img src="icons/bx-link-alt.svg"/>
-                                            <p>Copy Link</p>
+                                            <p onClick={() => this.handleDownload(item.path, item.name, true)}>Copy Link</p>
                                         </div>
 
                                         <div className="torrent-card-menu-contents-items">
