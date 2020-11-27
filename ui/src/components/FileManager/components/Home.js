@@ -4,6 +4,7 @@ import TorrentCard from "./TorrentCard";
 import FileCard from "./FileCard";
 import "../styles/Home.css";
 import {getFileDetails} from "../services/FileService";
+import cogoToast from 'cogo-toast';
 
 class Home extends Component {
     constructor(props) {
@@ -29,6 +30,8 @@ class Home extends Component {
                 response.json().then(json => {
                     this.setState({card:card, data:json})
                 })
+            }else {
+                cogoToast.error("file not found", {position: "top-center", hideAfter: 1});
             }
         }).catch( err => {
             console.log("[ERROR] from getFileDetails:", err)
