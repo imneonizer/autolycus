@@ -17,6 +17,14 @@ class Home extends Component {
 
     componentDidMount() {
         this.props.tFetcher(true);
+
+        window.history.pushState({name: "browserBack"}, "on browser back click", window.location.href);
+        window.history.pushState({name: "browserBack"}, "on browser back click", window.location.href);
+        
+        // switch to previous directory when user presses back button in browser
+        window.addEventListener('popstate', () => {
+            // pass when on Home screen
+        }, false)
     }
       
     componentWillUnmount() {

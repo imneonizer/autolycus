@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import "../styles/TorrentCard.css";
 import {DeleteTorrent} from "../services/TorrentService";
+import { Progress } from 'react-sweet-progress';
+import "react-sweet-progress/lib/style.css";
+import cogoToast from 'cogo-toast';
 
 class TorrentCard extends Component {
     constructor(props) {
@@ -11,10 +14,11 @@ class TorrentCard extends Component {
         this.handleOutsideClick = this.handleOutsideClick.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.trimString = this.trimString.bind(this);
+        this.getTorrentSize = this.getTorrentSize.bind(this);
     }
 
     humanFileSize(size) {
-        if (!size){return "0 Bytes"}
+        if (!size){return "0 B"}
 
         var i = Math.floor( Math.log(size) / Math.log(1024) );
         return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
@@ -41,7 +45,7 @@ class TorrentCard extends Component {
         DeleteTorrent(this.props.data.hash)
         .then( response => {
             if (response.ok){
-                //pass
+                cogoToast.success("torrent deleted", {position: "top-center", hideAfter: 1});
             }
         })
         .catch(err => {
@@ -63,6 +67,14 @@ class TorrentCard extends Component {
         }
     }
 
+    getTorrentSize(){
+        if (!this.props.data.is_finished){
+            return this.humanFileSize(this.props.data.downloaded_bytes)+" / "+this.humanFileSize(this.props.data.total_bytes)+ " ("+ this.humanFileSize(this.props.data.download_speed)+"/s)";
+        }else{
+            return this.humanFileSize(this.props.data.total_bytes);
+        }
+    }
+
     render(){
         return(
             <div className="torrent-card">
@@ -70,7 +82,8 @@ class TorrentCard extends Component {
                     <img src="icons/mac-folder-icon.svg"/>
                     <div className="torrent-card-wrapper">
                         <p className="torrent-card-info-name">{this.trimString(this.props.data.name, 30)}</p>
-                        <p className="torrent-card-info-size">{this.humanFileSize(this.props.data.total_bytes)}</p>
+                        {!this.props.data.is_finished && <Progress percent={this.props.data.progress} status="active" />}
+                        <p className="torrent-card-info-size">{this.getTorrentSize()}</p>
                     </div>
                 </div>
 
@@ -112,9 +125,9 @@ class TorrentCard extends Component {
                                 <p>Paste</p>
                             </div>
 
-                            <div className="torrent-card-menu-contents-items">
+                            <div onClick={this.handleDelete} className="torrent-card-menu-contents-items">
                                 <img src="icons/bx-trash.svg"/>
-                                <p onClick={this.handleDelete}>Delete</p>
+                                <p>Delete</p>
                             </div>
                         </div>
                     )}

@@ -4,6 +4,8 @@ import "../styles/TorrentCard.css";
 import {downloadFileUrl} from "../services/FileService";
 import cogoToast from 'cogo-toast';
 
+import $ from 'jquery';
+
 class FileCard extends Component {
     constructor(props) {
         super(props);
@@ -18,9 +20,16 @@ class FileCard extends Component {
 
     componentDidMount() {
         this.props.tFetcher(false);
+
+        // reason to write below line twice: https://stackoverflow.com/questions/55966533/show-alert-on-browser-back-button-event-on-react-js
+        window.history.pushState({name: "browserBack"}, "on browser back click", window.location.href);
+        window.history.pushState({name: "browserBack"}, "on browser back click", window.location.href);
+        
+        // switch to previous directory when user presses back button in browser
+        window.addEventListener('popstate', () => {this.props.goBack()}, false)
     }
 
-    cextendsomponentWillUnmount() {
+    componentWillUnmount() {
         this.props.tFetcher(true);
     }
 
@@ -91,9 +100,12 @@ class FileCard extends Component {
         }
     }
 
-    handleDownload(path, filename, copyLink=false){
+    handleDownload(path, filename, filetype, copyLink=false){
         let url = downloadFileUrl(path);
-
+        if (filetype === "directory"){
+            cogoToast.warn("directories not allowed", {position: "top-center", hideAfter: 1});
+            return;
+        }
         if (copyLink){
             // copy link to clipboard
             const el = document.createElement('textarea');
@@ -116,7 +128,13 @@ class FileCard extends Component {
     render(){
         return(
             <div>
-                <div className="file-card" style={{cursor: "pointer"}} onClick={() => this.props.goBack()}><p>...</p></div>
+                <div className="file-card" style={{cursor: "pointer"}} onClick={() => this.props.goBack()}>
+                    <div className="file-card-info">
+                        <img style={{width: "20px"}} src="icons/up-arrow.svg"/>
+                        <p className="file-card-wrapper file-card-info-size">Folder Up</p>
+                    </div>
+                </div>
+
                 {this.props.data.children &&
                 this.props.data.children.map((item) => {
                     return (
@@ -140,12 +158,12 @@ class FileCard extends Component {
                                 </div>
                                 {this.state.threeDotMenuVisible === item.name && (
                                     <div style={{transform: "translate(0px, "+this.state.MenuTranslateY+")"}} className="torrent-card-menu-contents">
-                                        <div onClick={() => this.handleDownload(item.path, item.name)} className="torrent-card-menu-contents-items">
+                                        <div onClick={() => this.handleDownload(item.path, item.name, item.type)} className="torrent-card-menu-contents-items">
                                             <img src="icons/bxs-cloud-download.svg"/>
                                             <p>Download</p>
                                         </div>
                                         
-                                        <div onClick={() => this.handleDownload(item.path, item.name, true)} className="torrent-card-menu-contents-items">
+                                        <div onClick={() => this.handleDownload(item.path, item.name, item.type, true)} className="torrent-card-menu-contents-items">
                                             <img src="icons/bx-link-alt.svg"/>
                                             <p>Copy Link</p>
                                         </div>
