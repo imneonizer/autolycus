@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import Home from "./components/Home";
 import {AuthLogout} from "../../services/LoginService";
 
@@ -25,7 +24,7 @@ function Settings(){
 }
 
 class FileManagerViews extends Component {
-    constructor(props) {
+    constructor(props){
         super(props);
     }
 

@@ -59,7 +59,7 @@ class FileCard extends Component {
     }
 
     getFileIcon(ext){
-        if ([".mkv", ".mp4"].includes(ext)){
+        if ([".mkv", ".mp4", ".avi"].includes(ext)){
             return "icons/video-file-icon.svg";
         }else if ([".txt", ".srt", ".md", ".docx"].includes(ext)){
             return "icons/doc-file-icon.svg";

@@ -55,7 +55,7 @@ class Home extends Component {
         if (data.type === "directory"){
             this.setState({ data: data, parent_items: this.state.parent_items.concat([previous_item]) })
         }else {
-            if ([".mkv", ".mp4"].includes(data.ext)){
+            if ([".mkv", ".mp4", ".avi"].includes(data.ext)){
                 console.log("video file clicked");
             }
         }
@@ -64,16 +64,16 @@ class Home extends Component {
     render(){
         if (this.state.data){
             return (
-                <div>
+                <div style={{scrollBehavior: "smooth"}}>
                     <AddMagnet/>
-                    <FileCard data={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goBack} updateCard={this.updateCard}/>
+                    <FileCard data={this.state.data} key={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goBack} updateCard={this.updateCard}/>
                 </div>
             )
         } else {
             return(
                 <div>
                     <AddMagnet/>
-                    {this.props.torrents.map((data) => {return <TorrentCard data={data} cardHandler={this.cardHandler}/>})}
+                    {this.props.torrents.map((data) => {return <TorrentCard data={data} key={data.name} cardHandler={this.cardHandler}/>})}
                 </div>
             )
         }
