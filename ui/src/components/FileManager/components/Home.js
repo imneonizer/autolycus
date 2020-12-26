@@ -4,6 +4,7 @@ import TorrentCard from "./TorrentCard";
 import FileCard from "./FileCard";
 import "../styles/Home.css";
 import {getFileDetails} from "../services/FileService";
+import cogoToast from 'cogo-toast';
 
 class Home extends Component {
     constructor(props) {
@@ -16,6 +17,14 @@ class Home extends Component {
 
     componentDidMount() {
         this.props.tFetcher(true);
+
+        window.history.pushState({name: "browserBack"}, "on browser back click", window.location.href);
+        window.history.pushState({name: "browserBack"}, "on browser back click", window.location.href);
+        
+        // switch to previous directory when user presses back button in browser
+        window.addEventListener('popstate', () => {
+            // pass when on Home screen
+        }, false)
     }
       
     componentWillUnmount() {
@@ -29,6 +38,8 @@ class Home extends Component {
                 response.json().then(json => {
                     this.setState({card:card, data:json})
                 })
+            }else {
+                cogoToast.error("file not found", {position: "top-center", hideAfter: 1});
             }
         }).catch( err => {
             console.log("[ERROR] from getFileDetails:", err)
@@ -44,7 +55,7 @@ class Home extends Component {
         if (data.type === "directory"){
             this.setState({ data: data, parent_items: this.state.parent_items.concat([previous_item]) })
         }else {
-            if ([".mkv", ".mp4"].includes(data.ext)){
+            if ([".mkv", ".mp4", ".avi"].includes(data.ext)){
                 console.log("video file clicked");
             }
         }
@@ -53,16 +64,16 @@ class Home extends Component {
     render(){
         if (this.state.data){
             return (
-                <div>
+                <div style={{scrollBehavior: "smooth"}}>
                     <AddMagnet/>
-                    <FileCard data={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goBack} updateCard={this.updateCard}/>
+                    <FileCard data={this.state.data} key={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goBack} updateCard={this.updateCard}/>
                 </div>
             )
         } else {
             return(
                 <div>
                     <AddMagnet/>
-                    {this.props.torrents.map((data) => {return <TorrentCard data={data} cardHandler={this.cardHandler}/>})}
+                    {this.props.torrents.map((data) => {return <TorrentCard data={data} key={data.name} cardHandler={this.cardHandler}/>})}
                 </div>
             )
         }

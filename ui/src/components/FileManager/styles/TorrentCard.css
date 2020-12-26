@@ -12,12 +12,14 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    overflow-x: hidden;
 }
 
 .torrent-card-wrapper {
     /* border: 1px solid red; */
     margin-left: 10px;
     /* display: flex; */
+    width: 100vw;
     
 }
 

@@ -3,10 +3,6 @@ import ReactDOM from 'react-dom';
 import './styles/index.css';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from './views/Home';
-import Dashboard from './views/Dashboard';
-// import Header from './components/Header'
-// import Login from './components/Login';
-// import Footer from './components/Footer'
 
 function App () {
     return (

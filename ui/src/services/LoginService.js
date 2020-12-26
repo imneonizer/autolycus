@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {uri} from '../uri';
 
 function handleErrors(response) {
     if (!response.ok) {
@@ -11,9 +11,9 @@ function clearTokens(){
     localStorage.setItem('autolycus-auth', undefined);
 }
 
-function AuthLogin(api_endpoint, username, password) {
+function AuthLogin(username, password) {
     let password_box = document.getElementById("login-password-box");
-    fetch(api_endpoint, {
+    fetch(uri+"/auth/login", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: username, password: password })
@@ -42,14 +42,13 @@ function AuthLogin(api_endpoint, username, password) {
     };
 
 function AuthLogout(){
-    let base_url = "http://192.168.0.179:5000/api/auth";
     let auth = localStorage.getItem('autolycus-auth');
     if (auth !== "undefined"){
         auth = JSON.parse(auth)
     }
 
     if (auth){
-        fetch(base_url+"/logout", {
+        fetch(uri+"/auth/logout", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,9 +66,9 @@ function AuthLogout(){
     }
 }
 
-function ValidateUsername(api_endpoint, username){
+function ValidateUsername(username){
     let usernamebox = document.getElementById("login-username-box");
-    return fetch(api_endpoint+username)
+    return fetch(uri+"/auth/user-exists?username="+username)
         // .then(handleErrors)
         .then(response => {
             if (response.status === 200){
@@ -86,7 +85,6 @@ function ValidateUsername(api_endpoint, username){
 
 
 async function refreshAccessToken() {
-        let base_url = "http://192.168.0.179:5000/api/auth";
         let auth = localStorage.getItem('autolycus-auth');
         let authorized = false;
     
@@ -96,7 +94,7 @@ async function refreshAccessToken() {
 
         if (auth){
             // try to get new access token using refresh token
-            await fetch(base_url+"/refresh-token", {
+            await fetch(uri+"/auth/refresh-token", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,18 +121,15 @@ async function refreshAccessToken() {
     }
 
 async function ValidateAuth (auto_refresh=false, interval=2) {
-    let base_url = "http://192.168.0.179:5000/api/auth";
     let auth = localStorage.getItem('autolycus-auth');
     let authorized = false;
 
     if (auth !== "undefined"){
         auth = JSON.parse(auth)
     }
-    
-    // console.log(auth);
 
     if (auth){
-        await fetch(base_url+"/user-details", {
+        await fetch(uri+"/auth/user-details", {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

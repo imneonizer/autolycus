@@ -1,4 +1,4 @@
-let base_url = "http://192.168.0.179:5000";
+import {uri} from "../../../uri";
 
 function getAuthToken(){
     let auth = localStorage.getItem('autolycus-auth');
@@ -19,15 +19,14 @@ function getAuthHeader(method="POST"){
 }
 
 function getFileDetails(Hash){
-    return fetch(base_url+"/api/torrents/files?hash="+Hash, getAuthHeader("GET"))
+    return fetch(uri+"/torrents/files?hash="+Hash, getAuthHeader("GET"))
 }
-
 
 
 function downloadFileUrl(path, name){
     let auth = getAuthToken();
     let b64 = btoa(unescape(encodeURIComponent(path)));
-    return base_url+"/api/torrent-files?path="+b64+"&auth="+auth.access_token;
+    return uri+"/torrent-files?path="+b64+"&auth="+auth.access_token;
 }
 
 export {

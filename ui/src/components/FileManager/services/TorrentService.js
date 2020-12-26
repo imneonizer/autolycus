@@ -1,4 +1,4 @@
-let base_url = "http://192.168.0.179:5000/api/torrents";
+import {uri} from "../../../uri";
 
 function getAuthToken(){
     let auth = localStorage.getItem('autolycus-auth');
@@ -23,7 +23,7 @@ function SendMagnet(element_id, magnet){
     let auth = getAuthToken();
 
     if (auth){
-        fetch(base_url+"/add?magnet="+magnet, {
+        fetch(uri+"/torrents/add?magnet="+magnet, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ function SendMagnet(element_id, magnet){
 function FetchTorrents(){
     let auth = getAuthToken();
     if (auth){
-        return fetch(base_url+"/status", getAuthHeader("GET"))
+        return fetch(uri+"/torrents/status", getAuthHeader("GET"))
     }
     
 }
@@ -69,7 +69,7 @@ function FetchTorrents(){
 function DeleteTorrent(Hash){
     let auth = getAuthToken();
     if (auth){
-        return fetch(base_url+"/remove?hash="+Hash, getAuthHeader("GET"))
+        return fetch(uri+"/torrents/remove?hash="+Hash, getAuthHeader("GET"))
     }
     
 }

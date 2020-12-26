@@ -3,6 +3,7 @@ import {withRouter} from "react-router-dom";
 import '../styles/Login.css';
 import {AuthLogin, ValidateUsername, clearTokens} from '../services/LoginService';
 import { DoesUserExists, DoesEmailExists, AuthSignup } from '../services/SignupService';
+import {uri} from "../uri";
 
 class Login extends React.Component {
     constructor(props) {
@@ -36,21 +37,18 @@ class Login extends React.Component {
     }
 
     handleSubmit(e) {
-        const base_url = "http://192.168.0.179:5000/api/auth";
         this.validateInputs()
     
         if (e.target.value === "login-account"){
             if (this.state.username && this.state.password){
-                ValidateUsername(base_url+"/user-exists?username=", this.state.username);
-                AuthLogin(base_url+"/login", this.state.username, this.state.password);
+                ValidateUsername(this.state.username);
+                AuthLogin(this.state.username, this.state.password);
             }
         } else{
-            console.log("Signup clicked")
             if (this.state.username && this.state.password){
                 DoesUserExists(this.state.username)
                 DoesEmailExists(this.state.email)
                 AuthSignup(this.state.username, this.state.email, this.state.password)
-                // AuthLogin(this.state.username, this.state.password);
             }
         }
         

@@ -30,7 +30,7 @@ class SendFileByToken(Resource):
             return JU.make_response("invalid path", 400)
 
         if os.path.isdir(path):
-            return JU.make_response("this is a directory's path", 400)
+            return JU.make_response("downloading directories not allowed", 400)
         elif os.path.exists(path):
             return send_file(path, mimetype='application/octet-stream', attachment_filename=os.path.basename(path), as_attachment=True)
 
