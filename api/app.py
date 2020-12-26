@@ -40,7 +40,7 @@ def create_app(config_name):
     api.add_resource(UserExists, '/auth/user-exists')
     api.add_resource(EmailExists, '/auth/email-exists')
     api.add_resource(UserDetails, '/auth/user-details')
-    api.add_resource(DeleteAccount, '/auth/delete-acount')
+    api.add_resource(DeleteAccount, '/auth/delete-account')
 
     api.add_resource(TokenRefresh, '/auth/refresh-token')
     api.add_resource(RevokeAccessToken, '/auth/revoke-access-token')

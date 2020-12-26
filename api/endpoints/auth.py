@@ -56,7 +56,8 @@ class Signup(Resource):
                 "access_token": access_token,
                 "refresh_token": refresh_token
                 }, 200)
-        except:
+        except Exception as e:
+            print(e)
             return JU.make_response("something went wrong", 500)
 
 class UserDetails(Resource):
