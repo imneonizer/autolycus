@@ -16,7 +16,7 @@ from endpoints.torrents import (
 )
 
 from endpoints.files import (
-    SendFileByToken
+    SendFileByToken, StreamFileByToken
 )
 
 from endpoints.auth import (
@@ -52,6 +52,7 @@ def create_app(config_name):
     
     api.add_resource(FileStructure, '/torrents/files')
     api.add_resource(SendFileByToken, '/torrent-files')
+    api.add_resource(StreamFileByToken, '/stream-files')
 
     db.app = app
     db.init_app(app)
@@ -69,6 +70,11 @@ def create_app(config_name):
     def my_expired_token_callback(expired_token):
         token_type = expired_token['type']
         return {'message': 'token has expired'}, 401
+    
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Accept-Ranges', 'bytes')
+        return response
 
     with app.app_context():
         if not check_db(db): exit(1)
