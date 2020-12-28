@@ -100,13 +100,17 @@ class FileCard extends Component {
         }
     }
 
-    handleDownload(path, filename, filetype, copyLink=false){
-        let url = downloadFileUrl(path);
-        if (filetype === "directory"){
+    handleDownload(item, copyLink=false){
+        let url = downloadFileUrl(item.path);
+        if (item.type === "directory"){
             cogoToast.warn("directories not allowed", {position: "top-center", hideAfter: 1});
             return;
         }
         if (copyLink){
+            if ([".mkv", ".mp4", ".avi"].includes(item.ext)){
+                url = url.replace('/torrent-files', '/stream-files');
+            }
+
             // copy link to clipboard
             const el = document.createElement('textarea');
             el.value = url;
@@ -115,11 +119,12 @@ class FileCard extends Component {
             document.execCommand('copy');
             document.body.removeChild(el);
             cogoToast.success("copied to clipboard", {position: "top-center", hideAfter: 1});
+
         }else{
             // download file
             let a = document.createElement('a');
             a.href = url;
-            a.download = filename;
+            a.download = item.name;
             a.click(); a.remove();
             cogoToast.success("download started", {position: "top-center", hideAfter: 1});
         }
@@ -158,12 +163,12 @@ class FileCard extends Component {
                                 </div>
                                 {this.state.threeDotMenuVisible === item.name && (
                                     <div style={{transform: "translate(0px, "+this.state.MenuTranslateY+")"}} className="torrent-card-menu-contents">
-                                        <div onClick={() => this.handleDownload(item.path, item.name, item.type)} className="torrent-card-menu-contents-items">
+                                        <div onClick={() => this.handleDownload(item)} className="torrent-card-menu-contents-items">
                                             <img src="icons/bxs-cloud-download.svg"/>
                                             <p>Download</p>
                                         </div>
                                         
-                                        <div onClick={() => this.handleDownload(item.path, item.name, item.type, true)} className="torrent-card-menu-contents-items">
+                                        <div onClick={() => this.handleDownload(item, true)} className="torrent-card-menu-contents-items">
                                             <img src="icons/bx-link-alt.svg"/>
                                             <p>Copy Link</p>
                                         </div>
