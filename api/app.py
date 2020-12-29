@@ -16,7 +16,8 @@ from endpoints.torrents import (
 )
 
 from endpoints.files import (
-    SendFileByToken, StreamFileByToken
+    SendFileByToken, StreamFileByToken,
+    PublicUrl
 )
 
 from endpoints.auth import (
@@ -53,6 +54,7 @@ def create_app(config_name):
     api.add_resource(FileStructure, '/torrents/files')
     api.add_resource(SendFileByToken, '/torrent-files')
     api.add_resource(StreamFileByToken, '/stream-files')
+    api.add_resource(PublicUrl, '/public/<string:public_url_hash>')
 
     db.app = app
     db.init_app(app)

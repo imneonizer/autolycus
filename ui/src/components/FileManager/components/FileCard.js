@@ -3,8 +3,7 @@ import "../styles/FileCard.css";
 import "../styles/TorrentCard.css";
 import {downloadFileUrl} from "../services/FileService";
 import cogoToast from 'cogo-toast';
-
-import $ from 'jquery';
+import {uri} from "../../../uri";
 
 class FileCard extends Component {
     constructor(props) {
@@ -101,33 +100,41 @@ class FileCard extends Component {
     }
 
     handleDownload(item, copyLink=false){
-        let url = downloadFileUrl(item.path);
         if (item.type === "directory"){
             cogoToast.warn("directories not allowed", {position: "top-center", hideAfter: 1});
             return;
         }
-        if (copyLink){
-            if ([".mkv", ".mp4", ".avi"].includes(item.ext)){
-                url = url.replace('/torrent-files', '/stream-files');
-            }
 
-            // copy link to clipboard
-            const el = document.createElement('textarea');
-            el.value = url;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            cogoToast.success("copied to clipboard", {position: "top-center", hideAfter: 1});
+        downloadFileUrl(item.path).then(response => {
+            response.json().then(json => {
+                if (response.status === 200){
+                    let url = uri+"/public/"+json.public_url_hash
+                    if (copyLink){
+                        if ([".mkv", ".mp4", ".avi"].includes(item.ext)){
+                            url = url+"?stream=true"
+                        }
 
-        }else{
-            // download file
-            let a = document.createElement('a');
-            a.href = url;
-            a.download = item.name;
-            a.click(); a.remove();
-            cogoToast.success("download started", {position: "top-center", hideAfter: 1});
-        }
+                        // copy link to clipboard
+                        const el = document.createElement('textarea');
+                        el.value = url;
+                        document.body.appendChild(el);
+                        el.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(el);
+                        cogoToast.success("copied to clipboard", {position: "top-center", hideAfter: 1});
+            
+                    }else{
+                        // download file
+                        let a = document.createElement('a');
+                        a.href = url;
+                        a.download = item.name;
+                        a.click(); a.remove();
+                        cogoToast.success("download started", {position: "top-center", hideAfter: 1});
+                    }
+                }
+            })
+        })
+
     }
 
     render(){
