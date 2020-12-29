@@ -23,10 +23,18 @@ function getFileDetails(Hash){
 }
 
 
-function downloadFileUrl(path, name){
-    let auth = getAuthToken();
-    let b64 = btoa(unescape(encodeURIComponent(path)));
-    return uri+"/torrent-files?path="+b64+"&auth="+auth.access_token;
+function downloadFileUrl(path){
+    return fetch(uri+"/public/create", {
+        method: "POST",
+        body: JSON.stringify({file_path: path}),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getAuthToken().access_token
+        }
+    })
+
+    // let b64 = btoa(unescape(encodeURIComponent(path)));
+    // return uri+"/torrent-files?path="+b64+"&auth="+auth.access_token;
 }
 
 export {

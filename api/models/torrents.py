@@ -22,7 +22,7 @@ class Torrent(db.Model):
     num_seeds = db.Column(db.Integer)
     num_trackers = db.Column(db.Integer)
 
-    # speed realted information
+    # speed related information
     upload_speed = db.Column(db.Integer) #Bytes/s
     download_speed = db.Column(db.Integer) #Bytes/s
 

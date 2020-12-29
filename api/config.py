@@ -14,6 +14,7 @@ class Config(object):
     JWT_BLACKLIST_ENABLED = True
     JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(minutes=60)
     JWT_REFRESH_TOKEN_EXPIRES = datetime.timedelta(days=15)
+    PUBLIC_URL_EXPIRES = datetime.timedelta(days=7)
 
     DEFAULT_SAVE_PATH = "/downloads"
     DEBUG = False
