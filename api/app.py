@@ -4,8 +4,7 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 from config import config
-from shared.factories import db
-from shared.factories import cache
+from shared.factories import db, cache, migrate
 from shared.logger import logger
 from shared.utils import check_db
 from models.revoked_tokens import RevokedToken
@@ -16,7 +15,6 @@ from endpoints.torrents import (
 )
 
 from endpoints.files import (
-    SendFileByToken, StreamFileByToken,
     PublicUrl
 )
 
@@ -52,14 +50,13 @@ def create_app(config_name):
     api.add_resource(TorrentStatus, '/torrents/status')
     
     api.add_resource(FileStructure, '/torrents/files')
-    api.add_resource(SendFileByToken, '/torrent-files')
-    api.add_resource(StreamFileByToken, '/stream-files')
     api.add_resource(PublicUrl, '/public/<string:public_url_hash>')
 
     db.app = app
     db.init_app(app)
     logger.init_app(app)
     cache.init_app(app)
+    migrate.init_app(app, db)
 
     jwt = JWTManager(app)
     

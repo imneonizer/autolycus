@@ -110,9 +110,7 @@ class FileCard extends Component {
                 if (response.status === 200){
                     let url = uri+"/public/"+json.public_url_hash
                     if (copyLink){
-                        if ([".mkv", ".mp4", ".avi"].includes(item.ext)){
-                            url = url+"?stream=true"
-                        }
+                        url = url+"?stream=true"
 
                         // copy link to clipboard
                         const el = document.createElement('textarea');
