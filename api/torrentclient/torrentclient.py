@@ -15,7 +15,9 @@ class TorrentClient:
         os.makedirs(self.default_save_path, exist_ok=True)
 
         self.lt_session = lt.session()
-        threading.Thread(target=self.auto_update_torrent_records).start()
+        t = threading.Thread(target=self.auto_update_torrent_records)
+        t.daemon = True
+        t.start()
         self.lock = threading.Lock()
 
     def auto_update_torrent_records(self):

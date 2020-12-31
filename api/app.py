@@ -4,8 +4,7 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 from config import config
-from shared.factories import db
-from shared.factories import cache
+from shared.factories import db, cache, migrate
 from shared.logger import logger
 from shared.utils import check_db
 from models.revoked_tokens import RevokedToken
@@ -60,6 +59,7 @@ def create_app(config_name):
     db.init_app(app)
     logger.init_app(app)
     cache.init_app(app)
+    migrate.init_app(app, db)
 
     jwt = JWTManager(app)
     
