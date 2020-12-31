@@ -9,7 +9,7 @@ class Config(object):
     CACHE_IGNORE_ERRORS = True
     CACHE_THRESHOLD = 100
 
-    SECRET_KEY = os.environ.get("SECRET_KEY", "super_secret")
+    SECRET_KEY = "super_secret"
     JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
     JWT_BLACKLIST_ENABLED = True
     JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(minutes=60)
@@ -26,7 +26,8 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
 class ProductionConfig(Config):
-    pass
+    SECRET_KEY = os.environ.get('FLASK_SECRET_KEY', 'super_secret')
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{os.environ.get('POSTGRES_USER')}:{os.environ.get('POSTGRES_PASSWORD')}@{os.environ.get('POSTGRES_HOST')}:{os.environ.get('POSTGRES_PORT', 5432)}/{os.environ.get('POSTGRES_DB')}"
 
 config = {
     "dev": DevelopmentConfig,
