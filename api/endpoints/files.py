@@ -14,6 +14,7 @@ import os
 import re
 import base64
 import hashlib
+import mimetypes
 
 class SendFileByToken(Resource):
     def get(self):
@@ -145,8 +146,8 @@ class PublicUrl(Resource):
                         byte2 = int(groups[1])
 
                 chunk, start, length, file_size = self.get_chunk(path, byte1, byte2)
-                resp = Response(chunk, 206, mimetype='video/mp4',
-                                content_type='video/mp4', direct_passthrough=True)
+                resp = Response(chunk, 206, mimetype=mimetypes.guess_type(path),
+                                content_type=mimetypes.guess_type(path), direct_passthrough=True)
                 resp.headers.add('Content-Range', 'bytes {0}-{1}/{2}'.format(start, start + length - 1, file_size))
                 return resp
 
