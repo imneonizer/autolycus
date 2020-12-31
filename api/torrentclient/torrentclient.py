@@ -8,6 +8,7 @@ import urllib.parse
 from shared.factories import db
 from models.torrents import Torrent
 import re
+from flask import current_app
 
 class TorrentClient:
     def __init__(self, default_save_path="/downloads"):
@@ -21,8 +22,7 @@ class TorrentClient:
         self.lock = threading.Lock()
 
     def auto_update_torrent_records(self):
-        from app import app
-        with app.app_context():
+        with current_app.app_context():
 
             while True:
                 self.lock.acquire()

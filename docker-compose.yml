@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  api:
+      build:
+        context: ./api
+      ports:
+        - 5000:5000
+      volumes:
+        - ./downloads:/downloads
+        - ./api:/app
+        - ./logs:/app/logs
+      environment:
+        - FLASK_ENVIRONMENT=prod
+        - POSTGRES_HOST=db
+      env_file:
+        - ./.env
+      depends_on:
+        - db
+
+  ui:
+      build:
+        context: ./ui
+      volumes:
+        - ./ui:/app
+      ports:
+        - 3000:3000
+      env_file:
+        - ./.env
+
+  db:
+    image: postgres:13-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    env_file:
+      - ./.env

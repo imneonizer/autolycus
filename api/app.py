@@ -1,3 +1,4 @@
+import os
 from flask import Flask, Blueprint
 from flask_cors import CORS
 from flask_restful import Api
@@ -80,8 +81,9 @@ def create_app(config_name):
 
     return app
 
-app = create_app("dev")
+config_name = os.environ.get('FLASK_ENVIRONMENT', 'dev')
+app = create_app(config_name)
 
 if __name__ == "__main__":
-    config = config["dev"]
+    config = config[config_name]
     app.run(debug=config.DEBUG, host=config.HOST, port=config.PORT)
