@@ -38,6 +38,7 @@ function downloadFileUrl(path){
 }
 
 export {
+    getAuthToken,
     getFileDetails,
     downloadFileUrl
 }

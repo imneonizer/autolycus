@@ -5,6 +5,8 @@ import FileCard from "./FileCard";
 import "../styles/Home.css";
 import {getFileDetails} from "../services/FileService";
 import cogoToast from 'cogo-toast';
+import {getAuthToken} from "../services/FileService";
+import {uri} from "../../../uri";
 
 class Home extends Component {
     constructor(props) {
@@ -55,8 +57,11 @@ class Home extends Component {
         if (data.type === "directory"){
             this.setState({ data: data, parent_items: this.state.parent_items.concat([previous_item]) })
         }else {
-            if ([".mkv", ".mp4", ".avi"].includes(data.ext)){
-                console.log("video file clicked");
+            if ([".mkv", ".mp4", ".avi", ".txt", ".srt", ".jpg"].includes(data.ext)){
+                let b64 = btoa(unescape(encodeURIComponent(data.path)));
+                let url = uri+"/public/"+b64+"?token="+getAuthToken().access_token
+                var win = window.open(url, '_blank');
+                win.focus();
             }
         }
     }

@@ -41,12 +41,24 @@ class PublicUrl(Resource):
             return JU.make_response(f"file '{file_path}' doesn't exists", 404)
     
     def get(self, public_url_hash):
-        # send file using public url
-        query = PublicURLS.find_by_public_url_hash(public_url_hash=public_url_hash)
-        download = True if request.args.get('download', None) else False
-        if not query: return JU.make_response(f"url not found", 404)
-        if not query.is_valid: return JU.make_response(f"url expired", 410)
-        return self.send_file(query.file_path, download)
+        access_token = request.args.get('token', None)
+
+        if not access_token:
+            query = PublicURLS.find_by_public_url_hash(public_url_hash=public_url_hash)
+            if not query: return JU.make_response(f"url not found", 404)
+            if not query.is_valid: return JU.make_response(f"url expired", 410)
+            return self.send_file(query.file_path, request.args.get('download', None))
+
+        else:
+            access_token = decode_token(access_token)
+            if time.time() > access_token.get('exp'): JU.make_response("token expired", 401)
+
+            try:
+                path = base64.b64decode(public_url_hash).decode('utf-8')
+            except:
+                return JU.make_response("invalid path", 400)
+
+            return self.send_file(path)
     
     def send_file(self, path, download=False):
         if not os.path.exists(path):
