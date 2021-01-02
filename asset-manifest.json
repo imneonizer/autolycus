@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/Autolycus/static/css/main.e6848e51.chunk.css",
-    "main.js": "/Autolycus/static/js/main.7a7218b3.chunk.js",
-    "main.js.map": "/Autolycus/static/js/main.7a7218b3.chunk.js.map",
-    "runtime-main.js": "/Autolycus/static/js/runtime-main.4093cfbb.js",
-    "runtime-main.js.map": "/Autolycus/static/js/runtime-main.4093cfbb.js.map",
-    "static/css/2.63a1f082.chunk.css": "/Autolycus/static/css/2.63a1f082.chunk.css",
-    "static/js/2.8dcfcc65.chunk.js": "/Autolycus/static/js/2.8dcfcc65.chunk.js",
-    "static/js/2.8dcfcc65.chunk.js.map": "/Autolycus/static/js/2.8dcfcc65.chunk.js.map",
-    "index.html": "/Autolycus/index.html",
-    "static/css/2.63a1f082.chunk.css.map": "/Autolycus/static/css/2.63a1f082.chunk.css.map",
-    "static/css/main.e6848e51.chunk.css.map": "/Autolycus/static/css/main.e6848e51.chunk.css.map",
-    "static/js/2.8dcfcc65.chunk.js.LICENSE.txt": "/Autolycus/static/js/2.8dcfcc65.chunk.js.LICENSE.txt"
+    "main.css": "/autolycus/static/css/main.e6848e51.chunk.css",
+    "main.js": "/autolycus/static/js/main.7a7218b3.chunk.js",
+    "main.js.map": "/autolycus/static/js/main.7a7218b3.chunk.js.map",
+    "runtime-main.js": "/autolycus/static/js/runtime-main.c62d4dd1.js",
+    "runtime-main.js.map": "/autolycus/static/js/runtime-main.c62d4dd1.js.map",
+    "static/css/2.63a1f082.chunk.css": "/autolycus/static/css/2.63a1f082.chunk.css",
+    "static/js/2.8dcfcc65.chunk.js": "/autolycus/static/js/2.8dcfcc65.chunk.js",
+    "static/js/2.8dcfcc65.chunk.js.map": "/autolycus/static/js/2.8dcfcc65.chunk.js.map",
+    "index.html": "/autolycus/index.html",
+    "static/css/2.63a1f082.chunk.css.map": "/autolycus/static/css/2.63a1f082.chunk.css.map",
+    "static/css/main.e6848e51.chunk.css.map": "/autolycus/static/css/main.e6848e51.chunk.css.map",
+    "static/js/2.8dcfcc65.chunk.js.LICENSE.txt": "/autolycus/static/js/2.8dcfcc65.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.4093cfbb.js",
+    "static/js/runtime-main.c62d4dd1.js",
     "static/css/2.63a1f082.chunk.css",
     "static/js/2.8dcfcc65.chunk.js",
     "static/css/main.e6848e51.chunk.css",
