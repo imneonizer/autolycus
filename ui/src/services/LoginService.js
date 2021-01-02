@@ -13,7 +13,7 @@ function clearTokens(){
 
 function AuthLogin(username, password) {
     let password_box = document.getElementById("login-password-box");
-    fetch(uri+"/auth/login", {
+    fetch(uri()+"/auth/login", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: username, password: password })
@@ -48,7 +48,7 @@ function AuthLogout(){
     }
 
     if (auth){
-        fetch(uri+"/auth/logout", {
+        fetch(uri()+"/auth/logout", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ function AuthLogout(){
 
 function ValidateUsername(username){
     let usernamebox = document.getElementById("login-username-box");
-    return fetch(uri+"/auth/user-exists?username="+username)
+    return fetch(uri()+"/auth/user-exists?username="+username)
         // .then(handleErrors)
         .then(response => {
             if (response.status === 200){
@@ -94,7 +94,7 @@ async function refreshAccessToken() {
 
         if (auth){
             // try to get new access token using refresh token
-            await fetch(uri+"/auth/refresh-token", {
+            await fetch(uri()+"/auth/refresh-token", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -129,7 +129,8 @@ async function ValidateAuth (auto_refresh=false, interval=2) {
     }
 
     if (auth){
-        await fetch(uri+"/auth/user-details", {
+        console.log(uri());
+        await fetch(uri()+"/auth/user-details", {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

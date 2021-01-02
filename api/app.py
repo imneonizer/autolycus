@@ -19,6 +19,8 @@ from endpoints.files import (
     PublicUrl
 )
 
+from endpoints.ping import Ping
+
 from endpoints.auth import (
     UserExists, EmailExists, Signup, Login,
     Logout, RevokeAccessToken, RevokeRefreshToken,
@@ -34,6 +36,7 @@ def create_app(config_name):
     api = Api(api_bp)
     app.register_blueprint(api_bp, url_prefix='/api')
 
+    api.add_resource(Ping, '/ping')
     api.add_resource(Signup, '/auth/signup')
     api.add_resource(Login, '/auth/login')
     api.add_resource(Logout, '/auth/logout')

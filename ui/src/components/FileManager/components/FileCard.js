@@ -110,7 +110,7 @@ class FileCard extends Component {
         downloadFileUrl(item.path).then(response => {
             response.json().then(json => {
                 if (response.status === 200){
-                    let url = uri+"/public/"+json.public_url_hash
+                    let url = uri()+"/public/"+json.public_url_hash
                     if (copyLink){
                         // copy link to clipboard
                         const el = document.createElement('textarea');
