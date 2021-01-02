@@ -23,7 +23,7 @@ function SendMagnet(element_id, magnet){
     let auth = getAuthToken();
 
     if (auth){
-        fetch(uri+"/torrents/add?magnet="+magnet, {
+        fetch(uri()+"/torrents/add?magnet="+magnet, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ function SendMagnet(element_id, magnet){
 function FetchTorrents(){
     let auth = getAuthToken();
     if (auth){
-        return fetch(uri+"/torrents/status", getAuthHeader("GET"))
+        return fetch(uri()+"/torrents/status", getAuthHeader("GET"))
     }
     
 }
@@ -69,7 +69,7 @@ function FetchTorrents(){
 function DeleteTorrent(Hash){
     let auth = getAuthToken();
     if (auth){
-        return fetch(uri+"/torrents/remove?hash="+Hash, getAuthHeader("GET"))
+        return fetch(uri()+"/torrents/remove?hash="+Hash, getAuthHeader("GET"))
     }
     
 }

@@ -10,7 +10,7 @@ function handleErrors(response) {
 function DoesUserExists(username){
     let usernamebox = document.getElementById("login-username-box");
 
-    return fetch(uri+"/auth/user-exists?username="+username)
+    return fetch(uri()+"/auth/user-exists?username="+username)
         .then(handleErrors)
         .then(response => {
             if (response.status === 200){
@@ -28,7 +28,7 @@ function DoesUserExists(username){
 function DoesEmailExists(email){
     let emailbox = document.getElementById("signup-email-box");
 
-    return fetch(uri+"/auth/email-exists?email="+email)
+    return fetch(uri()+"/auth/email-exists?email="+email)
         .then(handleErrors)
         .then(response => {
             if (response.status === 200){
@@ -44,7 +44,7 @@ function DoesEmailExists(email){
 }
 
 async function AuthSignup(username, email, password) {
-    await fetch(uri+"/auth/signup", {
+    await fetch(uri()+"/auth/signup", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

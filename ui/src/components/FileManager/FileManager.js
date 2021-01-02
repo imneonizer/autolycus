@@ -17,7 +17,7 @@ class FileManager extends Component {
 
     tFetcher(fetch=null){
         if (fetch){
-            this.timer = setInterval(this.updateTorrents, 2000)
+            this.timer = setInterval(this.updateTorrents, 2000);
         } else {
             clearInterval(this.timer);
         }

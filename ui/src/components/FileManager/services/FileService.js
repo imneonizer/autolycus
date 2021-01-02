@@ -19,12 +19,12 @@ function getAuthHeader(method="POST"){
 }
 
 function getFileDetails(Hash){
-    return fetch(uri+"/torrents/files?hash="+Hash, getAuthHeader("GET"))
+    return fetch(uri()+"/torrents/files?hash="+Hash, getAuthHeader("GET"))
 }
 
 
 function downloadFileUrl(path){
-    return fetch(uri+"/public/create", {
+    return fetch(uri()+"/public/create", {
         method: "POST",
         body: JSON.stringify({file_path: path}),
         headers: {

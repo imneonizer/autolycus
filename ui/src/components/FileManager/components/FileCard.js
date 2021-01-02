@@ -62,6 +62,8 @@ class FileCard extends Component {
             return "icons/video-file-icon.svg";
         }else if ([".txt", ".srt", ".md", ".docx"].includes(ext)){
             return "icons/doc-file-icon.svg";
+        }else if ([".mp3", ".wav"].includes(ext)){
+            return "icons/music-file-icon.svg";
         }else{
             return "icons/unknown-file-icon.svg";
         }
@@ -108,7 +110,7 @@ class FileCard extends Component {
         downloadFileUrl(item.path).then(response => {
             response.json().then(json => {
                 if (response.status === 200){
-                    let url = uri+"/public/"+json.public_url_hash
+                    let url = uri()+"/public/"+json.public_url_hash
                     if (copyLink){
                         // copy link to clipboard
                         const el = document.createElement('textarea');
