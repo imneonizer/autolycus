@@ -5,25 +5,28 @@ import threading, hashlib
 import libtorrent as lt
 import urllib
 import urllib.parse
-from shared.factories import db
 from models.torrents import Torrent
 import re
-from flask import current_app
 
 class TorrentClient:
-    def __init__(self, default_save_path="/downloads"):
+    def __init__(self, app=None, default_save_path="/downloads"):
+        self.app = app
+        if app is not None:
+            self.init_app(app)
+
         self.default_save_path = default_save_path
         os.makedirs(self.default_save_path, exist_ok=True)
-
+    
+    def init_app(self, app):
+        self.app = app
         self.lt_session = lt.session()
+        self.lock = threading.Lock()
         t = threading.Thread(target=self.auto_update_torrent_records)
         t.daemon = True
         t.start()
-        self.lock = threading.Lock()
 
     def auto_update_torrent_records(self):
-        with current_app.app_context():
-
+        with self.app.app_context():
             while True:
                 self.lock.acquire()
                 try:

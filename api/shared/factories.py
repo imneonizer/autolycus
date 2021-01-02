@@ -9,3 +9,6 @@ cache = Cache()
 
 from shared.file_system import FileSystem
 fs = FileSystem()
+
+from torrentclient import TorrentClient
+seedr = TorrentClient()
