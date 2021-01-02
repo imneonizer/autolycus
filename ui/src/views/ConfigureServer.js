@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import cogoToast from 'cogo-toast';
 import {API_URL, uri} from '../uri';
 import '../styles/ServerDown.css'
+import Home from '../views/Home';
 
 class ConfigureServer extends Component {
     constructor(props) {
@@ -16,7 +17,11 @@ class ConfigureServer extends Component {
 
         // forcefully set api address using query parameter
         let apiParameter = this.findGetParameter('api');
-        if (apiParameter){localStorage.setItem('autolycus-uri', apiParameter)}
+        if (apiParameter){
+            apiParameter = decodeURIComponent(apiParameter);
+            console.log(apiParameter);
+            localStorage.setItem('autolycus-uri', apiParameter)
+        }
 
     }
 
@@ -32,10 +37,10 @@ class ConfigureServer extends Component {
 
     findGetParameter(q) {
             return (window.location.search.match(new RegExp('[?&]' + q + '=([^&]+)')) || [, null])[1];
-         }
+    }
 
     componentDidMount() {
-        this.timer = setInterval(this.pingAPI, 1000);
+        this.timer = setInterval(this.pingAPI, 1000*10);
     }
     
     componentWillUnmount(){
@@ -82,7 +87,7 @@ class ConfigureServer extends Component {
             return (
                 <div className="server-down-container">
                     <div className="server-down">
-                        <img src="icons/server-down.svg" width="30%"></img>
+                        <img src="/autolycus/icons/server-down.svg" width="30%"></img>
                         <h3>Our Server is Feeling a Little Down</h3>
                         <p>
                             Please try again in a few moments.<br></br>
@@ -103,7 +108,8 @@ class ConfigureServer extends Component {
                 </div>
             )
         }else{
-            window.location.href = '/';
+            // window.location.href = '/';
+            return <Home />
         }
     }
 

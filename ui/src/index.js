@@ -8,10 +8,9 @@ import ConfigureServer from './views/ConfigureServer';
 function App () {
     return (
         <div className="app">
-            <Router>
+            <Router basename={process.env.PUBLIC_URL}>
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/down" component={ConfigureServer} />
                 </Switch>
             </ Router>
         </div>
