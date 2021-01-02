@@ -8,6 +8,7 @@
     "@material-ui/icons": "^4.9.1",
     "@mui-treasury/layout": "^4.5.0",
     "bootstrap": "^4.5.3",
+    "chalk": "^4.1.0",
     "cogo-toast": "^4.2.3",
     "font-awesome": "^4.7.0",
     "jquery": "^3.5.1",

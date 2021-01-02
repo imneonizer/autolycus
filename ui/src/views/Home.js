@@ -6,6 +6,7 @@ import {ValidateAuth, clearTokens, refreshAccessToken} from "../services/LoginSe
 import ThreeDotLoader from "../components/ThreeDotLoader";
 import Dashboard from "./Dashboard";
 import {uri} from "../uri";
+import ConfigureServer from '../views/ConfigureServer';
 
 class Home extends Component {
     constructor(props) {
@@ -13,7 +14,20 @@ class Home extends Component {
         this.state = {loading: true, authorized: false, apiDown: false};
         this.pingAPI = this.pingAPI.bind(this);
         this.timer = null;
+
+        // forcefully set api address using query parameter
+        let apiParameter = this.findGetParameter('api');
+        if (apiParameter){
+            apiParameter = decodeURIComponent(apiParameter);
+            console.log(apiParameter);
+            localStorage.setItem('autolycus-uri', apiParameter)
+        }
+        
     }
+
+    findGetParameter(q) {
+        return (window.location.search.match(new RegExp('[?&]' + q + '=([^&]+)')) || [, null])[1];
+     }
 
     pingAPI(){
         // check if api server is down
@@ -58,7 +72,7 @@ class Home extends Component {
             return (<Route component={Dashboard} />)
         } else {
             if (this.state.apiDown){
-                window.location.href = '/down';
+                return (<ConfigureServer />)
             }else{
                 return (
                     <div>

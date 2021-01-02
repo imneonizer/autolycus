@@ -19,7 +19,7 @@ class AddMagnet extends Component {
         return(
             <div className="add-magnet-div">
                 <input id="add-magnet-box" type="text" placeholder="Add Magnet Link" />
-                <img className="add-magnet-icon" src="icons/bxs-file-plus.svg" onClick={this.handleMagnetSubmit}/>
+                <img className="add-magnet-icon" src="/autolycus/icons/bxs-file-plus.svg" onClick={this.handleMagnetSubmit}/>
             </div>
 
         )
