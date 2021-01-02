@@ -2,8 +2,7 @@ from flask import request, make_response, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 
-from shared.factories import db, fs
-from torrentclient import seedr
+from shared.factories import db, fs, seedr
 from shared.utils import json_utils as JU
 from models.torrents import Torrent
 
