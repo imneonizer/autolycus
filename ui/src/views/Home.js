@@ -19,8 +19,8 @@ class Home extends Component {
         let apiParameter = this.findGetParameter('api');
         if (apiParameter){
             apiParameter = decodeURIComponent(apiParameter);
-            console.log(apiParameter);
             localStorage.setItem('autolycus-uri', apiParameter)
+            window.location.href = window.location.origin;
         }
         
     }
