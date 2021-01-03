@@ -129,7 +129,6 @@ async function ValidateAuth (auto_refresh=false, interval=2) {
     }
 
     if (auth){
-        console.log(uri());
         await fetch(uri()+"/auth/user-details", {
             method: 'GET',
             headers: {
