@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/autolycus/static/css/main.e6848e51.chunk.css",
-    "main.js": "/autolycus/static/js/main.f93bd35f.chunk.js",
-    "main.js.map": "/autolycus/static/js/main.f93bd35f.chunk.js.map",
+    "main.js": "/autolycus/static/js/main.74a0cb05.chunk.js",
+    "main.js.map": "/autolycus/static/js/main.74a0cb05.chunk.js.map",
     "runtime-main.js": "/autolycus/static/js/runtime-main.c62d4dd1.js",
     "runtime-main.js.map": "/autolycus/static/js/runtime-main.c62d4dd1.js.map",
     "static/css/2.63a1f082.chunk.css": "/autolycus/static/css/2.63a1f082.chunk.css",
@@ -18,6 +18,6 @@
     "static/css/2.63a1f082.chunk.css",
     "static/js/2.8dcfcc65.chunk.js",
     "static/css/main.e6848e51.chunk.css",
-    "static/js/main.f93bd35f.chunk.js"
+    "static/js/main.74a0cb05.chunk.js"
   ]
 }
