@@ -14,6 +14,7 @@ import re
 import base64
 import hashlib
 import mimetypes
+import shutil
 
 class PublicUrl(Resource):
     @jwt_required
@@ -116,3 +117,49 @@ class PublicUrl(Resource):
             chunk = f.read(length)
 
         return chunk, start, length, file_size
+    
+class CopyFile(Resource):
+    @jwt_required
+    def post(self, *args, **kwargs):
+        from_path, to_path, iscut = JU.extract_keys(request.get_json(), "from", "to", "iscut")
+        if None in [from_path, to_path]:
+            return JU.make_response("paths missing", 400)
+        
+        if not os.path.exists(from_path):
+            return JU.make_response("path: '{}' doesn't exists".format(from_path), 400)
+        
+        if not os.path.exists(to_path):
+            return JU.make_response("path: '{}' doesn't exists".format(to_path), 400)
+        
+        # construct full absolute path
+        to_path = os.path.join(to_path, os.path.basename(from_path))
+        
+        try:
+            if iscut:
+                shutil.move(from_path, to_path)
+            else:
+                shutil.copy(from_path, to_path)
+        except Exception as e:
+            return JU.make_response("Error occured: {}".format(str(e)), 500)
+        
+        return JU.make_response("file copied", 200)
+    
+class DeleteFile(Resource):
+    @jwt_required
+    def delete(self, *args, **kwargs):
+        path = JU.extract_keys(request.get_json(), "path")
+        if not path:
+            return JU.make_response("paths missing", 400)
+        
+        if not os.path.exists(path):
+            return JU.make_response("paths doesn't exists", 400)
+        
+        try:
+            if os.path.isfile(path):
+                os.remove(path)
+            else:
+                shutil.rmtree(path)
+        except Exception as e:
+            return JU.make_response("Error occured: {}".format(str(e)), 500)
+        
+        return JU.make_response("file deleted", 200)

@@ -16,7 +16,7 @@ from endpoints.torrents import (
 )
 
 from endpoints.files import (
-    PublicUrl
+    PublicUrl, CopyFile, DeleteFile
 )
 
 from endpoints.ping import Ping
@@ -54,6 +54,9 @@ def create_app(config_name):
     api.add_resource(TorrentStatus, '/torrents/status')
     
     api.add_resource(FileStructure, '/torrents/files')
+    api.add_resource(CopyFile, '/torrents/files/copy-file')
+    api.add_resource(DeleteFile, '/torrents/files/delete-file')
+
     api.add_resource(PublicUrl, '/public/<string:public_url_hash>')
 
     db.app = app

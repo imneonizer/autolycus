@@ -15,6 +15,8 @@ class Home extends Component {
         this.cardHandler = this.cardHandler.bind(this);
         this.goBack = this.goBack.bind(this);
         this.updateCard = this.updateCard.bind(this);
+        this.removeItem = this.removeItem.bind(this);
+        this.addItem = this.addItem.bind(this);
     }
 
     componentDidMount() {
@@ -28,7 +30,7 @@ class Home extends Component {
             // pass when on Home screen
         }, false)
     }
-      
+
     componentWillUnmount() {
         this.props.tFetcher(false);
     }
@@ -66,12 +68,41 @@ class Home extends Component {
         }
     }
 
+    removeItem(e){
+        let children = this.state.data.children.filter(function(item) {
+            return item.path !== e.path
+        });
+        
+        let data = this.state.data
+        data.children = children;
+        this.setState({data: data})
+    }
+    
+    addItem(parent, child, data='none'){
+        if (data === 'none'){
+            var data = this.state.data;
+        }
+
+        if (data['children']){
+            for (var i = 0; i < data.children.length; i++) {
+                let item = data.children[i];                
+                if (item.type === 'directory'){
+                    this.addItem(parent, child, item)
+                }
+
+                if (parent.path === item.path){
+                    parent.children.push(child);
+                }
+            }
+        }
+    }
+
     render(){
         if (this.state.data){
             return (
                 <div style={{scrollBehavior: "smooth"}}>
                     <AddMagnet/>
-                    <FileCard data={this.state.data} key={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goBack} updateCard={this.updateCard}/>
+                    <FileCard data={this.state.data} removeItem={this.removeItem} addItem={this.addItem} key={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goBack} updateCard={this.updateCard}/>
                 </div>
             )
         } else {

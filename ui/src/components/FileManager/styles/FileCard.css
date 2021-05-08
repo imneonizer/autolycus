@@ -79,3 +79,35 @@
 @media screen and (min-width: 0px) and (max-width: 800px) {
 
 }
+
+.toast-confirmation {
+    /* border: 1px solid red; */
+    padding: 10px;
+}
+
+.toast-confirmation > p {
+    padding-bottom: 15px;
+    font-size: large;
+}
+
+.toast-confirmation > button {
+    margin-right: 10px;
+    height: 25px;
+    width: 80px;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: medium;
+    cursor: pointer;
+}
+
+.toast-confirmation > button:hover {
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.toast-confirmation > button:active {
+    transform: translateY(1px);
+    
+}
