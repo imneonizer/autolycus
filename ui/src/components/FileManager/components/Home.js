@@ -61,10 +61,13 @@ class Home extends Component {
         if (data.type === "directory"){
             this.setState({ data: data, parent_items: this.state.parent_items.concat([previous_item]) })
         }else {
-            if ([".mkv", ".mp4", ".avi", ".txt", ".srt", ".jpg", ".mp3", ".wav"].includes(data.ext)){
-                let b64 = btoa(unescape(encodeURIComponent(data.path)));
-                let url = uri()+"/public/"+b64+"?token="+getAuthToken().access_token
+            let b64 = btoa(unescape(encodeURIComponent(data.path)));
+            let url = uri()+"/public/"+b64+"?token="+getAuthToken().access_token;
+            if ([".mkv", ".mp4", ".avi"].includes(data.ext)){    
                 this.setState({videoUrl: url});
+            }else if ([".txt", ".srt", ".jpg", ".mp3", ".wav"].includes(data.ext)) {
+                let win = window.open(url, '_blank');
+                win.focus();
             }
         }
     }
