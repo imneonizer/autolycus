@@ -17,6 +17,7 @@ class Home extends Component {
         this.updateCard = this.updateCard.bind(this);
         this.removeItem = this.removeItem.bind(this);
         this.addItem = this.addItem.bind(this);
+        this.renameItem = this.renameItem.bind(this);
     }
 
     componentDidMount() {
@@ -91,10 +92,28 @@ class Home extends Component {
                 }
 
                 if (parent.path === item.path){
-                    parent.children.push(child);
+                    var filename = parent.path;
+                    var s = filename.split("/");
+                    var newpath = s.slice(0, s.length).join("/") + "/" +child.name;
+                    child.path = newpath;
+                    for (var j=0; j< parent.children.length; j++){
+                        let subchild = parent.children[j];
+                        if (subchild.name !== child.name){
+                            parent.children.push(child);
+                        }
+                    }
+                    
                 }
             }
         }
+    }
+
+    renameItem(item, newname){
+        var filename = item.path;
+        var s = filename.split("/");
+        var newpath = s.slice(0, s.length-1).join("/") + "/" +newname;
+        item.name = newname;
+        item.path = newpath;
     }
 
     render(){
@@ -102,14 +121,14 @@ class Home extends Component {
             return (
                 <div style={{scrollBehavior: "smooth"}}>
                     <AddMagnet/>
-                    <FileCard data={this.state.data} removeItem={this.removeItem} addItem={this.addItem} key={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goBack} updateCard={this.updateCard}/>
+                    <FileCard data={this.state.data} updateActiveItemHover={this.props.updateActiveItemHover} removeItem={this.removeItem} addItem={this.addItem} renameItem={this.renameItem} key={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goBack} updateCard={this.updateCard}/>
                 </div>
             )
         } else {
             return(
                 <div>
                     <AddMagnet/>
-                    {this.props.torrents.map((data) => {return <TorrentCard data={data} key={data.name} cardHandler={this.cardHandler}/>})}
+                    {this.props.torrents.map((data) => {return <TorrentCard data={data} key={data.name} updateActiveItemHover={this.props.updateActiveItemHover} cardHandler={this.cardHandler}/>})}
                 </div>
             )
         }

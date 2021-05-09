@@ -26,8 +26,8 @@
 
 .middle-section::-webkit-scrollbar {
     display: none;
-  }
-  
+}
+
   /* Hide scrollbar for IE, Edge and Firefox */
 .middle-section {
     -ms-overflow-style: none;  /* IE and Edge */
@@ -40,6 +40,21 @@
     padding: 20px;
     margin-left: 5px;
     width: 20%;
+    overflow-x: auto;
+    overflow-wrap: break-word;
+    /* font-size: small; */
+}
+
+.right-section > div > h5 {
+    padding-bottom: 3px;
+    color: rgb(41, 41, 41);
+}
+
+
+.right-section > div > p {
+    padding-bottom: 10px;
+    color: rgb(41, 41, 41);
+    font-size: small;
 }
 
 .left-section-menu {

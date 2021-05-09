@@ -58,10 +58,22 @@ function deleteFile(path){
     })
 }
 
+function renameFile(path, newname){
+    return fetch(uri()+"/torrents/files/rename-file", {
+        method: "POST",
+        body: JSON.stringify({path: path, newname: newname}),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getAuthToken().access_token
+        }
+    })
+}
+
 export {
     getAuthToken,
     getFileDetails,
     downloadFileUrl,
     copyFile,
-    deleteFile
+    deleteFile,
+    renameFile
 }

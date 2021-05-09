@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "../styles/FileCard.css";
 import "../styles/TorrentCard.css";
-import {downloadFileUrl, copyFile, deleteFile} from "../services/FileService";
+import {downloadFileUrl, copyFile, deleteFile, renameFile} from "../services/FileService";
 import cogoToast from 'cogo-toast';
 import {uri} from "../../../uri";
 
@@ -18,6 +18,7 @@ class FileCard extends Component {
         this.handleCopy = this.handleCopy.bind(this);
         this.handlePaste = this.handlePaste.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleRename = this.handleRename.bind(this);
     }
 
     componentDidMount() {
@@ -191,15 +192,47 @@ class FileCard extends Component {
             hide();
             deleteFile(item.path).then(response => {
                 response.json().then(json => {
-                    if (response.status == 200){
+                    if (response.status === 200){
                         this.props.removeItem(item);
-                        cogoToast.success("file deleted", {position: "top-center", hideAfter: 1});
+                        // cogoToast.success("file deleted", {position: "top-center", hideAfter: 1});
                     }else{
                         cogoToast.error("error occured", {position: "top-center", hideAfter: 1});
                         console.error(json);
                     }
                 })
             })
+        }
+    }
+
+    handleRename(item){
+        const { hide } = cogoToast.loading(
+            <div className="toast-confirmation">
+                <p style={{paddingBottom: "1px"}}>Rename</p>
+                <input type="text" id="toast-rename-box" placeholder="Enter new name" defaultValue={item.name}></input>
+                <button style={{backgroundColor: "#1b53f4"}} onClick={() => confirmRename()}>Confirm</button>
+                <button style={{backgroundColor: "#4CAF50"}} onClick={() => hide()}>Cancel</button>
+            </div>, {
+            hideAfter: 0
+        });
+
+        var confirmRename = () => {
+            let newname = document.getElementById("toast-rename-box");
+            if (newname.value && newname.value !== item.name){
+                renameFile(item.path, newname.value).then(response => {
+                    response.json().then(json => {
+                        if (response.status === 200){
+                            item.name = newname.value;
+                            this.props.renameItem(item, newname.value);
+                        }else{
+                            console.error(json);
+                        }
+                    })
+                })
+
+                hide();
+            }
+            
+            
         }
     }
 
@@ -246,7 +279,7 @@ class FileCard extends Component {
                                             <p>Copy Link</p>
                                         </div>
 
-                                        <div className="torrent-card-menu-contents-items">
+                                        <div onClick={() => this.handleRename(item)} className="torrent-card-menu-contents-items">
                                             <img src="/autolycus/icons/bx-edit-alt.svg"/>
                                             <p>Rename</p>
                                         </div>

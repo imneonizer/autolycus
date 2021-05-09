@@ -163,3 +163,20 @@ class DeleteFile(Resource):
             return JU.make_response("Error occured: {}".format(str(e)), 500)
         
         return JU.make_response("file deleted", 200)
+    
+class RenameFile(Resource):
+    @jwt_required
+    def post(self, *args, **kwargs):
+        path, newname = JU.extract_keys(request.get_json(), "path", "newname")
+        if None in [path, newname]:
+            return JU.make_response("data missing", 400)
+        
+        if not os.path.exists(path):
+            return JU.make_response("paths doesn't exists", 400)
+        
+        try:
+            os.rename(path, os.path.join(os.path.dirname(path), newname))
+        except Exception as e:
+            return JU.make_response("Error occured: {}".format(e), 500)
+        
+        return JU.make_response("file rename successfull", 200)
