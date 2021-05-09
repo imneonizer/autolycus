@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "../styles/AddMagnet.css"
 import { SendMagnet } from "../services/TorrentService";
+import VideoPlayer from "../../VideoPlayer";
 
 class AddMagnet extends Component {
     constructor(props) {
@@ -17,9 +18,12 @@ class AddMagnet extends Component {
 
     render(){
         return(
-            <div className="add-magnet-div">
-                <input id="add-magnet-box" type="text" placeholder="Add Magnet Link" />
-                <img className="add-magnet-icon" src="/autolycus/icons/bxs-file-plus.svg" onClick={this.handleMagnetSubmit}/>
+            <div>
+                <div className="add-magnet-div">
+                    <input id="add-magnet-box" type="text" placeholder="Add Magnet Link" />
+                    <img className="add-magnet-icon" src="/autolycus/icons/bxs-file-plus.svg" onClick={this.handleMagnetSubmit}/>
+                </div>
+                {this.props.videoUrl && <VideoPlayer src={this.props.videoUrl}/>}
             </div>
 
         )

@@ -160,7 +160,7 @@ class FileCard extends Component {
                         document.execCommand('copy');
                         document.body.removeChild(el);
                         cogoToast.success("copied to clipboard", {position: "top-center", hideAfter: 1});
-            
+                        
                     }else{
                         // download file
                         url = url+"?download=true"
@@ -227,7 +227,6 @@ class FileCard extends Component {
                         }
                     })
                 })
-
                 hide();
             }
             
@@ -248,7 +247,7 @@ class FileCard extends Component {
                 {this.props.data.children &&
                 this.props.data.children.map((item) => {
                     return (
-                        <div className="file-card">
+                        <div className="file-card" id="file-card">
                             <div className="file-card-info">
                                 {item.type === "directory" && <img src="/autolycus/icons/mac-folder-icon.svg"/>}
                                 {item.type === "file" && <img style={{width:"32px"}} src={this.getFileIcon(item.ext)}/>}
@@ -305,7 +304,6 @@ class FileCard extends Component {
                                     </div>
                                 )}
                             </div>
-
                         </div>
                     )
                 })}

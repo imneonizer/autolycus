@@ -102,7 +102,7 @@ class FileManager extends Component {
                         </div>
                     </div>
 
-                    <div className="middle-section">
+                    <div className="middle-section" id="middle-section">
                         <FileManagerViews username={this.username} updateActiveItemHover={this.updateActiveItemHover} view={this.state.view} torrents={this.state.torrents} tFetcher={this.tFetcher}/>
                     </div>
                         

@@ -49,9 +49,6 @@ class FileManagerInfo extends Component {
 
                     <h5>Size</h5>
                     <p>{this.humanFileSize(this.props.activeItem.downloaded_bytes)}</p>
-{/* 
-                    <h5>{"All"}</h5>
-                    <p>{JSON.stringify(this.props.activeItem)}</p> */}
                 </div>
             )
             

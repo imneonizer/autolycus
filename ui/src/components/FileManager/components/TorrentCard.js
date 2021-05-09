@@ -104,7 +104,7 @@ class TorrentCard extends Component {
 
     render(){
         return(
-            <div className="torrent-card" onMouseOver={() => this.props.updateActiveItemHover(this.props.data)} onMouseOut={() => this.props.updateActiveItemHover()}>
+            <div className="torrent-card" id="torrent-card" onMouseOver={() => this.props.updateActiveItemHover(this.props.data)} onMouseOut={() => this.props.updateActiveItemHover()}>
                 <div className="torrent-card-info" onClick={() => this.props.cardHandler(this.props.data)}>
                     <img src="/autolycus/icons/mac-folder-icon.svg"/>
                     <div className="torrent-card-wrapper">

@@ -7,11 +7,12 @@ import {getFileDetails} from "../services/FileService";
 import cogoToast from 'cogo-toast';
 import {getAuthToken} from "../services/FileService";
 import {uri} from "../../../uri";
+import VideoPlayer from "../../VideoPlayer";
 
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.state = {card: null, data:null, parent_items: []}
+        this.state = {card: null, data:null, parent_items: [], videoUrl: null}
         this.cardHandler = this.cardHandler.bind(this);
         this.goBack = this.goBack.bind(this);
         this.updateCard = this.updateCard.bind(this);
@@ -63,8 +64,7 @@ class Home extends Component {
             if ([".mkv", ".mp4", ".avi", ".txt", ".srt", ".jpg", ".mp3", ".wav"].includes(data.ext)){
                 let b64 = btoa(unescape(encodeURIComponent(data.path)));
                 let url = uri()+"/public/"+b64+"?token="+getAuthToken().access_token
-                var win = window.open(url, '_blank');
-                win.focus();
+                this.setState({videoUrl: url});
             }
         }
     }
@@ -120,14 +120,14 @@ class Home extends Component {
         if (this.state.data){
             return (
                 <div style={{scrollBehavior: "smooth"}}>
-                    <AddMagnet/>
+                    <AddMagnet videoUrl={this.state.videoUrl}/>
                     <FileCard data={this.state.data} updateActiveItemHover={this.props.updateActiveItemHover} removeItem={this.removeItem} addItem={this.addItem} renameItem={this.renameItem} key={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goBack} updateCard={this.updateCard}/>
                 </div>
             )
         } else {
             return(
                 <div>
-                    <AddMagnet/>
+                    <AddMagnet videoUrl={this.state.videoUrl}/>
                     {this.props.torrents.map((data) => {return <TorrentCard data={data} key={data.name} updateActiveItemHover={this.props.updateActiveItemHover} cardHandler={this.cardHandler}/>})}
                 </div>
             )
