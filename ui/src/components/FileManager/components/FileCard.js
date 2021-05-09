@@ -177,8 +177,6 @@ class FileCard extends Component {
     }
 
     handleDelete(item){
-        
-
         const { hide } = cogoToast.loading(
             <div className="toast-confirmation">
                 <p>Are you sure ?</p>
@@ -205,10 +203,11 @@ class FileCard extends Component {
     }
 
     handleRename(item){
+        const selectAllText = (e) => {e.target.select()};
         const { hide } = cogoToast.loading(
             <div className="toast-confirmation">
                 <p style={{paddingBottom: "1px"}}>Rename</p>
-                <input type="text" id="toast-rename-box" placeholder="Enter new name" defaultValue={item.name}></input>
+                <input type="text" id="toast-rename-box" onFocus={selectAllText} placeholder="Enter new name" defaultValue={item.name}></input>
                 <button style={{backgroundColor: "#1b53f4"}} onClick={() => confirmRename()}>Confirm</button>
                 <button style={{backgroundColor: "#4CAF50"}} onClick={() => hide()}>Cancel</button>
             </div>, {
