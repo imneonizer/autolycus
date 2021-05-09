@@ -15,6 +15,8 @@ import base64
 import hashlib
 import mimetypes
 import shutil
+import mmap
+import contextlib
 
 class PublicUrl(Resource):
     @jwt_required
@@ -103,7 +105,7 @@ class PublicUrl(Resource):
     def get_chunk(self, full_path, byte1=None, byte2=None):
         file_size = os.stat(full_path).st_size
         start = 0
-        length = 102400
+        length = 1024
 
         if byte1 < file_size:
             start = byte1
@@ -113,8 +115,10 @@ class PublicUrl(Resource):
             length = file_size - start
 
         with open(full_path, 'rb') as f:
-            f.seek(start)
-            chunk = f.read(length)
+            with contextlib.closing(mmap.mmap(f.fileno(), length=0, access=mmap.ACCESS_READ)) as m:
+                m.seek(start)
+                chunk = m.read(length)
+                m.flush()
 
         return chunk, start, length, file_size
     
