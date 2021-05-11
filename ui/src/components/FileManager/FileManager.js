@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import "../../styles/FileManager.css";
 import FileManagerViews from "./FileManagerViews";
+import FileManagerInfo from "./FileManagerInfo";
 import { FetchTorrents } from "./services/TorrentService";
 
 class FileManager extends Component {
     constructor(props) {
         super(props);
-        this.state = {view: "Home", torrents: []};
+        this.state = {view: "Home", torrents: [], activeItem: {}};
         this.username = JSON.parse(localStorage.getItem('autolycus-auth')).username;
         this.updateView = this.updateView.bind(this);
 
         this.timer = null;
         this.updateTorrents = this.updateTorrents.bind(this);
         this.tFetcher = this.tFetcher.bind(this);
+        this.updateActiveItemHover = this.updateActiveItemHover.bind(this);
     }
 
     tFetcher(fetch=null){
@@ -47,6 +49,14 @@ class FileManager extends Component {
                 elements[i].style.backgroundColor="transparent";
             }
             document.getElementById(view+"NavButton").style.backgroundColor = "rgb(42 154 245 / 10%)";
+        }
+    }
+
+    updateActiveItemHover(item=null){
+        if (item){
+            this.setState({activeItem: item});
+        }else{
+            this.setState({activeItem: {}});
         }
     }
 
@@ -92,12 +102,12 @@ class FileManager extends Component {
                         </div>
                     </div>
 
-                    <div className="middle-section">
-                        <FileManagerViews username={this.username} view={this.state.view} torrents={this.state.torrents} tFetcher={this.tFetcher}/>
+                    <div className="middle-section" id="middle-section">
+                        <FileManagerViews username={this.username} updateActiveItemHover={this.updateActiveItemHover} view={this.state.view} torrents={this.state.torrents} tFetcher={this.tFetcher}/>
                     </div>
                         
                     <div className="right-section">
-                    <p>File info will appear here</p>
+                        <FileManagerInfo activeItem={this.state.activeItem}/>
                     </div>
                 </div>
             </div>

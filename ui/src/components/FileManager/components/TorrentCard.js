@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "../styles/TorrentCard.css";
 import {DeleteTorrent} from "../services/TorrentService";
+import {copyFile} from "../services/FileService";
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
 import cogoToast from 'cogo-toast';
@@ -15,6 +16,7 @@ class TorrentCard extends Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.trimString = this.trimString.bind(this);
         this.getTorrentSize = this.getTorrentSize.bind(this);
+        this.handlePaste = this.handlePaste.bind(this);
     }
 
     humanFileSize(size) {
@@ -39,9 +41,9 @@ class TorrentCard extends Component {
         if (this.node.contains(e.target)){
             return
         }; this.handleDotMenu();
-      }
+    }
 
-      handleDelete(){
+    handleDelete(){
         DeleteTorrent(this.props.data.hash)
         .then( response => {
             if (response.ok){
@@ -51,7 +53,7 @@ class TorrentCard extends Component {
         .catch(err => {
             console.log("[ERROR] in DeleteTorrent:", err)
         })
-      }
+    }
 
     trimString(string, length){
         let w = window.innerWidth;
@@ -75,9 +77,34 @@ class TorrentCard extends Component {
         }
     }
 
+    handlePaste(){
+        let item = {path: this.props.data.download_path, type: 'directory'};
+        let path = JSON.parse(window.localStorage.getItem('autolycus_copy_path'));
+        if (path.item){
+            if (item.type === "directory" && item.path != path.item.path){
+                copyFile(path.item.path, item.path, path.iscut).then(response => {
+                    response.json().then(json => {
+                        if (response.status == 200){
+                            cogoToast.success("Pasted", {position: "top-center", hideAfter: 1});
+                            window.localStorage.removeItem('autolycus_copy_path');
+                        }else{
+                            console.error(json);
+                            cogoToast.error("Unable to paste", {position: "top-center", hideAfter: 1});
+                        }
+                    })
+                })
+            }else{
+                cogoToast.warn("Not allowed", {position: "top-center", hideAfter: 1});
+            }
+        }else{
+            cogoToast.error("Nothing to paste", {position: "top-center", hideAfter: 1});
+        }
+        
+    }
+
     render(){
         return(
-            <div className="torrent-card">
+            <div className="torrent-card" id="torrent-card" onMouseOver={() => this.props.updateActiveItemHover(this.props.data)} onMouseOut={() => this.props.updateActiveItemHover()}>
                 <div className="torrent-card-info" onClick={() => this.props.cardHandler(this.props.data)}>
                     <img src="/autolycus/icons/mac-folder-icon.svg"/>
                     <div className="torrent-card-wrapper">
@@ -120,7 +147,7 @@ class TorrentCard extends Component {
                                 <p>Cut</p>
                             </div>
 
-                            <div className="torrent-card-menu-contents-items">
+                            <div onClick={() => this.handlePaste()} className="torrent-card-menu-contents-items">
                                 <img src="/autolycus/icons/bx-paste.svg"/>
                                 <p>Paste</p>
                             </div>

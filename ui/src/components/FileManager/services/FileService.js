@@ -22,7 +22,6 @@ function getFileDetails(Hash){
     return fetch(uri()+"/torrents/files?hash="+Hash, getAuthHeader("GET"))
 }
 
-
 function downloadFileUrl(path){
     return fetch(uri()+"/public/create", {
         method: "POST",
@@ -37,8 +36,44 @@ function downloadFileUrl(path){
     // return uri+"/torrent-files?path="+b64+"&auth="+auth.access_token;
 }
 
+function copyFile(from, to, iscut=false){
+    return fetch(uri()+"/torrents/files/copy-file", {
+        method: "POST",
+        body: JSON.stringify({from: from, to:to, iscut: iscut}),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getAuthToken().access_token
+        }
+    })
+}
+
+function deleteFile(path){
+    return fetch(uri()+"/torrents/files/delete-file", {
+        method: "DELETE",
+        body: JSON.stringify({path: path}),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getAuthToken().access_token
+        }
+    })
+}
+
+function renameFile(path, newname){
+    return fetch(uri()+"/torrents/files/rename-file", {
+        method: "POST",
+        body: JSON.stringify({path: path, newname: newname}),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getAuthToken().access_token
+        }
+    })
+}
+
 export {
     getAuthToken,
     getFileDetails,
-    downloadFileUrl
+    downloadFileUrl,
+    copyFile,
+    deleteFile,
+    renameFile
 }

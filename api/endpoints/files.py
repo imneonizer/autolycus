@@ -14,6 +14,9 @@ import re
 import base64
 import hashlib
 import mimetypes
+import shutil
+import mmap
+import contextlib
 
 class PublicUrl(Resource):
     @jwt_required
@@ -102,7 +105,7 @@ class PublicUrl(Resource):
     def get_chunk(self, full_path, byte1=None, byte2=None):
         file_size = os.stat(full_path).st_size
         start = 0
-        length = 102400
+        length = 1024
 
         if byte1 < file_size:
             start = byte1
@@ -112,7 +115,72 @@ class PublicUrl(Resource):
             length = file_size - start
 
         with open(full_path, 'rb') as f:
-            f.seek(start)
-            chunk = f.read(length)
+            with contextlib.closing(mmap.mmap(f.fileno(), length=0, access=mmap.ACCESS_READ)) as m:
+                m.seek(start)
+                chunk = m.read(length)
+                m.flush()
 
         return chunk, start, length, file_size
+    
+class CopyFile(Resource):
+    @jwt_required
+    def post(self, *args, **kwargs):
+        from_path, to_path, iscut = JU.extract_keys(request.get_json(), "from", "to", "iscut")
+        if None in [from_path, to_path]:
+            return JU.make_response("paths missing", 400)
+        
+        if not os.path.exists(from_path):
+            return JU.make_response("path: '{}' doesn't exists".format(from_path), 400)
+        
+        if not os.path.exists(to_path):
+            return JU.make_response("path: '{}' doesn't exists".format(to_path), 400)
+        
+        # construct full absolute path
+        to_path = os.path.join(to_path, os.path.basename(from_path))
+        
+        try:
+            if iscut:
+                shutil.move(from_path, to_path)
+            else:
+                shutil.copy(from_path, to_path)
+        except Exception as e:
+            return JU.make_response("Error occured: {}".format(str(e)), 500)
+        
+        return JU.make_response("file copied", 200)
+    
+class DeleteFile(Resource):
+    @jwt_required
+    def delete(self, *args, **kwargs):
+        path = JU.extract_keys(request.get_json(), "path")
+        if not path:
+            return JU.make_response("paths missing", 400)
+        
+        if not os.path.exists(path):
+            return JU.make_response("paths doesn't exists", 400)
+        
+        try:
+            if os.path.isfile(path):
+                os.remove(path)
+            else:
+                shutil.rmtree(path)
+        except Exception as e:
+            return JU.make_response("Error occured: {}".format(str(e)), 500)
+        
+        return JU.make_response("file deleted", 200)
+    
+class RenameFile(Resource):
+    @jwt_required
+    def post(self, *args, **kwargs):
+        path, newname = JU.extract_keys(request.get_json(), "path", "newname")
+        if None in [path, newname]:
+            return JU.make_response("data missing", 400)
+        
+        if not os.path.exists(path):
+            return JU.make_response("paths doesn't exists", 400)
+        
+        try:
+            os.rename(path, os.path.join(os.path.dirname(path), newname))
+        except Exception as e:
+            return JU.make_response("Error occured: {}".format(e), 500)
+        
+        return JU.make_response("file rename successfull", 200)

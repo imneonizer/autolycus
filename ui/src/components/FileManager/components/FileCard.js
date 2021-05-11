@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "../styles/FileCard.css";
 import "../styles/TorrentCard.css";
-import {downloadFileUrl} from "../services/FileService";
+import {downloadFileUrl, copyFile, deleteFile, renameFile} from "../services/FileService";
 import cogoToast from 'cogo-toast';
 import {uri} from "../../../uri";
 
@@ -15,6 +15,10 @@ class FileCard extends Component {
         this.handleDotMenu = this.handleDotMenu.bind(this);
         this.handleOutsideClick = this.handleOutsideClick.bind(this);
         this.handleDownload = this.handleDownload.bind(this);
+        this.handleCopy = this.handleCopy.bind(this);
+        this.handlePaste = this.handlePaste.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleRename = this.handleRename.bind(this);
     }
 
     componentDidMount() {
@@ -101,6 +105,42 @@ class FileCard extends Component {
         }
     }
 
+    handleCopy(item, iscut=false){
+        let message = "Item copied";
+        if (iscut){
+            message = "Item cut";
+        }
+        cogoToast.info(message, {position: "top-center", hideAfter: 1});
+        window.localStorage.setItem('autolycus_copy_path', JSON.stringify({item: item, iscut: iscut}));
+    }
+
+    handlePaste(item){
+        let path = JSON.parse(window.localStorage.getItem('autolycus_copy_path'));
+        if (path){
+            if (item.type === "directory" && item.path != path.item.path){
+                copyFile(path.item.path, item.path, path.iscut).then(response => {
+                    response.json().then(json => {
+                        if (response.status == 200){
+                            this.props.addItem(item, path.item);
+                            cogoToast.success("Pasted", {position: "top-center", hideAfter: 1});
+                            if (path.iscut){
+                                window.localStorage.removeItem('autolycus_copy_path');
+                            }
+                        }else{
+                            console.error(json);
+                            cogoToast.error("Unable to paste", {position: "top-center", hideAfter: 1});
+                        }
+                    })
+                })
+            }else{
+                cogoToast.warn("Not allowed", {position: "top-center", hideAfter: 1});
+            }
+        }else{
+            cogoToast.error("Nothing to paste", {position: "top-center", hideAfter: 1});
+        }
+        
+    }
+
     handleDownload(item, copyLink=false){
         if (item.type === "directory"){
             cogoToast.warn("directories not allowed", {position: "top-center", hideAfter: 1});
@@ -120,7 +160,7 @@ class FileCard extends Component {
                         document.execCommand('copy');
                         document.body.removeChild(el);
                         cogoToast.success("copied to clipboard", {position: "top-center", hideAfter: 1});
-            
+                        
                     }else{
                         // download file
                         url = url+"?download=true"
@@ -136,6 +176,64 @@ class FileCard extends Component {
 
     }
 
+    handleDelete(item){
+        const { hide } = cogoToast.loading(
+            <div className="toast-confirmation">
+                <p>Are you sure ?</p>
+                <button style={{backgroundColor: "red"}} onClick={() => confirmDelete()}>Yes</button>
+                <button style={{backgroundColor: "#4CAF50"}} onClick={() => hide()}>No</button>
+            </div>, {
+            hideAfter: 0
+        });
+
+        var confirmDelete = () => {
+            hide();
+            deleteFile(item.path).then(response => {
+                response.json().then(json => {
+                    if (response.status === 200){
+                        this.props.removeItem(item);
+                        // cogoToast.success("file deleted", {position: "top-center", hideAfter: 1});
+                    }else{
+                        cogoToast.error("error occured", {position: "top-center", hideAfter: 1});
+                        console.error(json);
+                    }
+                })
+            })
+        }
+    }
+
+    handleRename(item){
+        const selectAllText = (e) => {e.target.select()};
+        const { hide } = cogoToast.loading(
+            <div className="toast-confirmation">
+                <p style={{paddingBottom: "1px"}}>Rename</p>
+                <input type="text" id="toast-rename-box" onFocus={selectAllText} placeholder="Enter new name" defaultValue={item.name}></input>
+                <button style={{backgroundColor: "#1b53f4"}} onClick={() => confirmRename()}>Confirm</button>
+                <button style={{backgroundColor: "#4CAF50"}} onClick={() => hide()}>Cancel</button>
+            </div>, {
+            hideAfter: 0
+        });
+
+        var confirmRename = () => {
+            let newname = document.getElementById("toast-rename-box");
+            if (newname.value && newname.value !== item.name){
+                renameFile(item.path, newname.value).then(response => {
+                    response.json().then(json => {
+                        if (response.status === 200){
+                            item.name = newname.value;
+                            this.props.renameItem(item, newname.value);
+                        }else{
+                            console.error(json);
+                        }
+                    })
+                })
+                hide();
+            }
+            
+            
+        }
+    }
+
     render(){
         return(
             <div>
@@ -149,7 +247,7 @@ class FileCard extends Component {
                 {this.props.data.children &&
                 this.props.data.children.map((item) => {
                     return (
-                        <div className="file-card">
+                        <div className="file-card" id="file-card">
                             <div className="file-card-info">
                                 {item.type === "directory" && <img src="/autolycus/icons/mac-folder-icon.svg"/>}
                                 {item.type === "file" && <img style={{width:"32px"}} src={this.getFileIcon(item.ext)}/>}
@@ -179,34 +277,33 @@ class FileCard extends Component {
                                             <p>Copy Link</p>
                                         </div>
 
-                                        <div className="torrent-card-menu-contents-items">
+                                        <div onClick={() => this.handleRename(item)} className="torrent-card-menu-contents-items">
                                             <img src="/autolycus/icons/bx-edit-alt.svg"/>
                                             <p>Rename</p>
                                         </div>
 
-                                        <div className="torrent-card-menu-contents-items">
+                                        <div onClick={() => this.handleCopy(item)} className="torrent-card-menu-contents-items">
                                             <img src="/autolycus/icons/bx-copy-alt.svg"/>
                                             <p>Copy</p>
                                         </div>
 
-                                        <div className="torrent-card-menu-contents-items">
+                                        <div onClick={() => this.handleCopy(item, true)} className="torrent-card-menu-contents-items">
                                             <img src="/autolycus/icons/bx-cut.svg"/>
                                             <p>Cut</p>
                                         </div>
 
-                                        <div className="torrent-card-menu-contents-items">
+                                        <div onClick={() => this.handlePaste(item)} className="torrent-card-menu-contents-items">
                                             <img src="/autolycus/icons/bx-paste.svg"/>
                                             <p>Paste</p>
                                         </div>
 
-                                        <div className="torrent-card-menu-contents-items">
+                                        <div onClick={() => this.handleDelete(item)} className="torrent-card-menu-contents-items">
                                             <img src="/autolycus/icons/bx-trash.svg"/>
-                                            <p onClick={this.handleDelete}>Delete</p>
+                                            <p>Delete</p>
                                         </div>
                                     </div>
                                 )}
                             </div>
-
                         </div>
                     )
                 })}
