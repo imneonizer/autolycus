@@ -87,7 +87,7 @@ class ConfigureServer extends Component {
             return (
                 <div className="server-down-container">
                     <div className="server-down">
-                        <img src="/autolycus/icons/server-down.svg" width="30%"></img>
+                        <img src="/autolycus/icons/server-down.svg"></img>
                         <h3>Our Server is Feeling a Little Down</h3>
                         <p>
                             Please try again in a few moments.<br></br>

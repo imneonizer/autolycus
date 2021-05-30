@@ -7,7 +7,6 @@
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    
 }
 
 .server-down {
@@ -35,6 +34,11 @@
 .server-down > h3 {
     color:#484848;
     padding-bottom: 8px;;
+}
+
+.server-down img {
+    width: 30%;
+    min-width: 180px;
 }
 
 .server-down-configure{
