@@ -44,12 +44,11 @@ This section tells you how to setup a self-hosted instance of Autolycus
 
 ## Pre-requisites
 
-You will need the following before installation:
-
-1. Docker Command line tools
+You will be going to need the Docker Command line tools before installation. They include:
     1. [Docker Engine](https://docs.docker.com/engine/install)
     1. [Docker Compose](https://docs.docker.com/compose/install/) command
-1. Postgresql database with its username, password and host
+
+Install these before proceeding.
 
 ## Setup
 
@@ -73,7 +72,7 @@ sudo docker-compose up
 ```
 
 This command will 
-    - Pull appropriate NodeJS and 🐍 Python docker image from the marketplace
+    - Pull appropriate NodeJS, 🐍 Python and PostgreSQL docker image from the marketplace
     - Install dependencies for Python (pip) and NodeJS (npm) on the first-time boot
     - Setup libtorrent for linux (for downloading torrents)
 
