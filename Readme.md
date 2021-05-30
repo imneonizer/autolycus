@@ -84,3 +84,6 @@ After succesfull completions, the react frontend (user entry point) would be ope
 1. Unable to download complete folders at a time
     - After the magnet-link torrent get downloaded on the server, the user would be unable to download the complete folder at once. This is because the `Folder-archiving` feature is still being implemented. (#30)
     - However, users could downlaod folders' files individually for now.
+2. Email verification not implemented
+    - Currently, users could signup using any email, since email-verification has not been implemented.
+    - This would lead to a lost account in case the user forgets his/her password.
