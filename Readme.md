@@ -78,3 +78,9 @@ This command will
     - Setup libtorrent for linux (for downloading torrents)
 
 After succesfull completions, the react frontend (user entry point) would be open at port 3000 in **development** mode and api would be open at port 5000 (by default).
+
+# Known Issues
+
+1. Unable to download complete folders at a time
+    - After the magnet-link torrent get downloaded on the server, the user would be unable to download the complete folder at once. This is because the `Folder-archiving` feature is still being implemented. (#30)
+    - However, users could downlaod folders' files individually for now.
