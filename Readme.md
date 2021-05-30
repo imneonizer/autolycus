@@ -1,12 +1,16 @@
-### Autolycus
+# Autolycus
 
-A [seedr.cc](https://www.seedr.cc/) inspired web application to download torrent files on hosted web server.  
+A [seedr.cc](https://www.seedr.cc/) inspired web application to download torrent files on hosted web server.
 
 - with remote file browsing / download support.
 - Optimized for both web and mobile views, responsive layout.
 - Built using React and Flask.
 
-### Desktop views
+# How it looks
+
+The app is fully optimised for desktop and mobile viewing. This is how it looks in different screen sizes
+
+## Desktop views
 
 <html>
 
@@ -20,7 +24,7 @@ A [seedr.cc](https://www.seedr.cc/) inspired web application to download torrent
 
 </html>
 
-### Mobile views
+## Mobile views
 
 <html>
 
