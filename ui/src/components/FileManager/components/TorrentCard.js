@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import "../styles/TorrentCard.css";
 import {DeleteTorrent} from "../services/TorrentService";
-import {copyFile} from "../services/FileService";
+import {downloadFileUrl, copyFile} from "../services/FileService";
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
 import cogoToast from 'cogo-toast';
+import {uri} from "../../../uri";
 
 class TorrentCard extends Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class TorrentCard extends Component {
         this.humanFileSize = this.humanFileSize.bind(this);
         this.handleDotMenu = this.handleDotMenu.bind(this);
         this.handleOutsideClick = this.handleOutsideClick.bind(this);
+        this.handleDownload = this.handleDownload.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.trimString = this.trimString.bind(this);
         this.getTorrentSize = this.getTorrentSize.bind(this);
@@ -42,6 +44,26 @@ class TorrentCard extends Component {
             return
         }; this.handleDotMenu();
     }
+
+    handleDownload(item, copyLink=false){
+        cogoToast.loading("archiving directory", {position: "top-center"}).then(() => {
+            downloadFileUrl(item.download_path).then(response => {
+                response.json().then(json => {
+                    if (response.status === 200){
+                        let url = uri()+"/public/"+json.public_url_hash
+                        // download file
+                        url = url+"?download=true"
+                        let a = document.createElement('a');
+                        a.href = url;
+                        a.download = item.name;
+                        a.click(); a.remove();
+                        cogoToast.success("download started", {position: "top-center", hideAfter: 1});
+                    }
+                })
+            })
+        });
+    }
+
 
     handleDelete(){
         DeleteTorrent(this.props.data.hash)
@@ -122,7 +144,7 @@ class TorrentCard extends Component {
                     </div>
                     {this.state.threeDotMenuVisible && (
                         <div className="torrent-card-menu-contents">
-                            <div className="torrent-card-menu-contents-items">
+                            <div onClick={() => this.handleDownload(this.props.data, true)} className="torrent-card-menu-contents-items">
                                 <img src="/autolycus/icons/bxs-cloud-download.svg"/>
                                 <p>Download</p>
                             </div>

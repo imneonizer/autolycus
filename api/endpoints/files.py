@@ -10,6 +10,7 @@ from models.public_urls import PublicURLS
 
 import time
 import os
+import glob
 import re
 import base64
 import hashlib
@@ -68,7 +69,23 @@ class PublicUrl(Resource):
             return JU.make_response("invalid path", 400)
             
         elif os.path.isdir(path):
-            return JU.make_response("downloading directories not allowed", 400)
+            # archive directory and send zip file
+            current_app.logger.info(f"archiving dir: {path} to send")
+            
+            os.makedirs("/downloads/tmp", exist_ok=True)
+            fname = os.path.join("/downloads/tmp/", os.path.basename(path))+".zip"
+            
+            for i in glob.glob("/downloads/tmp/*.zip"):
+                current_app.logger.info(f"deleting older archive: {i}")
+                os.remove(i)
+            
+            if not os.path.exists(fname):
+                shutil.make_archive(fname.rstrip(".zip"),'zip', path)
+            
+            if os.path.exists(path):
+                return send_file(fname, mimetype='application/octet-stream', attachment_filename=os.path.basename(fname), as_attachment=True)
+            else:
+                return JU.make_response("Unable to archive directory", 400)
 
         elif os.path.exists(path):
             if download:
