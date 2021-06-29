@@ -5,11 +5,12 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
+
 <br />
 
 <p align="center">
   <a href="https://github.com/imneonizer/autolycus">
-    <img src="images/banner.png" alt="Logo" width="800" height="200">
+    <img src="images/banner-logo.png" alt="Logo" width="800" height="200">
   </a>
 
   <h3 align="center">Home server companion</h3>
