@@ -121,7 +121,7 @@ This project is focused to run on server environment hence docker containers are
 
   ![login screen](images/web-login.png)
 
-- One logged in you can paste any valid torrent magnet link into the `Add Magnet` input field and it will start downloading the torrent file.
+- Once logged in you can paste any valid torrent magnet link into the `Add Magnet` input field and it will start downloading the torrent file.
 
   ![downloading](images/web-download.png)
 
@@ -167,19 +167,10 @@ Project Link: [https://github.com/imneonizer/autolycus](https://github.com/imneo
 <!-- ACKNOWLEDGEMENTS -->
 
 ## Acknowledgements
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
-
-
+* https://github.com/CrazyCoder009/AUTOLYCUS/blob/master/AUTOLYCUS.ipynb
+* https://stackoverflow.com/questions/57314357/streaming-video-files-using-flask
+* https://codeburst.io/jwt-authorization-in-flask-c63c1acf4eeb
+* https://flask-jwt-extended.readthedocs.io/en/stable/changing_default_behavior
 
 
 
