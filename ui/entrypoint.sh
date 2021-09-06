@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ ! -e './node_modules' ]]; then
-    npm install --silent
+    npm install --silent --save
 fi
 
 # update API URL in the file
