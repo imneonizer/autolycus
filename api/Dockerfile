@@ -9,4 +9,4 @@ RUN apt-get update -y \
 
 ENV PYTHONPATH="/usr/lib/python3/dist-packages":$PYTHONPATH
 RUN pip install -r /app/requirements.txt --no-cache-dir
-CMD /app/entrypoint.sh
+CMD chmod +x /app/entrypoint.sh && /app/entrypoint.sh
