@@ -21,7 +21,7 @@
     <a href="https://github.com/imneonizer/autolycus"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://youtu.be/FoUhcqDm4u4">View Demo</a>
+    <a href="https://youtu.be/A64dRyOJoqw">View Demo</a>
     ·
     <a href="https://github.com/imneonizer/autolycus/issues">Report Bug</a>
     ·
