@@ -21,7 +21,7 @@
     <a href="https://github.com/imneonizer/autolycus"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://youtu.be/FoUhcqDm4u4">View Demo</a>
+    <a href="https://youtu.be/A64dRyOJoqw">View Demo</a>
     ·
     <a href="https://github.com/imneonizer/autolycus/issues">Report Bug</a>
     ·
@@ -130,7 +130,7 @@ This project is focused to run on server environment hence docker containers are
 
 ## Roadmap
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/imneonizer/autolycus/issues) for a list of proposed features (and known issues).
 
 
 
