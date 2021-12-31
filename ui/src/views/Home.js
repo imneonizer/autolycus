@@ -26,7 +26,8 @@ class Home extends Component {
     }
 
     findGetParameter(q) {
-        return (window.location.search.match(new RegExp('[?&]' + q + '=([^&]+)')) || [, null])[1];
+        // return (window.location.search.match(new RegExp('[?&]' + q + '=([^&]+)')) || [, null])[1];
+        return (window.location.search.match(new RegExp('[?&]' + q + '=([^&]+)')) || [null])[1];
      }
 
     pingAPI(){

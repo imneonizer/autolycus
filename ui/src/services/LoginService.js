@@ -1,4 +1,6 @@
 import {uri} from '../uri';
+import axios from 'axios';
+
 
 function handleErrors(response) {
     if (!response.ok) {
@@ -7,92 +9,81 @@ function handleErrors(response) {
     return response;
 }
 
+
 function clearTokens(){
-    localStorage.setItem('autolycus-auth', undefined);
+    localStorage.setItem('autolycus-auth', 'undefined');
 }
+
+
+async function ValidateUsername(username){
+    let usernamebox = document.getElementById("login-username-box");
+    let user_exists = false;
+
+    await axios.get(uri()+"/auth/user-exists?username="+username)
+    .then(function (response) {
+        usernamebox.style.border = "1px solid #efefef";
+        user_exists = true;
+    }).catch(function (error) {
+        usernamebox.style.border = "1px solid red";
+      });
+    
+    return user_exists;
+}
+
 
 function AuthLogin(username, password) {
     let password_box = document.getElementById("login-password-box");
-    fetch(uri()+"/auth/login", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: username, password: password })
-        })
-        .then(handleErrors)
-        .then(response => {
-            response.json().then(json => {
-                if (response.status === 200){
-                    // console.log("success json", json);
-                    password_box.style.border = "1px solid #efefef";
-                    json["username"] = username;
-                    localStorage.setItem('autolycus-auth', JSON.stringify(json));
-                    window.location.reload(true);
-                    // var retrievedObject = localStorage.getItem('autolycus-auth');
-                    // console.log('retrievedObject: ', JSON.parse(retrievedObject));
-                } else {
-                    clearTokens();
-                    password_box.style.border = "1px solid red";
-                };
-            });
-        }).catch(err => {
-            clearTokens();
-            password_box.style.border = "1px solid red";
-            console.log("[ERROR] in AuthLogin:", err);
-        });
-    };
+    ValidateUsername(username)
+    .then(function (user_exists) {
+        if (user_exists){
+            axios.post(uri()+"/auth/login", {
+                username: username,
+                password: password 
+            }).then(function (response) {
+                password_box.style.border = "1px solid #efefef";
+                response.data["username"] = username;
+                localStorage.setItem('autolycus-auth', JSON.stringify(response.data));
+                window.location.reload(true);
+              })
+              .catch(function (error) {
+                clearTokens();
+                password_box.style.border = "1px solid red";
+                console.log("[ERROR] in AuthLogin:", error);
+              });
+        }
+    });
+}
+
 
 function AuthLogout(){
     let auth = localStorage.getItem('autolycus-auth');
     if (auth !== "undefined"){
         auth = JSON.parse(auth)
-    }
-
-    if (auth){
-        fetch(uri()+"/auth/logout", {
-            method: 'POST',
+        axios.post(uri()+"/auth/logout", {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + auth.access_token
             },
             body: JSON.stringify(auth)
         })
-        .then(handleErrors)
-        .then(response => {
-            if (response.status === 200){
-                clearTokens();
-                window.location.reload(true);
-            }
-        })
-    }
-}
-
-function ValidateUsername(username){
-    let usernamebox = document.getElementById("login-username-box");
-    return fetch(uri()+"/auth/user-exists?username="+username)
-        // .then(handleErrors)
-        .then(response => {
-            if (response.status === 200){
-                // console.log("user "+username+" exists");
-                usernamebox.style.border = "1px solid #efefef";
-            } else {
-                // console.error("user "+username+" doesn't exists");
-                usernamebox.style.border = "1px solid red";
-            }
-        }).catch(err => {
-            console.log("[ERROR] in AuthLogin:", err);
+        .then(function (response) {
+            clearTokens();
+            window.location.reload(true);
+        }).catch(function (error) {
+            clearTokens();
+            window.location.reload(true);
         });
     }
+}
 
 
 async function refreshAccessToken() {
         let auth = localStorage.getItem('autolycus-auth');
         let authorized = false;
-    
+
         if (auth !== "undefined"){
             auth = JSON.parse(auth)
-        }
 
-        if (auth){
             // try to get new access token using refresh token
             await fetch(uri()+"/auth/refresh-token", {
                 method: 'POST',
@@ -118,17 +109,15 @@ async function refreshAccessToken() {
         }
 
         return authorized;
-    }
+}
+
 
 async function ValidateAuth (auto_refresh=false, interval=2) {
     let auth = localStorage.getItem('autolycus-auth');
     let authorized = false;
 
-    if (auth !== "undefined"){
-        auth = JSON.parse(auth)
-    }
-
-    if (auth){
+    if (auth !== 'undefined'){
+        auth = JSON.parse(auth);
         await fetch(uri()+"/auth/user-details", {
             method: 'GET',
             headers: {

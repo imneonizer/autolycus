@@ -7,10 +7,17 @@ import { FetchTorrents } from "./services/TorrentService";
 class FileManager extends Component {
     constructor(props) {
         super(props);
-        this.state = {view: "Home", torrents: [], activeItem: {}};
-        this.username = JSON.parse(localStorage.getItem('autolycus-auth')).username;
-        this.updateView = this.updateView.bind(this);
+        this.state = {view: "Home", torrents: [], activeItem: {}, searchResults: []};
 
+        let auth = localStorage.getItem('autolycus-auth');
+
+        if (auth !== 'undefined') {
+            this.username = JSON.parse(localStorage.getItem('autolycus-auth')).username;
+        } else {
+            this.username = 'unknown';
+        }
+
+        this.updateView = this.updateView.bind(this);
         this.timer = null;
         this.updateTorrents = this.updateTorrents.bind(this);
         this.tFetcher = this.tFetcher.bind(this);
@@ -76,10 +83,10 @@ class FileManager extends Component {
                                 <img className="left-section-menu-/autolycus/icons" src="/autolycus/icons/bx-home-alt.svg"/>
                                 <p style={{backgroundColor: "none"}} className="left-section-menu-texts">Home</p>
                             </div>
-                                
-                            <div className="left-section-menu-items" id="StarredNavButton" onClick={() => this.updateView('Starred')}>
-                                <img className="left-section-menu-/autolycus/icons" src="/autolycus/icons/bx-star.svg"/>
-                                <p className="left-section-menu-texts">Starred</p>
+
+                            <div className="left-section-menu-items" id="SearchTorrentNavButton" onClick={() => this.updateView('SearchTorrent')}>
+                                <img className="left-section-menu-/autolycus/icons" src="/autolycus/icons/bx-search-alt.svg"/>
+                                <p className="left-section-menu-texts">Search</p>
                             </div>
                                 
                             <div className="left-section-menu-items" id="RecycleBinNavButton" onClick={() => this.updateView('RecycleBin')}>
