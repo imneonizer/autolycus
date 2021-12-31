@@ -1,4 +1,6 @@
 from shared.factories import db
+from psycopg2 import OperationalError, errorcodes, errors
+from flask import current_app
 
 class Torrent(db.Model):
     __tablename__ = 'torrents'
@@ -13,8 +15,8 @@ class Torrent(db.Model):
     username = db.Column(db.String)
 
     # File size related information
-    total_bytes = db.Column(db.Integer) #Bytes
-    downloaded_bytes = db.Column(db.Integer) #Bytes
+    total_bytes = db.Column(db.BigInteger) #Bytes
+    downloaded_bytes = db.Column(db.BigInteger) #Bytes
 
     # connection related information
     num_connections = db.Column(db.Integer)
@@ -41,7 +43,7 @@ class Torrent(db.Model):
         return self.query.filter_by(username=username)
     
     @classmethod
-    def find_by_magnet(self, Hash):
+    def find_by_magnet(self, magnet):
         return self.query.filter_by(magnet=magnet).first()
     
     @classmethod
@@ -66,8 +68,11 @@ class Torrent(db.Model):
     @classmethod
     def update_to_db(self, Hash, fields, synchronize_session = False):
         torrent = Torrent.query.filter_by(Hash=Hash).update(fields)
-        db.session.commit()
-
+        try:
+            db.session.commit()
+        except Exception as e:
+            current_app.logger.error(e)
+            
     @property
     def JSON(self):
         return {
