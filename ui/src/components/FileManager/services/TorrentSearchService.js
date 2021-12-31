@@ -55,7 +55,7 @@ function addMagnet(magnet){
         }
     })
     .then(function (response) {
-        // console.log("Magnet added to download queue!")
+        console.log("Magnet added to download queue!")
     }).catch(function (error) {
         console.log(error)
     });
