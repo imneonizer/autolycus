@@ -21,6 +21,7 @@ from endpoints.files import (
 )
 
 from endpoints.ping import Ping
+from endpoints.search_torrent import TorrentSearch
 
 from endpoints.auth import (
     UserExists, EmailExists, Signup, Login,
@@ -55,6 +56,7 @@ def create_app(config_name):
     api.add_resource(TorrentStatus, '/torrents/status')
     
     api.add_resource(FileStructure, '/torrents/files')
+    api.add_resource(TorrentSearch, '/torrents/search')
     api.add_resource(CopyFile, '/torrents/files/copy-file')
     api.add_resource(DeleteFile, '/torrents/files/delete-file')
     api.add_resource(RenameFile, '/torrents/files/rename-file')

@@ -1,3 +1,4 @@
+import os
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
@@ -12,3 +13,6 @@ fs = FileSystem()
 
 from torrentclient import TorrentClient
 seedr = TorrentClient()
+
+from torrentsearch import TorrentSearch
+tsearch = TorrentSearch()

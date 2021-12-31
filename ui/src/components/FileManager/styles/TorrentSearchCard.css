@@ -1,0 +1,30 @@
+.torrent-search-result-card{
+    display: flex;
+    border-radius: 10px;
+    background-color: white;
+    padding: 10px;
+    padding-left: 15px;
+    margin-bottom: 5px;
+    justify-content: space-between;
+    overflow-x: hidden;
+}
+
+.torrent-search-result-card-details {
+    display: flex;
+    font-size: small;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.torrent-search-result-card-details > p {
+    margin-right: 10px;
+}
+
+.torrent-search-result-card-name {
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+.torrent-card-menu-contents{
+    z-index: 1;
+}

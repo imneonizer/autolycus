@@ -41,7 +41,6 @@ class Login extends React.Component {
     
         if (e.target.value === "login-account"){
             if (this.state.username && this.state.password){
-                ValidateUsername(this.state.username);
                 AuthLogin(this.state.username, this.state.password);
             }
         } else{

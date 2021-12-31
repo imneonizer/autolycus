@@ -15,18 +15,17 @@ class Dashboard extends Component {
         // refresh access token every 1 hour
         ValidateAuth(true, 60*60).then(authorized => {
             if (authorized === true){
-                    this.setState({ loading: false, authorized: true });
-                } else {
-                    refreshAccessToken().then(authorized => {
-                        if (authorized === true){
-                            this.setState({ loading: false, authorized: true });
-                        } else {
-                            this.setState({ loading: false, authorized: false });
-                        }
-                    })
-                }
+                this.setState({ loading: false, authorized: true });
+            } else {
+                refreshAccessToken().then(authorized => {
+                    if (authorized === true){
+                        this.setState({ loading: false, authorized: true });
+                    } else {
+                        this.setState({ loading: false, authorized: false });
+                    }
+                })
             }
-        )
+        })
     }
 
     render() {
