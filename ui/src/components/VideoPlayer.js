@@ -31,9 +31,11 @@ class VideoPlayer extends Component {
     render(){
         return (
             <div className="video-player-container" style={{marginBottom: "5px"}}>
-                <video id="video-player" style={{borderRadius: "10px"}} width={this.state.width} controls autoPlay playsInline>
-                    <source src={this.props.src} type="video/mp4"></source>
-                </video>
+                <React.Fragment key={this.props.src}>
+                    <video id="video-player" style={{borderRadius: "10px"}} width={this.state.width} controls autoPlay playsInline>
+                        <source src={this.props.src} type="video/mp4"></source>
+                    </video>
+                </React.Fragment>
             </div>
         
         )
