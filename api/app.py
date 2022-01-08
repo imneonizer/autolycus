@@ -22,6 +22,7 @@ from endpoints.files import (
 
 from endpoints.ping import Ping
 from endpoints.search_torrent import TorrentSearch
+from endpoints.storage_status import StorageStatus
 
 from endpoints.auth import (
     UserExists, EmailExists, Signup, Login,
@@ -62,6 +63,8 @@ def create_app(config_name):
     api.add_resource(RenameFile, '/torrents/files/rename-file')
 
     api.add_resource(PublicUrl, '/public/<string:public_url_hash>')
+    
+    api.add_resource(StorageStatus, '/storage-status')
 
     db.app = app
     db.init_app(app)

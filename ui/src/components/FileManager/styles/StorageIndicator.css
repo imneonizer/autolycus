@@ -1,0 +1,29 @@
+.storage-indicator{
+    width: 90%;
+    list-style-type: none;
+    padding-left: 5px;
+}
+
+.storage-indicator-text{
+    padding-bottom: 8px;
+    font-size: small;
+    color:rgb(80, 80, 80)
+}
+
+.storage-indicator-base{
+    background-color: #efefef;
+    border-radius: 10px;
+    height: 15px;
+}
+
+.storage-indicator-progress{
+    background-color: #2A9AF5;
+    border-radius: 10px;
+    height: 15px;
+    transform: translateY(-15px);
+    width: 50%;
+    -webkit-transition: width 1s ease-in-out;
+    -moz-transition: width 1s ease-in-out;
+    -o-transition: width 1s ease-in-out;
+    transition: width 1s ease-in-out;
+}
