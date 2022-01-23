@@ -261,9 +261,9 @@ class FileCard extends Component {
                 </div>
 
                 {this.props.data.children &&
-                this.props.data.children.map((item) => {
+                this.props.data.children.map((item, idx) => {
                     return (
-                        <div className="file-card" id="file-card">
+                        <div className="file-card" id="file-card" key={idx}>
                             <div className="file-card-info">
                                 {item.type === "directory" && <img src="/autolycus/icons/mac-folder-icon.svg"/>}
                                 {item.type === "file" && <img style={{width:"32px"}} src={this.getFileIcon(item.ext)}/>}
@@ -273,7 +273,6 @@ class FileCard extends Component {
                                     {item.type === "file" && <p className="file-card-info-size">{this.humanFileSize(item.size)}</p>}
                                 </div>
                             </div>
-
 
                             <div className="torrent-card-menu">
                                 <div className="torrent-card-menu-dot-wrapper" onClick={(e) => this.handleDotMenu(e, item.name)}>

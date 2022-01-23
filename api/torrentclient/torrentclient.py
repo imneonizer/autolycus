@@ -88,7 +88,10 @@ class TorrentClient:
             print("Error from add_torrent:", str(e))
 
     def remove_path(self, path):
-        if os.path.exists(path):
+        if not os.path.exists(path): return
+        if os.path.isfile(path) or os.path.islink(path):
+            os.remove(path)
+        elif os.path.isdir(path):
             shutil.rmtree(path)
 
     def add_magnet(self, magnet, username=None, save_path=None):
@@ -141,8 +144,9 @@ class TorrentClient:
                 if info_hash == Hash:
                     self.lt_session.remove_torrent(t)
             self.remove_path(torrent.download_path)
-            torrent.delete_from_db()
-            return True
+            if not os.path.exists(torrent.download_path):
+                torrent.delete_from_db()
+                return True
         except Exception as e:
             print(e)
     

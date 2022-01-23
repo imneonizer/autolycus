@@ -3,11 +3,13 @@ import "../../styles/FileManager.css";
 import FileManagerViews from "./FileManagerViews";
 import FileManagerInfo from "./FileManagerInfo";
 import { FetchTorrents } from "./services/TorrentService";
+import StorageIndicator from "./StorageIndicator";
+import FetchStorageData from "./services/FetchStorageData";
 
 class FileManager extends Component {
     constructor(props) {
         super(props);
-        this.state = {view: "Home", torrents: [], activeItem: {}, searchResults: []};
+        this.state = {view: "Home", torrents: [], activeItem: {}, searchResults: [], usedBytes: 0, totalBytes: 0};
 
         let auth = localStorage.getItem('autolycus-auth');
 
@@ -19,9 +21,11 @@ class FileManager extends Component {
 
         this.updateView = this.updateView.bind(this);
         this.timer = null;
+        this.storageTimer = null;
         this.updateTorrents = this.updateTorrents.bind(this);
         this.tFetcher = this.tFetcher.bind(this);
         this.updateActiveItemHover = this.updateActiveItemHover.bind(this);
+        this.updateStorageState = this.updateStorageState.bind(this);
     }
 
     tFetcher(fetch=null){
@@ -30,6 +34,20 @@ class FileManager extends Component {
         } else {
             clearInterval(this.timer);
         }
+    }
+
+    componentDidMount() {
+        this.storageTimer = setInterval(this.updateStorageState, 2000);
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.storageTimer);
+    }
+
+    updateStorageState(){
+        FetchStorageData().then(json => {
+            this.setState(json)
+        })
     }
 
     updateTorrents(){
@@ -104,8 +122,9 @@ class FileManager extends Component {
                                 <p className="left-section-menu-texts">Settings</p>
                             </div>
 
-                            {/* <p>Upgrade</p> */}
-
+                        </div>
+                        <div className="left-section-storage-indicator">
+                            <StorageIndicator usedBytes={this.state.usedBytes} totalBytes={this.state.totalBytes}/>
                         </div>
                     </div>
 
