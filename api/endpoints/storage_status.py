@@ -5,6 +5,7 @@ from shared.utils import json_utils as JU
 import rapidjson as json
 import os
 from pathlib import Path
+import shutil
 
 class StorageStatus(Resource):
     @jwt_required
@@ -14,15 +15,15 @@ class StorageStatus(Resource):
         return make_response(json.dumps(stats), 200)
     
     def status_disk(self, folder):
-        try:
-            disk = os.statvfs(folder)
-            # totalSpace = float(disk.f_bsize * disk.f_blocks)
-            totalUsedSpace = sum([f.stat().st_size for f in Path(folder).glob("**/*")])
-            totalAvailSpaceNonRoot = float(disk.f_bsize * disk.f_bavail)
-            # totalAvailSpace = float(disk.f_bsize * disk.f_bfree)
+        try:            
+            total_storage_size = shutil.disk_usage("/").total
+            space_used_by_all_user = shutil.disk_usage("/").used
+            space_used_by_current_user = sum([f.stat().st_size for f in Path(folder).glob("**/*")])            
+            available_free_space = total_storage_size - space_used_by_all_user + space_used_by_current_user
             return {
-                'totalBytes': totalAvailSpaceNonRoot,
-                'usedBytes': totalUsedSpace,
+                'totalBytes': available_free_space,
+                'usedBytes': space_used_by_current_user,
+                'driveCapacity': total_storage_size
             }
         except:
-            return {'totalBytes': 0, 'usedBytes': 0}
+            return {'totalBytes': 0, 'usedBytes': 0, 'driveCapacity': 0}
