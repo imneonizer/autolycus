@@ -37,7 +37,7 @@ class FileManagerInfo extends Component {
     render() {        
         if (this.props.activeItem.name){
             return (
-                <div>
+                <div className="right-section-text">
                     <h5>Name</h5>
                     <p>{this.props.activeItem.name}</p>
 
@@ -53,7 +53,7 @@ class FileManagerInfo extends Component {
             )
             
         }else {
-            return (<p>File info will appear here</p>)
+            return (<p className="right-section-text" >File info will appear here</p>)
         }
     }
 }
