@@ -5,11 +5,11 @@ body, .left-section, .right-section, .torrent-card, .right-section, .file-card, 
 }
 
 .torrent-card-menu-contents {
-    background-color: rgba(31, 32, 34, 0.97) !important;
+    background-color: rgba(31, 32, 34) !important;
 }
 
 .middle-section, .storage-indicator-base{
-    background-color:rgb(24, 24, 24) !important;
+    background-color:rgb(31, 31, 31) !important;
 }
 
 #add-magnet-box,  .right-section-text > p, .right-section-text > h5, .server-down, .server-down > h3, .server-down > p, .server-down-reset-div >p{
