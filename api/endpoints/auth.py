@@ -1,6 +1,3 @@
-#https://codeburst.io/jwt-authorization-in-flask-c63c1acf4eeb
-#https://flask-jwt-extended.readthedocs.io/en/stable/blacklist_and_token_revoking/
-#https://flask-jwt-extended.readthedocs.io/en/stable/changing_default_behavior/
 from flask_restful import Resource, reqparse
 from flask import request, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -15,6 +12,8 @@ from flask_jwt_extended import (
     jwt_required, fresh_jwt_required, jwt_refresh_token_required,
     get_jwt_identity, get_raw_jwt, get_jti
 )
+
+import os
 
 class UserExists(Resource):
     def get(self):
@@ -34,6 +33,9 @@ class EmailExists(Resource):
 
 class Signup(Resource):
     def post(self):
+        if os.environ.get('DISABLE_SIGNUP', "false").lower() == "true":
+            return JU.make_response("signup is disabled by admin", 403)
+        
         name, username, email, password = JU.extract_keys(
             request.get_json(), "name", "username", "email", "password")
 

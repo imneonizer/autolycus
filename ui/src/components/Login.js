@@ -24,7 +24,7 @@ class Login extends React.Component {
     }
 
     validateInputs(reset=false){
-        let color = reset ? "1px solid #efefef":"1px solid red";
+        let color = reset ? "0px solid #efefef":"1px solid red";
         if (!this.state.username){
             document.getElementById("login-username-box").style.border = color;
         }

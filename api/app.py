@@ -9,6 +9,7 @@ from shared.factories import db, cache, migrate, seedr
 from shared.logger import logger
 from shared.utils import check_db
 from models.revoked_tokens import RevokedToken
+from models.users import User
 
 from endpoints.torrents import (
     AddTorrent, RemoveTorrent,TorrentStatus,
@@ -92,6 +93,17 @@ def create_app(config_name):
 
     with app.app_context():
         if not check_db(db): exit(1)
+        
+        # generate admin account
+        username = os.environ.get('ADMIN_USERNAME', None)
+        password = os.environ.get('ADMIN_PASSWORD', None)
+        
+        try:
+            if username and password:
+                new_user = User(name=username, username=username, email=username, password=User.hashify(password))
+                new_user.save_to_db()
+                app.logger.info(f"user {username} with admin privileges created!")
+        except: pass
 
     return app
 

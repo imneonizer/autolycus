@@ -10,6 +10,7 @@ class SearchTorrent extends Component {
         super(props);
         this.state = {data: [], isLoading: false, threeDotMenuVisible: false};
         this.handleTorrentSearch = this.handleTorrentSearch.bind(this);
+        this.trimString = this.trimString.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.copyToClipboard = this.copyToClipboard.bind(this);
     }
@@ -85,6 +86,20 @@ class SearchTorrent extends Component {
         }
     }
 
+    trimString(string, length){
+        let w = window.innerWidth;
+        
+        if ( w >= 800){
+            return string;
+        }else {
+            let postfix = "";
+            if (string.length > length){
+                postfix = "...";
+            }
+            return string.slice(0, length).trim()+postfix;
+        }
+    }
+
     render(){
         return(
             <div>
@@ -100,14 +115,13 @@ class SearchTorrent extends Component {
                             <div style={{display: 'flex'}}>
                                 <img className="search-result-magnet-icon" style={{paddingRight: '15px', width: '25px'}} src="/autolycus/icons/bx-magnet.svg"/>
                                 <div>
-                                    <p class="torrent-search-result-card-name" onClick={() => this.handleClick(item)}>{item.name}</p>
+                                    <p class="torrent-search-result-card-name" onClick={() => this.handleClick(item)}>{this.trimString(item.name, 30)}</p>
                                     <div class="torrent-search-result-card-details">
                                         <p>{item.size}</p>
                                         <p>↓ {item.seed}</p>
                                         <p>{item.created}</p>
                                         <p>{item.type}</p>
                                         <p>{item.source.toUpperCase()}</p>
-
                                     </div>
                                 </div>
                             </div>

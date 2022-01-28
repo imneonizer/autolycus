@@ -1,0 +1,41 @@
+body, .left-section, .right-section, .torrent-card, .right-section, .file-card, #add-magnet-box, .right-section-text > p, .right-section-text > h5{
+    background-color:rgb(0, 0, 0) !important;
+    color: rgb(228, 228, 228) !important;
+
+}
+
+.torrent-card-menu-contents {
+    background-color: rgba(31, 32, 34) !important;
+}
+
+.middle-section, .storage-indicator-base{
+    background-color:rgb(31, 31, 31) !important;
+}
+
+#add-magnet-box,  .right-section-text > p, .right-section-text > h5, .server-down, .server-down > h3, .server-down > p, .server-down-reset-div >p{
+    background-color: black !important;
+    color: rgb(228, 228, 228) !important;
+}
+
+#login-username-box, #login-password-box, #signup-email-box, #enter-api-address{
+    border: none;
+    background-color:rgb(37, 37, 37) !important;
+    color: rgb(228, 228, 228) !important;
+}
+
+#signup-email-container > p{
+    color: rgb(228, 228, 228) !important;
+}
+
+.login-card, .login-form > p, .password-forgot-combined > p {
+    background-color: black !important;
+    color: rgb(228, 228, 228) !important;
+}
+
+.storage-indicator-text{
+    color:rgb(228, 228, 228) !important;
+}
+
+.svg-black {
+    filter: invert(.9);
+}
