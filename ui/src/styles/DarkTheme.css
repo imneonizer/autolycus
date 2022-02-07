@@ -12,7 +12,7 @@ body, .left-section, .right-section, .torrent-card, .right-section, .file-card, 
     background-color:rgb(31, 31, 31) !important;
 }
 
-#add-magnet-box,  .right-section-text > p, .right-section-text > h5, .server-down, .server-down > h3, .server-down > p, .server-down-reset-div >p{
+#add-magnet-box,  .right-section-text > p, .right-section-text > h5, .server-down, .server-down > h3, .server-down > p, .server-down-reset-div >p, .torrent-search-result-card{
     background-color: black !important;
     color: rgb(228, 228, 228) !important;
 }
