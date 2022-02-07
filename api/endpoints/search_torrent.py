@@ -30,3 +30,6 @@ class TorrentSearch(Resource):
         
         magnet = ts.get_magnet(item)
         return {"magnet": magnet}
+
+if __name__ == "__main__":
+    print(ts.search("spiderman"))
