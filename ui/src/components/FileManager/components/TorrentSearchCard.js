@@ -113,7 +113,7 @@ class SearchTorrent extends Component {
                     return (
                         <div class="torrent-search-result-card" key={idx}>
                             <div style={{display: 'flex'}}>
-                                <img className="search-result-magnet-icon" style={{paddingRight: '15px', width: '25px'}} src="/autolycus/icons/bx-magnet.svg"/>
+                                <img className="search-result-magnet-icon svg-black" style={{paddingRight: '15px', width: '25px'}} src="/autolycus/icons/bx-magnet.svg"/>
                                 <div>
                                     <p class="torrent-search-result-card-name" onClick={() => this.handleClick(item)}>{this.trimString(item.name, 30)}</p>
                                     <div class="torrent-search-result-card-details">
