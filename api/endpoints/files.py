@@ -29,7 +29,7 @@ class PublicUrl(Resource):
         username = get_jwt_identity()
         user = User.find_by_username(username)
         if not user: return JU.make_response(f"user '{username}' doesn't exists", 404)
-
+        
         if os.path.exists(file_path):
             record = PublicURLS.find_by_file_path(file_path=file_path)
             if record: return record.as_dict()
@@ -175,6 +175,11 @@ class DeleteFile(Resource):
         if not os.path.exists(path):
             return JU.make_response("paths doesn't exists", 400)
         
+        
+        try:
+            PublicURLS.find_by_file_path(file_path=path).delete_from_db()
+        except: pass
+        
         try:
             if os.path.isfile(path):
                 os.remove(path)
@@ -201,3 +206,25 @@ class RenameFile(Resource):
             return JU.make_response("Error occured: {}".format(e), 500)
         
         return JU.make_response("file rename successfull", 200)
+
+from shared.hls_converter import hls
+from shared.torrent_name_parser import parse_name
+class ConvertToHls(Resource):
+    @jwt_required
+    def post(self, *args, **kwargs):
+        # create public url from file path
+        file_path = JU.extract_keys(request.get_json(), "file_path")
+        if not file_path: return JU.make_response("invalid data", 400)
+
+        username = get_jwt_identity()
+        user = User.find_by_username(username)
+        if not user: return JU.make_response(f"user '{username}' doesn't exists", 404)
+        
+        if os.path.exists(file_path):
+            output_file = parse_name(os.path.basename(file_path))['key']
+            output_file_dirname = os.path.basename(os.path.splitext(file_path)[0])
+            output_file = os.path.join(os.path.dirname(file_path), output_file_dirname, output_file+".m3u8")
+            output_file = hls.convert(file_path, output_file)
+            return JU.make_response(output_file, 200)
+        else:
+            return JU.make_response(f"file '{file_path}' doesn't exists", 404)

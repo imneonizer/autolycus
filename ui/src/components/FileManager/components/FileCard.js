@@ -164,7 +164,13 @@ class FileCard extends Component {
             downloadFileUrl(item.path).then(response => {
                 response.json().then(json => {
                     if (response.status === 200){
-                        let url = uri()+"/public/"+json.public_url_hash
+                        let url = uri()+"/public/";
+                        if (item.type === "hls"){
+                            url = url+"hls/"+json.public_url_hash+"/"+item.info.key+".m3u8"
+                        }else{
+                            url = url+json.public_url_hash
+                        }
+                        
                         if (copyLink){
                             // copy link to clipboard
                             const el = document.createElement('textarea');
@@ -266,11 +272,13 @@ class FileCard extends Component {
                         <div className="file-card" id="file-card" key={idx}>
                             <div className="file-card-info">
                                 {item.type === "directory" && <img src="/autolycus/icons/mac-folder-icon.svg"/>}
+                                {item.type === "hls" && <img style={{width:"32px"}} src="/autolycus/icons/hls-file-icon.svg"/>}
                                 {item.type === "file" && <img style={{width:"32px"}} src={this.getFileIcon(item.ext)}/>}
 
                                 <div className="file-card-wrapper">
                                     <p className="file-card-info-name" onClick={() => this.props.updateCard(item, this.props.data)}>{this.trimString(item.name, 30)}</p>
                                     {item.type === "file" && <p className="file-card-info-size">{this.humanFileSize(item.size)}</p>}
+                                    {item.type === "hls" && <p className="file-card-info-size">{this.humanFileSize(item.size)}</p>}
                                 </div>
                             </div>
 

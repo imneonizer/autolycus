@@ -65,7 +65,11 @@ class Home extends Component {
             let url = uri()+"/public/"+b64+"?token="+getAuthToken().access_token;
             if ([".mkv", ".mp4", ".avi"].includes(data.ext)){    
                 this.setState({videoUrl: url});
-            }else if ([".txt", ".srt", ".jpg", ".mp3", ".wav"].includes(data.ext)) {
+            } else if (data.ext === ".m3u8"){
+                let url = uri()+"/hls/"+getAuthToken().access_token+"/"+btoa(unescape(encodeURIComponent(data.path)))+"/"+data.info.key+".m3u8";
+                this.setState({videoUrl: url});
+            }
+            else if ([".txt", ".srt", ".jpg", ".mp3", ".wav"].includes(data.ext)) {
                 let win = window.open(url, '_blank');
                 win.focus();
             }

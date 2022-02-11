@@ -1,4 +1,5 @@
 __pycache__/
+downloads/
 logs/
 *.pyc
 *.sqlite3
