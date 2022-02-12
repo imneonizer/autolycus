@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 /downloads/
+uri.js
 
 # testing
 /coverage
