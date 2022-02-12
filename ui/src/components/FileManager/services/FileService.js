@@ -70,12 +70,31 @@ function renameFile(path, newname){
     })
 }
 
-async function convertHlsService(path){
+async function convertMp4toHlsService(path){
     let auth = getAuthToken();
     let res = null;
 
-    await axios.post(uri()+"/torrents/files/convert-hls", {
+    await axios.post(uri()+"/torrents/files/convert-mp4-to-hls", {
         file_path: path
+    }, {
+    headers: {
+        'Authorization': `Bearer ${auth.access_token}` 
+    }
+    }).then(function (response) {
+        res = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    
+    return res;
+}
+
+async function convertHlstoMp4Service(hls_element){
+    let auth = getAuthToken();
+    let res = null;
+
+    await axios.post(uri()+"/torrents/files/convert-hls-to-mp4", {
+        hls_element: hls_element
     }, {
     headers: {
         'Authorization': `Bearer ${auth.access_token}` 
@@ -96,5 +115,6 @@ export {
     copyFile,
     deleteFile,
     renameFile,
-    convertHlsService
+    convertMp4toHlsService,
+    convertHlstoMp4Service
 }

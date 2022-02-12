@@ -17,13 +17,15 @@ def remove_emoji(string):
 
 def parse_name(raw):
     info = {
-        'season': 'NaN',
-        'episode': 'NaN',
-        'resolution': 'Unknown',
-        'codec': 'Unknown',
-        'container': 'Unknown',
-        'title': os.path.splitext(remove_emoji(raw))[0],
+        'season': '',
+        'episode': '',
+        'resolution': '',
+        'codec': '',
+        'container': '',
+        'title': remove_emoji(raw),
     }
+    
     info.update(ptn.parse(info['title']))
-    info.update({'key': f"{info['title'].replace(' ', '.')}.S{info['season']}.E{info['episode']}"})
+    info.update({'key': f"{info['title'].replace(' ', '.')}.{'S' if info.get('season') else ''}{info['season']}.{'E' if info.get('episode') else ''}{info['episode']}".rstrip('.').rstrip('.')})
+    
     return info

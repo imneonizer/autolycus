@@ -35,7 +35,7 @@ class HlsConverter:
         
         return out[0]
         
-    def convert(self, input_file, output_file, length=10):
+    def convert_to_hls(self, input_file, output_file, length=10):
         assert os.path.exists(input_file), f"{input_file} doesn't exists"
         
         output_dir = os.path.dirname(output_file)
@@ -46,6 +46,7 @@ class HlsConverter:
         audio_mapping = ' '.join([f'-map 0:{i}' for i in range(len(self.get_audio_tracks(input_file))+1)])
 
         self.exec(f""" \
+            -v error \
             -i {input_file} \
             -codec: copy \
             -c:a copy \
@@ -59,6 +60,25 @@ class HlsConverter:
         
         with open(os.path.join(output_dir, ".hlskeep"), "w") as f:
             f.write(os.path.basename(input_file))
+        
+        if os.path.exists(output_file):
+            return output_file
+    
+    def convert_to_mp4(self, input_file, output_file):
+        assert os.path.exists(input_file), f"{input_file} doesn't exists"
+        
+        if os.path.exists(output_file):
+            os.remove(output_file)
+        
+        audio_mapping = ' '.join([f'-map 0:{i}' for i in range(len(self.get_audio_tracks(input_file))//2+1)])
+        
+        self.exec(f""" \
+            -v error \
+            -i {input_file} \
+            -codec: copy -c:a copy \
+            {audio_mapping} \
+            {output_file}
+        """)
         
         if os.path.exists(output_file):
             return output_file

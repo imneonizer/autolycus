@@ -209,10 +209,9 @@ class RenameFile(Resource):
 
 from shared.hls_converter import hls
 from shared.torrent_name_parser import parse_name
-class ConvertToHls(Resource):
+class ConvertMp4toHls(Resource):
     @jwt_required
     def post(self, *args, **kwargs):
-        # create public url from file path
         file_path = JU.extract_keys(request.get_json(), "file_path")
         if not file_path: return JU.make_response("invalid data", 400)
 
@@ -224,15 +223,43 @@ class ConvertToHls(Resource):
             output_file = parse_name(os.path.basename(file_path))['key']
             output_file_dirname = os.path.basename(os.path.splitext(file_path)[0])
             output_file = os.path.join(os.path.dirname(file_path), output_file_dirname, output_file+".m3u8")
-            output_file = hls.convert(file_path, output_file)
+            output_file = hls.convert_to_hls(file_path, output_file)
             
             new_hls_child = {
                 'name': os.path.basename(os.path.splitext(file_path)[0]),
                 'info': parse_name(os.path.basename(file_path)),
                 'type': 'hls',
                 'path': os.path.splitext(file_path)[0],
+                'ext': ".m3u8",
                 'size': os.stat(file_path).st_size
             }
             return new_hls_child, 200
+        else:
+            return JU.make_response(f"file '{file_path}' doesn't exists", 404)
+
+class ConvertHlstoMp4(Resource):
+    @jwt_required
+    def post(self, *args, **kwargs):
+        hls_element = JU.extract_keys(request.get_json(), "hls_element")
+        file_path = hls_element.get('path')+"/"+hls_element.get('info').get('key')+".m3u8"
+        if not file_path: return JU.make_response("invalid data", 400)
+
+        username = get_jwt_identity()
+        user = User.find_by_username(username)
+        if not user: return JU.make_response(f"user '{username}' doesn't exists", 404)
+
+        if os.path.exists(file_path):
+            output_file = os.path.join(os.path.dirname(os.path.dirname(file_path)), os.path.splitext(os.path.basename(file_path))[0]+".mp4")
+            output_file = hls.convert_to_mp4(file_path, output_file)
+            
+            new_mp4_child = {
+                'name': os.path.basename(os.path.splitext(file_path)[0])+".mp4",
+                'type': 'file',
+                'path': output_file,
+                'ext': ".mp4",
+                'size': os.stat(output_file).st_size
+            }
+            
+            return new_mp4_child, 200
         else:
             return JU.make_response(f"file '{file_path}' doesn't exists", 404)
