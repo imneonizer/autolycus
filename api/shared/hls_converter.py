@@ -19,7 +19,7 @@ class HlsConverter:
     def get_audio_tracks(self, input_file):
         out = sp.check_output(f""" \
                 {self.ffprobe} -v error \
-                {input_file} \
+                "{input_file}" \
                 -show_entries stream=index:stream_tags=language \
                 -select_streams a \
                 -of compact=p=0:nk=1 """, shell=True).strip().decode().split("\n")
@@ -31,7 +31,7 @@ class HlsConverter:
                 -select_streams v \
                 -show_entries stream=width,height \
                 -of csv=p=0:s=x \
-                {input_file} """, shell=True).strip().decode().split("\n")
+                "{input_file}" """, shell=True).strip().decode().split("\n")
         
         return out[0]
         
@@ -47,7 +47,7 @@ class HlsConverter:
 
         self.exec(f""" \
             -v error \
-            -i {input_file} \
+            -i "{input_file}" \
             -codec: copy \
             -c:a copy \
             {audio_mapping}
@@ -55,7 +55,7 @@ class HlsConverter:
             -hls_time {length} \
             -hls_list_size 0 \
             -f hls \
-            {output_file}
+            "{output_file}"
         """)
         
         with open(os.path.join(output_dir, ".hlskeep"), "w") as f:
