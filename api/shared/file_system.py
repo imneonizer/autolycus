@@ -27,7 +27,9 @@ class FileSystem:
                     d['path'] = os.path.realpath(path)
                     d['size'] = sum(x.stat().st_size for x in os.scandir(path) if x.is_file())
                     
-                    if not hls_index_file:
+                    if hls_index_file:
+                        d['hls_children'] = [path_to_dict(os.path.join(path,x)) for x in self.sort_names(os.listdir(path))]
+                    else:
                         d['children'] = [path_to_dict(os.path.join(path,x)) for x in self.sort_names(os.listdir(path))]
                 else:
                     d['type'] = "file"

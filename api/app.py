@@ -18,7 +18,7 @@ from endpoints.torrents import (
 
 from endpoints.files import (
     PublicUrl, CopyFile, DeleteFile,
-    RenameFile, ConvertToHls
+    RenameFile, ConvertMp4toHls, ConvertHlstoMp4
 )
 
 from endpoints.ping import Ping
@@ -63,7 +63,8 @@ def create_app(config_name):
     api.add_resource(CopyFile, '/torrents/files/copy-file')
     api.add_resource(DeleteFile, '/torrents/files/delete-file')
     api.add_resource(RenameFile, '/torrents/files/rename-file')
-    api.add_resource(ConvertToHls, '/torrents/files/convert-hls')
+    api.add_resource(ConvertMp4toHls, '/torrents/files/convert-mp4-to-hls')
+    api.add_resource(ConvertHlstoMp4, '/torrents/files/convert-hls-to-mp4')
 
     api.add_resource(PublicUrl, '/public/<string:public_url_hash>')
     api.add_resource(PublicHls, '/public/hls/<string:public_url_hash>/<string:filename>')

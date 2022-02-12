@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "../styles/FileCard.css";
 import "../styles/TorrentCard.css";
-import {downloadFileUrl, copyFile, deleteFile, renameFile, convertHlsService} from "../services/FileService";
+import {downloadFileUrl, copyFile, deleteFile, renameFile, convertMp4toHlsService, convertHlstoMp4Service} from "../services/FileService";
 import cogoToast from 'cogo-toast';
 import {uri} from "../../../uri";
 
@@ -19,8 +19,8 @@ class FileCard extends Component {
         this.handlePaste = this.handlePaste.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleRename = this.handleRename.bind(this);
-        this.handleConvertHls = this.handleConvertHls.bind(this);
-        this.handleConvertMp4 = this.handleConvertMp4.bind(this);
+        this.handleConvertMp4toHls = this.handleConvertMp4toHls.bind(this);
+        this.handleConvertHlstoMp4 = this.handleConvertHlstoMp4.bind(this);
     }
 
     componentDidMount() {
@@ -75,7 +75,7 @@ class FileCard extends Component {
         }
     }
 
-    handleConvertHls(parent, e){
+    handleConvertMp4toHls(parent, e){
         const { hide } = cogoToast.loading(
             <div className="toast-confirmation">
                 <p style={{paddingBottom: "1px"}}>Converting to HLS</p>
@@ -83,9 +83,8 @@ class FileCard extends Component {
             hideAfter: 0
         });
 
-        convertHlsService(e.path).then(newHlsChild => {
+        convertMp4toHlsService(e.path).then(newHlsChild => {
             hide();
-            cogoToast.success("Conversion Complete", {hideAfter: 0.9});
             let alreadyPresent = false;
             parent.children.forEach(function (item, index) {
                 if (item.type === 'hls' && item.name === newHlsChild.name){
@@ -100,8 +99,30 @@ class FileCard extends Component {
         })
     }
 
-    handleConvertMp4(parent, e){
-        console.log(e);
+    handleConvertHlstoMp4(parent, e){
+        const { hide } = cogoToast.loading(
+            <div className="toast-confirmation">
+                <p style={{paddingBottom: "1px"}}>Converting to MP4</p>
+            </div>, {
+            hideAfter: 0
+        });
+        
+        convertHlstoMp4Service(e).then(newMp4Child => {
+            hide();
+ 
+            let alreadyPresent = false;
+            parent.children.forEach(function (item, index) {
+                if (item.type === 'file' && item.name === newMp4Child.name){
+                    alreadyPresent = true;
+                    return;
+                }
+              });
+
+              if (alreadyPresent === false){
+                parent.children.push(newMp4Child);
+              }
+        })
+
     }
 
     handleDotMenu(e, name){
@@ -334,16 +355,16 @@ class FileCard extends Component {
                                         </div>
 
                                         {[".mp4", ".mkv"].includes(item.ext) && 
-                                            <div onClick={() => this.handleConvertHls(this.props.data, item)} className="torrent-card-menu-contents-items">
+                                            <div onClick={() => this.handleConvertMp4toHls(this.props.data, item)} className="torrent-card-menu-contents-items">
                                                 <img className="svg-black" src="/autolycus/icons/bx-convert-hls.svg"/>
-                                                <p>Convert HLS</p>
+                                                <p>Make HLS</p>
                                             </div>
                                         }
 
                                         {[".m3u8"].includes(item.ext) && 
-                                            <div onClick={() => this.handleConvertMp4(this.props.data, item)} className="torrent-card-menu-contents-items">
+                                            <div onClick={() => this.handleConvertHlstoMp4(this.props.data, item)} className="torrent-card-menu-contents-items">
                                                 <img className="svg-black" src="/autolycus/icons/bx-convert-hls.svg"/>
-                                                <p>Convert MP4</p>
+                                                <p>Make MP4</p>
                                             </div>
                                         }
 
