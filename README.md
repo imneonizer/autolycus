@@ -166,9 +166,6 @@ Project Link: [https://github.com/imneonizer/autolycus](https://github.com/imneo
 
 ## Acknowledgements
 * https://github.com/CrazyCoder009/AUTOLYCUS/blob/master/AUTOLYCUS.ipynb
-* https://stackoverflow.com/questions/57314357/streaming-video-files-using-flask
-* https://codeburst.io/jwt-authorization-in-flask-c63c1acf4eeb
-* https://flask-jwt-extended.readthedocs.io/en/stable/changing_default_behavior
 
 
 

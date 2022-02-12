@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "../styles/FileCard.css";
 import "../styles/TorrentCard.css";
-import {downloadFileUrl, copyFile, deleteFile, renameFile} from "../services/FileService";
+import {downloadFileUrl, copyFile, deleteFile, renameFile, convertHlsService} from "../services/FileService";
 import cogoToast from 'cogo-toast';
 import {uri} from "../../../uri";
 
@@ -19,6 +19,7 @@ class FileCard extends Component {
         this.handlePaste = this.handlePaste.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleRename = this.handleRename.bind(this);
+        this.handleConvertHls = this.handleConvertHls.bind(this);
     }
 
     componentDidMount() {
@@ -71,6 +72,31 @@ class FileCard extends Component {
         }else{
             return "/autolycus/icons/unknown-file-icon.svg";
         }
+    }
+
+    handleConvertHls(parent, e){
+        const { hide } = cogoToast.loading(
+            <div className="toast-confirmation">
+                <p style={{paddingBottom: "1px"}}>Converting to HLS</p>
+            </div>, {
+            hideAfter: 0
+        });
+
+        convertHlsService(e.path).then(newHlsChild => {
+            hide();
+            cogoToast.success("Conversion Complete", {hideAfter: 0.9});
+            let alreadyPresent = false;
+            parent.children.forEach(function (item, index) {
+                if (item.type === 'hls' && item.name === newHlsChild.name){
+                    alreadyPresent = true;
+                    return;
+                }
+              });
+            
+              if (alreadyPresent === false){
+                parent.children.push(newHlsChild);
+              }
+        })
     }
 
     handleDotMenu(e, name){
@@ -282,6 +308,8 @@ class FileCard extends Component {
                                 </div>
                             </div>
 
+                            {/* style={{height:"260px"}} */}
+
                             <div className="torrent-card-menu">
                                 <div className="torrent-card-menu-dot-wrapper" onClick={(e) => this.handleDotMenu(e, item.name)}>
                                     <div className="torrent-card-menu-dot" />
@@ -289,6 +317,8 @@ class FileCard extends Component {
                                     <div className="torrent-card-menu-dot" />
                                 </div>
                                 {this.state.threeDotMenuVisible === item.name && (
+
+                                    
                                     <div style={{transform: "translate(0px, "+this.state.MenuTranslateY+")"}} className="torrent-card-menu-contents">
                                         <div onClick={() => this.handleDownload(item)} className="torrent-card-menu-contents-items">
                                             <img className="svg-black" src="/autolycus/icons/bxs-cloud-download.svg"/>
@@ -299,6 +329,13 @@ class FileCard extends Component {
                                             <img className="svg-black" src="/autolycus/icons/bx-link-alt.svg"/>
                                             <p>Copy Link</p>
                                         </div>
+
+                                        {[".mp4"].includes(item.ext) && 
+                                            <div onClick={() => this.handleConvertHls(this.props.data, item)} className="torrent-card-menu-contents-items">
+                                                <img className="svg-black" src="/autolycus/icons/bx-convert-hls.svg"/>
+                                                <p>Convert HLS</p>
+                                            </div>
+                                        }
 
                                         <div onClick={() => this.handleRename(item)} className="torrent-card-menu-contents-items">
                                             <img className="svg-black" src="/autolycus/icons/bx-edit-alt.svg"/>

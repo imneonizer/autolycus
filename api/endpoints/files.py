@@ -225,6 +225,14 @@ class ConvertToHls(Resource):
             output_file_dirname = os.path.basename(os.path.splitext(file_path)[0])
             output_file = os.path.join(os.path.dirname(file_path), output_file_dirname, output_file+".m3u8")
             output_file = hls.convert(file_path, output_file)
-            return JU.make_response(output_file, 200)
+            
+            new_hls_child = {
+                'name': os.path.basename(os.path.splitext(file_path)[0]),
+                'info': parse_name(os.path.basename(file_path)),
+                'type': 'hls',
+                'path': os.path.splitext(file_path)[0],
+                'size': os.stat(file_path).st_size
+            }
+            return new_hls_child, 200
         else:
             return JU.make_response(f"file '{file_path}' doesn't exists", 404)
