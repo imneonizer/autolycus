@@ -1,4 +1,5 @@
 import {uri} from "../../../uri";
+import axios from 'axios';
 
 function getAuthToken(){
     let auth = localStorage.getItem('autolycus-auth');
@@ -69,11 +70,31 @@ function renameFile(path, newname){
     })
 }
 
+async function convertHlsService(path){
+    let auth = getAuthToken();
+    let res = null;
+
+    await axios.post(uri()+"/torrents/files/convert-hls", {
+        file_path: path
+    }, {
+    headers: {
+        'Authorization': `Bearer ${auth.access_token}` 
+    }
+    }).then(function (response) {
+        res = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    
+    return res;
+}
+
 export {
     getAuthToken,
     getFileDetails,
     downloadFileUrl,
     copyFile,
     deleteFile,
-    renameFile
+    renameFile,
+    convertHlsService
 }

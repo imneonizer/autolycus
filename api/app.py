@@ -18,12 +18,13 @@ from endpoints.torrents import (
 
 from endpoints.files import (
     PublicUrl, CopyFile, DeleteFile,
-    RenameFile
+    RenameFile, ConvertToHls
 )
 
 from endpoints.ping import Ping
 from endpoints.search_torrent import TorrentSearch
 from endpoints.storage_status import StorageStatus
+from endpoints.hls_streaming import PublicHls, PrivateHls
 
 from endpoints.auth import (
     UserExists, EmailExists, Signup, Login,
@@ -62,8 +63,11 @@ def create_app(config_name):
     api.add_resource(CopyFile, '/torrents/files/copy-file')
     api.add_resource(DeleteFile, '/torrents/files/delete-file')
     api.add_resource(RenameFile, '/torrents/files/rename-file')
+    api.add_resource(ConvertToHls, '/torrents/files/convert-hls')
 
     api.add_resource(PublicUrl, '/public/<string:public_url_hash>')
+    api.add_resource(PublicHls, '/public/hls/<string:public_url_hash>/<string:filename>')
+    api.add_resource(PrivateHls, '/hls/<string:access_token>/<string:bs64_file_path>/<string:filename>')
     
     api.add_resource(StorageStatus, '/storage-status')
 

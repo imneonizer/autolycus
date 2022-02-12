@@ -49,45 +49,38 @@ class Home extends Component {
         if (!auth){
             clearTokens();
         }
-
-        ValidateAuth().then(authorized => {
-            if (authorized === true){
+        
+        refreshAccessToken().then(
+            ValidateAuth().then(authorized => {
+                if (authorized){
                     this.setState({ loading: false, authorized: true });
                 } else {
-                    refreshAccessToken().then(authorized => {
-                        if (authorized === true){
-                            this.setState({ loading: false, authorized: true });
-                        } else {
-                            this.setState({ loading: false, authorized: false });
-                        }
-                    })
+                    this.setState({ loading: false, authorized: false });
                 }
-            }
+            })
         )
     }
 
     render () {
-        if (this.state.loading){
+        if (this.state.apiDown){
+            return (<ConfigureServer />)
+        } else if (this.state.loading){
             return (<ThreeDotLoader/>)
         } else if (this.state.authorized) {
             return (<Route component={Dashboard} />)
         } else {
-            if (this.state.apiDown){
-                return (<ConfigureServer />)
-            }else{
-                return (
-                    <div>
-                        <div className="home-section">
-                            <div className="carousel-section"></div>
-                            <div className="login-section">
-                                <div className="login-form">
-                                    <Login />
-                                </div>
+            return (
+                <div>
+                    <div className="home-section">
+                        <div className="carousel-section"></div>
+                        <div className="login-section">
+                            <div className="login-form">
+                                <Login />
                             </div>
                         </div>
                     </div>
-                )
-            }
+                </div>
+            )
         }
 
     }

@@ -2,6 +2,7 @@ import os
 import glob
 import json
 import re
+from .torrent_name_parser import parse_name
 
 class FileSystem:
     def sort_names(self, data): 
@@ -14,9 +15,20 @@ class FileSystem:
             def path_to_dict(path):
                 d = {'name': os.path.basename(path)}
                 if os.path.isdir(path):
-                    d['type'] = "directory"
+                    hls_index_file =  os.path.exists(os.path.join(path, ".hlskeep"))
+                    if hls_index_file:
+                        dtype = "hls"
+                        d['info'] = parse_name(os.path.basename(path))
+                        d['ext'] = ".m3u8"
+                    else:
+                        dtype = "directory"
+                    
+                    d['type'] = dtype
                     d['path'] = os.path.realpath(path)
-                    d['children'] = [path_to_dict(os.path.join(path,x)) for x in self.sort_names(os.listdir(path))]
+                    d['size'] = sum(x.stat().st_size for x in os.scandir(path) if x.is_file())
+                    
+                    if not hls_index_file:
+                        d['children'] = [path_to_dict(os.path.join(path,x)) for x in self.sort_names(os.listdir(path))]
                 else:
                     d['type'] = "file"
                     d['path'] = os.path.realpath(path)
