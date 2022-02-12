@@ -224,7 +224,7 @@ class ConvertToHls(Resource):
             output_file = parse_name(os.path.basename(file_path))['key']
             output_file_dirname = os.path.basename(os.path.splitext(file_path)[0])
             output_file = os.path.join(os.path.dirname(file_path), output_file_dirname, output_file+".m3u8")
-            output_file = hls.convert(file_path, output_file)
+            output_file = hls.convert_hls(file_path, output_file)
             
             new_hls_child = {
                 'name': os.path.basename(os.path.splitext(file_path)[0]),

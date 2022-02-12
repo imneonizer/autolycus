@@ -20,6 +20,7 @@ class FileCard extends Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleRename = this.handleRename.bind(this);
         this.handleConvertHls = this.handleConvertHls.bind(this);
+        this.handleConvertMp4 = this.handleConvertMp4.bind(this);
     }
 
     componentDidMount() {
@@ -97,6 +98,10 @@ class FileCard extends Component {
                 parent.children.push(newHlsChild);
               }
         })
+    }
+
+    handleConvertMp4(parent, e){
+        console.log(e);
     }
 
     handleDotMenu(e, name){
@@ -308,8 +313,6 @@ class FileCard extends Component {
                                 </div>
                             </div>
 
-                            {/* style={{height:"260px"}} */}
-
                             <div className="torrent-card-menu">
                                 <div className="torrent-card-menu-dot-wrapper" onClick={(e) => this.handleDotMenu(e, item.name)}>
                                     <div className="torrent-card-menu-dot" />
@@ -330,10 +333,17 @@ class FileCard extends Component {
                                             <p>Copy Link</p>
                                         </div>
 
-                                        {[".mp4"].includes(item.ext) && 
+                                        {[".mp4", ".mkv"].includes(item.ext) && 
                                             <div onClick={() => this.handleConvertHls(this.props.data, item)} className="torrent-card-menu-contents-items">
                                                 <img className="svg-black" src="/autolycus/icons/bx-convert-hls.svg"/>
                                                 <p>Convert HLS</p>
+                                            </div>
+                                        }
+
+                                        {[".m3u8"].includes(item.ext) && 
+                                            <div onClick={() => this.handleConvertMp4(this.props.data, item)} className="torrent-card-menu-contents-items">
+                                                <img className="svg-black" src="/autolycus/icons/bx-convert-hls.svg"/>
+                                                <p>Convert MP4</p>
                                             </div>
                                         }
 

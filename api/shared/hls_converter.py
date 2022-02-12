@@ -35,7 +35,7 @@ class HlsConverter:
         
         return out[0]
         
-    def convert(self, input_file, output_file, length=10):
+    def convert_hls(self, input_file, output_file, length=10):
         assert os.path.exists(input_file), f"{input_file} doesn't exists"
         
         output_dir = os.path.dirname(output_file)
@@ -62,5 +62,17 @@ class HlsConverter:
         
         if os.path.exists(output_file):
             return output_file
+    
+    # def convert_mp4(self, input_file, output_file):
+    #     assert os.path.exists(input_file), f"{input_file} doesn't exists"
+        
+    #     if os.path.exists(output_file):
+    #         os.remove(output_file)
+        
+    #     audio_mapping = ' '.join([f'-map 0:{i}' for i in range(len(self.get_audio_tracks(input_file))+1)])
+        
+    #     return audio_mapping
+    #     # ffmpeg -i "./All.Of.Us.Are.Dead.S01E12.1080p.NF.10bit.DDP.5.1.x265.[HashMiner]/All.Of.Us.Are.Dead.S1.E12.m3u8" -codec: copy -c:a copy -map 0:0 -map 0:1 -map 0:2 -map 0:3 file.mp4
+    #     pass
   
 hls = HlsConverter()
