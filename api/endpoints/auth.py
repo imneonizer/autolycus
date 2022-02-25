@@ -9,8 +9,7 @@ from models.revoked_tokens import RevokedToken
 
 from flask_jwt_extended import (
     create_access_token, create_refresh_token,
-    jwt_required, fresh_jwt_required, jwt_refresh_token_required,
-    get_jwt_identity, get_raw_jwt, get_jti
+    jwt_required, get_jwt_identity, get_jwt, get_jti
 )
 
 import os
@@ -63,7 +62,7 @@ class Signup(Resource):
             return JU.make_response("something went wrong", 500)
 
 class UserDetails(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self):
         username = get_jwt_identity()
         user = User.find_by_username(username)
@@ -95,9 +94,9 @@ class Login(Resource):
             }, 200)
 
 class Logout(Resource):
-    @jwt_required
+    @jwt_required()
     def post(self):
-        access_jti = get_raw_jwt()['jti']
+        access_jti = get_jwt()['jti']
         refresh_token = JU.extract_keys(request.get_json(), "refresh_token")
         if not refresh_token: return JU.make_response("refresh token is required", 400)
         try:
@@ -110,7 +109,7 @@ class Logout(Resource):
             return {'message': 'something went wrong'}, 500
 
 class DeleteAccount(Resource):
-    @jwt_required
+    @jwt_required()
     def post(self):
         username = get_jwt_identity()
         password,  refresh_token = JU.extract_keys(request.get_json(), "password", "refresh_token")
@@ -132,14 +131,14 @@ class DeleteAccount(Resource):
         return JU.make_response(f"user '{username}' deleted", 200)
 
 class TokenRefresh(Resource):
-    @jwt_refresh_token_required
+    @jwt_required(refresh=True)
     def post(self):
         username = get_jwt_identity()
         access_token = create_access_token(identity=username, fresh=False)
         return make_response({'access_token': access_token}, 200)
 
 class RevokeRefreshToken(Resource):
-    @jwt_refresh_token_required
+    @jwt_required(refresh=True)
     def post(self):
         jti = get_raw_jwt()['jti']
         try:
@@ -150,7 +149,7 @@ class RevokeRefreshToken(Resource):
             return {'message': 'something went wrong'}, 500
 
 class RevokeAccessToken(Resource):
-    @jwt_required
+    @jwt_required()
     def post(self):
         jti = get_raw_jwt()['jti']
         try:

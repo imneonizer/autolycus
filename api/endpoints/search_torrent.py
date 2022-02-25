@@ -7,7 +7,7 @@ import rapidjson as json
 import requests
 
 class TorrentSearch(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self):
         query = request.args.get('query', None)
         if not query: return JU.make_response("parameter '?query=' required", 400)
@@ -19,7 +19,7 @@ class TorrentSearch(Resource):
         
         return make_response(json.dumps(torrents), 200)
     
-    @jwt_required
+    @jwt_required()
     def post(self, *args, **kwargs):
         item = JU.extract_keys(request.get_json(), "item")
         if not item: return JU.make_response("invalid data", 400)

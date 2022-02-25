@@ -20,7 +20,7 @@ import mmap
 import contextlib
 
 class PublicUrl(Resource):
-    @jwt_required
+    @jwt_required()
     def post(self, *args, **kwargs):
         # create public url from file path
         file_path = JU.extract_keys(request.get_json(), "file_path")
@@ -140,7 +140,7 @@ class PublicUrl(Resource):
         return chunk, start, length, file_size
     
 class CopyFile(Resource):
-    @jwt_required
+    @jwt_required()
     def post(self, *args, **kwargs):
         from_path, to_path, iscut = JU.extract_keys(request.get_json(), "from", "to", "iscut")
         if None in [from_path, to_path]:
@@ -166,7 +166,7 @@ class CopyFile(Resource):
         return JU.make_response("file copied", 200)
     
 class DeleteFile(Resource):
-    @jwt_required
+    @jwt_required()
     def delete(self, *args, **kwargs):
         path = JU.extract_keys(request.get_json(), "path")
         if not path:
@@ -191,7 +191,7 @@ class DeleteFile(Resource):
         return JU.make_response("file deleted", 200)
     
 class RenameFile(Resource):
-    @jwt_required
+    @jwt_required()
     def post(self, *args, **kwargs):
         path, newname = JU.extract_keys(request.get_json(), "path", "newname")
         if None in [path, newname]:
@@ -210,7 +210,7 @@ class RenameFile(Resource):
 from shared.hls_converter import hls
 from shared.torrent_name_parser import parse_name
 class ConvertMp4toHls(Resource):
-    @jwt_required
+    @jwt_required()
     def post(self, *args, **kwargs):
         file_path = JU.extract_keys(request.get_json(), "file_path")
         if not file_path: return JU.make_response("invalid data", 400)
@@ -238,7 +238,7 @@ class ConvertMp4toHls(Resource):
             return JU.make_response(f"file '{file_path}' doesn't exists", 404)
 
 class ConvertHlstoMp4(Resource):
-    @jwt_required
+    @jwt_required()
     def post(self, *args, **kwargs):
         hls_element = JU.extract_keys(request.get_json(), "hls_element")
         file_path = hls_element.get('path')+"/"+hls_element.get('info').get('key')+".m3u8"
