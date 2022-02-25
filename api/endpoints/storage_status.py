@@ -8,7 +8,7 @@ from pathlib import Path
 import shutil
 
 class StorageStatus(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self):
         username = get_jwt_identity()
         stats = self.status_disk("/downloads/"+username)

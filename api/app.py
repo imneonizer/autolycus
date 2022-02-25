@@ -81,15 +81,15 @@ def create_app(config_name):
 
     jwt = JWTManager(app)
     
-    @jwt.token_in_blacklist_loader
-    def check_if_token_in_blacklist(decrypted_token):
-        jti = decrypted_token['jti']
+    @jwt.token_in_blocklist_loader
+    def check_if_token_in_blacklist(header, payload):
+        jti = payload['jti']
         return RevokedToken.is_jti_blacklisted(jti)
     
     @jwt.expired_token_loader
-    def my_expired_token_callback(expired_token):
-        token_type = expired_token['type']
-        return {'message': 'token has expired'}, 401
+    def my_expired_token_callback(header, payload):
+        token_type = payload['type']
+        return {'message': f'{token_type} token has expired'}, 401
     
     @app.after_request
     def after_request(response):

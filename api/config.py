@@ -12,7 +12,7 @@ class Config(object):
     SECRET_KEY = "super_secret"
     JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
     JWT_BLACKLIST_ENABLED = True
-    JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(hours=3)
+    JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(minutes=15)
     JWT_REFRESH_TOKEN_EXPIRES = datetime.timedelta(days=15)
     PUBLIC_URL_EXPIRES = datetime.timedelta(days=7)
 
