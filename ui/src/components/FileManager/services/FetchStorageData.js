@@ -1,4 +1,5 @@
 import {uri} from "../../../uri";
+import {ValidateAuth} from "../../../services/LoginService";
 import axios from 'axios';
 
 function getAuthToken(){
@@ -10,6 +11,8 @@ function getAuthToken(){
 }
 
 async function FetchStorageData(){
+    await ValidateAuth()
+    
     let auth = getAuthToken();
     const headers = { Authorization: `Bearer ${auth.access_token}` };
     let stats = {usedBytes: 0, totalBytes: 0};

@@ -1,4 +1,5 @@
 import {uri} from "../../../uri";
+import {ValidateAuth} from "../../../services/LoginService";
 
 function getAuthToken(){
     let auth = localStorage.getItem('autolycus-auth');
@@ -59,6 +60,10 @@ function SendMagnet(element_id, magnet){
 }
 
 function FetchTorrents(){
+    ValidateAuth().then(authorized => {
+        // pass
+    })
+
     let auth = getAuthToken();
     if (auth){
         return fetch(uri()+"/torrents/status", getAuthHeader("GET"))

@@ -44,21 +44,14 @@ class Home extends Component {
     componentDidMount() {
         this.pingAPI();
 
-        // get auth from local storage
-        let auth = localStorage.getItem('autolycus-auth');
-        if (!auth){
-            clearTokens();
-        }
+        ValidateAuth(true).then(authorized => {
+            if (authorized){
+                this.setState({ loading: false, authorized: true });
+            } else {
+                this.setState({ loading: false, authorized: false });
+            }
+        })
         
-        refreshAccessToken().then(
-            ValidateAuth().then(authorized => {
-                if (authorized){
-                    this.setState({ loading: false, authorized: true });
-                } else {
-                    this.setState({ loading: false, authorized: false });
-                }
-            })
-        )
     }
 
     render () {

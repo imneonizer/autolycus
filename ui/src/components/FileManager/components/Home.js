@@ -135,7 +135,7 @@ class Home extends Component {
             return(
                 <div>
                     <AddMagnet videoUrl={this.state.videoUrl}/>
-                    {this.props.torrents.map((data) => {return <TorrentCard data={data} key={data.name} updateActiveItemHover={this.props.updateActiveItemHover} cardHandler={this.cardHandler}/>})}
+                    {this.props.torrents && this.props.torrents.map((data) => {return <TorrentCard data={data} key={data.name} updateActiveItemHover={this.props.updateActiveItemHover} cardHandler={this.cardHandler}/>})}
                 </div>
             )
         }
