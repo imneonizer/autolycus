@@ -12,8 +12,7 @@ class Dashboard extends Component {
       }
 
     componentDidMount() {
-        // refresh access token every 1 hour
-        ValidateAuth(true, 60*60).then(authorized => {
+        ValidateAuth().then(authorized => {
             if (authorized === true){
                 this.setState({ loading: false, authorized: true });
             } else {

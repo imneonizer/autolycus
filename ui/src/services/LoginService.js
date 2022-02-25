@@ -9,6 +9,13 @@ function handleErrors(response) {
     return response;
 }
 
+function getAuthToken(validate=false){
+    let auth = localStorage.getItem('autolycus-auth');
+    if (auth !== "undefined"){
+        auth = JSON.parse(auth)
+    }
+    return auth;
+}
 
 function clearTokens(){
     localStorage.setItem('autolycus-auth', 'undefined');
@@ -77,68 +84,52 @@ function AuthLogout(){
 }
 
 
-async function refreshAccessToken() {
-        let auth = localStorage.getItem('autolycus-auth');
-        let authorized = false;
+async function refreshAccessToken(){
+    let auth = getAuthToken();
 
-        if (auth !== "undefined"){
-            auth = JSON.parse(auth)
-
-            // try to get new access token using refresh token
-            await fetch(uri()+"/auth/refresh-token", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + auth.refresh_token
-                }
-            })
-            .then(handleErrors)
-            .then(response => {
-                if (response.status === 200){
-                    response.json()
-                    .then(response => {
-                        authorized = true;
-                        // console.log("access token refreshed")
-                        auth.access_token = response.access_token;
-                        localStorage.setItem('autolycus-auth', JSON.stringify(auth));
-                    })
-                }
-            }).catch(err => {
-                console.log("[ERROR] in refreshAccessToken:",err)
-            })
+    return axios.post(uri()+"/auth/refresh-token", {}, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${auth.refresh_token}` 
         }
-
-        return authorized;
+    }).then(function (response) {
+        let res = response.data;
+        auth.access_token = res.access_token;
+        localStorage.setItem('autolycus-auth', JSON.stringify(auth));
+        return true;
+    }).catch(function (e) {
+        if (e.response.status === 401){
+            console.log("Refresh token expired please login");
+            return false
+        }else{
+            console.error("[ERROR] in refreshAccessToken:", e)
+            return false;
+        }
+    });
 }
 
-
-async function ValidateAuth (auto_refresh=false, interval=2) {
-    let auth = localStorage.getItem('autolycus-auth');
-    let authorized = false;
-
-    if (auth !== 'undefined'){
-        auth = JSON.parse(auth);
-        await fetch(uri()+"/auth/user-details", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + auth.access_token
-            }
-        })
-        .then(handleErrors)
-        .then(response => {
-            if (response.status === 200){
-                authorized = true;
-                if (auto_refresh){
-                    window.setInterval(refreshAccessToken, 1000*interval);
-                }
-            }
-        }).catch(err => {
-            console.log("[ERROR] in ValidateAuth:", err)
-        })
-    }
-
-    return authorized;
+// refresh access token every 15 minute
+async function ValidateAuth(auto_refresh=false, interval=900){
+    let auth = getAuthToken();
+    return axios.get(uri()+"/auth/user-details", {}, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${auth.access_token}` 
+        }
+    }).then(function (response) {
+        let res = response.data;
+        if (auto_refresh){
+            window.setInterval(refreshAccessToken, 1000*interval);
+        }
+        return true;
+    }).catch(function (e) {
+        if (e.response.status === 401){
+            return refreshAccessToken();
+        }else{
+            console.log(e);
+            return false;
+        }
+    });
 }
 
 export {
