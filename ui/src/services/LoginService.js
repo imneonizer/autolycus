@@ -87,7 +87,7 @@ function AuthLogout(){
 async function refreshAccessToken(){
     let auth = getAuthToken();
 
-    return axios.post(uri()+"/auth/refresh-token", {}, {
+    return axios.post(uri()+"/auth/refresh-token", {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${auth.refresh_token}` 
@@ -111,7 +111,7 @@ async function refreshAccessToken(){
 // refresh access token every 15 minute
 async function ValidateAuth(auto_refresh=false, interval=900){
     let auth = getAuthToken();
-    return axios.get(uri()+"/auth/user-details", {}, {
+    return axios.get(uri()+"/auth/user-details", {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${auth.access_token}` 
