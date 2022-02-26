@@ -49,15 +49,17 @@ async function getMagnetFromSearch(item){
 
 function addMagnet(magnet){
     let auth = getAuthToken();
-    axios.get(uri()+"/torrents/add?magnet="+magnet,{
+    return axios.get(uri()+"/torrents/add?magnet="+magnet,{
         headers: {
             'Authorization': `Bearer ${auth.access_token}` 
         }
     })
     .then(function (response) {
-        console.log("Magnet added to download queue!")
+        // console.log("Magnet added to download queue!")
+        return true;
     }).catch(function (error) {
         console.log(error)
+        return false;
     });
 }
 

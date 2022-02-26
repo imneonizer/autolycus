@@ -49,11 +49,23 @@ class SearchTorrent extends Component {
             hide();
             if (item.magnet){
                 // if magnet is preent in json
-                addMagnet(item.magnet)
+                addMagnet(item.magnet).then(res =>{
+                    if (res){
+                        cogoToast.success("Magnet Added!")
+                    }else{
+                        cogoToast.error("Unable to Added Magnet")
+                    }
+                })
             } else {
                 // query magnet from API first
                 getMagnetFromSearch(item).then(response => {
-                    addMagnet(response)
+                    addMagnet(response).then(res =>{
+                        if (res){
+                            cogoToast.success("Magnet Added!")
+                        }else{
+                            cogoToast.error("Unable to Added Magnet")
+                        }
+                    })
                 })
             } 
         }
