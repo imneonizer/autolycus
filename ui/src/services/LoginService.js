@@ -86,20 +86,16 @@ function AuthLogout(){
 
 async function refreshAccessToken(){
     let auth = getAuthToken();
-
-    return axios.post(uri()+"/auth/refresh-token", {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${auth.refresh_token}` 
-        }
-    }).then(function (response) {
+    
+    return axios({ method: 'post', url: uri()+"/auth/refresh-token", headers: { Authorization: `Bearer ${auth.refresh_token}` } })
+    .then(function (response) {
         let res = response.data;
         auth.access_token = res.access_token;
         localStorage.setItem('autolycus-auth', JSON.stringify(auth));
         return true;
     }).catch(function (e) {
         if (e.response.status === 401){
-            console.log("Refresh token expired please login");
+            console.log("Refresh token expired please login", e);
             return false
         }else{
             console.error("[ERROR] in refreshAccessToken:", e)
@@ -124,6 +120,9 @@ async function ValidateAuth(auto_refresh=false, interval=900){
         return true;
     }).catch(function (e) {
         if (e.response.status === 401){
+            if (auto_refresh){
+                window.setInterval(refreshAccessToken, 1000*interval);
+            }
             return refreshAccessToken();
         }else{
             console.log(e);

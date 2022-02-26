@@ -72,7 +72,6 @@ function DeleteTorrent(Hash){
     if (auth){
         return fetch(uri()+"/torrents/remove?hash="+Hash, getAuthHeader("GET"))
     }
-    
 }
 
 export {
