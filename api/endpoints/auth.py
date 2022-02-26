@@ -116,7 +116,7 @@ class DeleteAccount(Resource):
         if JU.null_values(username, password, refresh_token):
             return JU.make_response("invalid data", 400)
         
-        access_jti = get_raw_jwt()['jti']
+        access_jti = get_jwt()['jti']
         refresh_jti = get_jti(refresh_token)
         user = User.find_by_username(username)
 
@@ -140,7 +140,7 @@ class TokenRefresh(Resource):
 class RevokeRefreshToken(Resource):
     @jwt_required(refresh=True)
     def post(self):
-        jti = get_raw_jwt()['jti']
+        jti = get_jwt()['jti']
         try:
             revoked_token = RevokedToken(jti = jti)
             revoked_token.add()
@@ -151,7 +151,7 @@ class RevokeRefreshToken(Resource):
 class RevokeAccessToken(Resource):
     @jwt_required()
     def post(self):
-        jti = get_raw_jwt()['jti']
+        jti = get_jwt()['jti']
         try:
             revoked_token = RevokedToken(jti = jti)
             revoked_token.add()

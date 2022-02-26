@@ -12,6 +12,7 @@ function getAuthToken(){
 
 async function FetchStorageData(){
     let auth = getAuthToken();
+    
     const headers = { Authorization: `Bearer ${auth.access_token}` };
     let stats = {usedBytes: 0, totalBytes: 0};
 

@@ -45,6 +45,8 @@ class Home extends Component {
         this.pingAPI();
 
         ValidateAuth(true).then(authorized => {
+            console.log(authorized);
+            
             if (authorized){
                 this.setState({ loading: false, authorized: true });
             } else {
