@@ -1,4 +1,4 @@
-name: Docker Build API
+name: Docker Build UI
 
 on:
   push:
