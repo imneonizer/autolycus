@@ -104,7 +104,7 @@ class SearchTorrent extends Component {
         return(
             <div>
                 <div className="add-magnet-div">
-                    <input id="add-magnet-box" type="text" placeholder="Search Torrent" />
+                    <input id="add-magnet-box" type="text" placeholder="Search Torrent" onKeyPress={event => {if (event.key === 'Enter') {this.handleTorrentSearch()}}} />
                     <img className="add-magnet-icon" src="/autolycus/icons/bx-search.svg" onClick={this.handleTorrentSearch}/>
                 </div>
 
