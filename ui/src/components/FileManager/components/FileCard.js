@@ -266,9 +266,9 @@ class FileCard extends Component {
                 response.json().then(json => {
                     if (response.status === 200){
                         this.props.removeItem(item);
-                        // cogoToast.success("file deleted", {position: "top-center", hideAfter: 1});
+                        cogoToast.success("File Deleted", {position: "top-center", hideAfter: 1});
                     }else{
-                        cogoToast.error("error occured", {position: "top-center", hideAfter: 1});
+                        cogoToast.error("Error Occured", {position: "top-center", hideAfter: 1});
                         console.error(json);
                     }
                 })

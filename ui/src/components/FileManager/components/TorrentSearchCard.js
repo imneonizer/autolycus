@@ -36,7 +36,7 @@ class SearchTorrent extends Component {
     }
 
     handleClick(item){
-        const { hide } = cogoToast.loading(
+        let { hide } = cogoToast.loading(
             <div className="toast-confirmation">
                 <p>Choose one option</p>
                 <button style={{backgroundColor: "rgb(42, 154, 245)"}} onClick={() => copyMagnet(item)}>Copy</button>
@@ -61,9 +61,9 @@ class SearchTorrent extends Component {
                 getMagnetFromSearch(item).then(response => {
                     addMagnet(response).then(res =>{
                         if (res){
-                            cogoToast.success("Magnet Added!")
+                            cogoToast.success("Magnet Added!");
                         }else{
-                            cogoToast.error("Unable to Added Magnet")
+                            cogoToast.error("Unable to Added Magnet");
                         }
                     })
                 })
@@ -80,7 +80,7 @@ class SearchTorrent extends Component {
                 getMagnetFromSearch(item).then(response => {
                     this.copyToClipboard(response);
                 })
-            }    
+            }
             
         }
 

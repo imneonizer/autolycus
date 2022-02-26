@@ -66,15 +66,26 @@ class TorrentCard extends Component {
 
 
     handleDelete(){
-        DeleteTorrent(this.props.data.hash)
-        .then( response => {
-            if (response.ok){
-                cogoToast.success("torrent deleted", {position: "top-center", hideAfter: 1});
-            }
-        })
-        .catch(err => {
-            console.log("[ERROR] in DeleteTorrent:", err)
-        })
+        const { hide } = cogoToast.loading(
+            <div className="toast-confirmation">
+                <p>Are you sure ?</p>
+                <button style={{backgroundColor: "red"}} onClick={() => confirmDelete()}>Yes</button>
+                <button style={{backgroundColor: "#4CAF50"}} onClick={() => hide()}>No</button>
+            </div>, {
+            hideAfter: 0
+        });
+
+        var confirmDelete = () => {
+            hide();
+            DeleteTorrent(this.props.data.hash).then( response => {
+                if (response.ok){
+                    cogoToast.success("Torrent Deleted", {position: "top-center", hideAfter: 1});
+                }
+            }).catch(err => {
+                cogoToast.error("Error Occured", {position: "top-center", hideAfter: 1});
+                console.log("[ERROR] in DeleteTorrent:", err)
+            })
+        }
     }
 
     trimString(string, length){
