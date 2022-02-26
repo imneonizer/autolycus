@@ -1,0 +1,26 @@
+.video-player-container {
+    overflow-x: hidden;
+}
+
+.video-player-overlay{
+    margin-top: 1em;
+    margin-left: 1em;
+    position: absolute;
+    overflow-x: hidden;
+}
+
+.video-player-title {
+     color: white;
+     width: 90%;
+     line-height: 1.2em;
+     font-size: medium;
+     word-wrap: break-word;
+     text-shadow: 2px 2px 5px rgb(0, 0, 0);
+}
+
+/* for small screens */
+@media screen and (min-width: 0px) and (max-width: 700px) {
+    .video-player-title {
+        font-size: small;
+    }
+}

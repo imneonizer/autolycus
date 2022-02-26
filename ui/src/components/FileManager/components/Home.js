@@ -12,7 +12,7 @@ import VideoPlayer from "../../VideoPlayer";
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.state = {card: null, data:null, parent_items: [], videoUrl: null}
+        this.state = {card: null, data:null, parent_items: [], videoUrl: null, videoMeta: {}}
         this.cardHandler = this.cardHandler.bind(this);
         this.goBack = this.goBack.bind(this);
         this.updateCard = this.updateCard.bind(this);
@@ -64,10 +64,10 @@ class Home extends Component {
             let b64 = btoa(unescape(encodeURIComponent(data.path)));
             let url = uri()+"/public/"+b64+"?token="+getAuthToken().access_token;
             if ([".mkv", ".mp4", ".avi"].includes(data.ext)){    
-                this.setState({videoUrl: url});
+                this.setState({videoUrl: url, videoMeta: data});
             } else if (data.ext === ".m3u8"){
                 let url = uri()+"/hls/"+getAuthToken().access_token+"/"+btoa(unescape(encodeURIComponent(data.path)))+"/"+data.info.key+".m3u8";
-                this.setState({videoUrl: url});
+                this.setState({videoUrl: url, videoMeta: data});
             }
             else if ([".txt", ".srt", ".jpg", ".mp3", ".wav"].includes(data.ext)) {
                 let win = window.open(url, '_blank');
@@ -127,14 +127,14 @@ class Home extends Component {
         if (this.state.data){
             return (
                 <div style={{scrollBehavior: "smooth"}}>
-                    <AddMagnet videoUrl={this.state.videoUrl}/>
+                    <AddMagnet videoUrl={this.state.videoUrl} videoMeta={this.state.videoMeta} />
                     <FileCard data={this.state.data} updateActiveItemHover={this.props.updateActiveItemHover} removeItem={this.removeItem} addItem={this.addItem} renameItem={this.renameItem} key={this.state.data} tFetcher={this.props.tFetcher} goBack={this.goBack} updateCard={this.updateCard}/>
                 </div>
             )
         } else {
             return(
                 <div>
-                    <AddMagnet videoUrl={this.state.videoUrl}/>
+                    <AddMagnet videoUrl={this.state.videoUrl} videoMeta={this.state.videoMeta}/>
                     {this.props.torrents && this.props.torrents.map((data) => {return <TorrentCard data={data} key={data.name} updateActiveItemHover={this.props.updateActiveItemHover} cardHandler={this.cardHandler}/>})}
                 </div>
             )
