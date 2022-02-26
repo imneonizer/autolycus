@@ -40,8 +40,7 @@ jobs:
         run: |
           IMG="autolycus"
           OWNER="$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')"
-          autolycus-version=$(git rev-parse --short HEAD)
-          echo "BUILD_VER=$autolycus-version" >> $GITHUB_ENV
+          echo "BUILD_VER=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           echo "IMG=${IMG}" >> $GITHUB_ENV
           echo "IMAGE=${OWNER}/${IMG}" >> $GITHUB_ENV
           echo "BUILD_DATE=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
