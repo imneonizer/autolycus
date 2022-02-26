@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - ui/**
-      - .github/workflows/docker-buil-api.yml
+      - .github/workflows/docker-buil-ui.yml
   # For manually triggering the build
   workflow_dispatch:
 
