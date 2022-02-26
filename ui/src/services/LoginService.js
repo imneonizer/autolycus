@@ -12,9 +12,9 @@ function handleErrors(response) {
 function getAuthToken(validate=false){
     let auth = localStorage.getItem('autolycus-auth');
     if (auth !== "undefined"){
-        auth = JSON.parse(auth)
+        return JSON.parse(auth)
     }
-    return auth;
+    return {access_token: ''};
 }
 
 function clearTokens(){
@@ -119,7 +119,7 @@ async function ValidateAuth(auto_refresh=false, interval=900){
         }
         return true;
     }).catch(function (e) {
-        if (e.response.status === 401){
+        if (e.response && e.response.status === 401){
             if (auto_refresh){
                 window.setInterval(refreshAccessToken, 1000*interval);
             }
