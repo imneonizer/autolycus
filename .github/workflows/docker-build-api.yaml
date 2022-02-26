@@ -37,7 +37,7 @@ jobs:
 
       - name: Set ENV Variables
         run: |
-          IMG="autolycus:api"
+          IMG="autolycus-api"
           OWNER="$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')"
           echo "BUILD_VER=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           echo "IMG=${IMG}" >> $GITHUB_ENV
