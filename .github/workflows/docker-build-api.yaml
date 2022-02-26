@@ -1,4 +1,4 @@
-name: Docker Build
+name: Docker Build API
 
 on:
   push:
@@ -6,8 +6,7 @@ on:
       - main
     paths:
       - api/**
-      - ui/**
-      - .github/workflows/docker-build.yml
+      - .github/workflows/docker-buil-api.yml
   # For manually triggering the build
   workflow_dispatch:
 
@@ -38,7 +37,7 @@ jobs:
 
       - name: Set ENV Variables
         run: |
-          IMG="autolycus"
+          IMG="autolycus:api"
           OWNER="$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')"
           echo "BUILD_VER=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           echo "IMG=${IMG}" >> $GITHUB_ENV
@@ -57,7 +56,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./api
           platforms: linux/amd64,linux/arm64
           push: true
           cache-from: type=gha
