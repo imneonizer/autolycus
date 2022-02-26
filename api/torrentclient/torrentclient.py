@@ -80,6 +80,17 @@ class TorrentClient:
                 return info_hash
         except Exception as e:
             print("Error from get_info_hash:", str(e))
+    
+    def clean_magnet(self, string):
+        try:
+            magnet = re.findall(r"magnet:\?xt=urn:btih:[a-zA-Z0-9]*", string)
+            if len(magnet) >= 1:
+                magnet = magnet[0].lower()
+                return magnet
+        except Exception as e:
+            print(e)
+        
+        return string
 
     def add_torrent(self, magnet, save_path):
         try:
@@ -97,6 +108,7 @@ class TorrentClient:
     def add_magnet(self, magnet, username=None, save_path=None):
         save_path = save_path or self.default_save_path
         magnet = urllib.parse.unquote(magnet)
+        magnet = self.clean_magnet(magnet)
         Hash = self.get_info_hash(magnet)
 
         if not Hash: return
