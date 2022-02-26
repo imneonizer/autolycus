@@ -157,4 +157,4 @@ class TorrentClient:
     def list_torrents(self, hashes=None, username=None):
         if hashes:
             return [self.torrent_status(Hash, username) for Hash in hashes if self.torrent_status(Hash, username)]
-        return [t.JSON for t in Torrent.find_by_username(username)][::-1]
+        return sorted([t.JSON for t in Torrent.find_by_username(username)], key=lambda k:k.get('added_time'), reverse=True)
