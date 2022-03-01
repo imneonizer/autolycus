@@ -66,9 +66,6 @@
     flex-direction: column;
 }
 
-/* .left-section-storage-indicator{
-    border: 1px solid blue;
-} */
 
 .left-section-logo {
     /* border: 1px solid red; */
@@ -128,10 +125,6 @@
 @media screen and (min-width: 0px) and (max-width: 800px) {
     .left-section-logo {
         /* border: 1px solid red; */
-        display: none;
-    }
-
-    .left-section-storage-indicator {
         display: none;
     }
 

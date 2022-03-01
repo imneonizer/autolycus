@@ -2,6 +2,7 @@
     width: 90%;
     list-style-type: none;
     padding-left: 5px;
+    border-radius: 10px;
 }
 
 .storage-indicator-text{
@@ -26,4 +27,22 @@
     -moz-transition: width 1s ease-in-out;
     -o-transition: width 1s ease-in-out;
     transition: width 1s ease-in-out;
+}
+
+@media screen and (min-width: 0px) and (max-width: 800px){
+    .storage-indicator-text{
+        display: none;
+    }
+
+    .storage-indicator-base{
+        background-color: white;
+    }
+
+    .storage-indicator{
+        padding-left: 0px;
+        padding-top: .5em;
+        margin-left: -.7em;
+        margin-bottom: -5em;
+        width: 100%;
+    }
 }

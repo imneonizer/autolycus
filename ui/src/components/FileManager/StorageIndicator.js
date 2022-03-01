@@ -20,6 +20,14 @@ class storageIndicator extends Component {
         if (isNaN(length)){
             return 1;
         } else {
+            if (length > 70.0){
+                let storageIndicator = document.getElementById('storage-indicator-progress');
+                if (length > 90.0){
+                    storageIndicator.style.backgroundColor = 'red';    
+                }else{
+                    storageIndicator.style.backgroundColor = 'orange';
+                }
+            }
             return length;
         }
     }
@@ -29,9 +37,7 @@ class storageIndicator extends Component {
             <div className="storage-indicator">
                 <p className="storage-indicator-text">{this.humanFileSize(this.props.usedBytes)} / {this.humanFileSize(this.props.totalBytes)}</p>
                 <div className="storage-indicator-base"></div>
-                <div className="storage-indicator-progress" style={{width: this.getIndicatorLength()+"%"}}></div>
-                
-                <p></p>
+                <div id='storage-indicator-progress' className="storage-indicator-progress" style={{width: this.getIndicatorLength()+"%"}}></div>
             </div>
         )
     }

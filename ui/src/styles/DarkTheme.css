@@ -39,3 +39,9 @@ body, .left-section, .right-section, .torrent-card, .right-section, .file-card, 
 .svg-black {
     filter: invert(.9);
 }
+
+@media screen and (min-width: 0px) and (max-width: 800px){
+    .storage-indicator-base{
+        background-color: black !important;
+    }
+}
