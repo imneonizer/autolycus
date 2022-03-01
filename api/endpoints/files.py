@@ -219,21 +219,24 @@ class ConvertMp4toHls(Resource):
         user = User.find_by_username(username)
         if not user: return JU.make_response(f"user '{username}' doesn't exists", 404)
         
-        if os.path.exists(file_path):
+        if os.path.exists(file_path):            
             output_file = parse_name(os.path.basename(file_path))['key']
             output_file_dirname = os.path.basename(os.path.splitext(file_path)[0])
             output_file = os.path.join(os.path.dirname(file_path), output_file_dirname, output_file+".m3u8")
             output_file = hls.convert_to_hls(file_path, output_file)
             
-            new_hls_child = {
-                'name': os.path.basename(os.path.splitext(file_path)[0]),
-                'info': parse_name(os.path.basename(file_path)),
-                'type': 'hls',
-                'path': os.path.splitext(file_path)[0],
-                'ext': ".m3u8",
-                'size': os.stat(file_path).st_size
-            }
-            return new_hls_child, 200
+            if output_file:
+                new_hls_child = {
+                    'name': os.path.basename(os.path.splitext(file_path)[0]),
+                    'info': parse_name(os.path.basename(file_path)),
+                    'type': 'hls',
+                    'path': os.path.splitext(file_path)[0],
+                    'ext': ".m3u8",
+                    'size': os.stat(file_path).st_size
+                }
+                return new_hls_child, 200
+            else:
+                return JU.make_response("conversion error", 400)
         else:
             return JU.make_response(f"file '{file_path}' doesn't exists", 404)
 
@@ -252,14 +255,16 @@ class ConvertHlstoMp4(Resource):
             output_file = os.path.join(os.path.dirname(os.path.dirname(file_path)), os.path.splitext(os.path.basename(file_path))[0]+".mp4")
             output_file = hls.convert_to_mp4(file_path, output_file)
             
-            new_mp4_child = {
-                'name': os.path.basename(os.path.splitext(file_path)[0])+".mp4",
-                'type': 'file',
-                'path': output_file,
-                'ext': ".mp4",
-                'size': os.stat(output_file).st_size
-            }
-            
-            return new_mp4_child, 200
+            if output_file:
+                new_mp4_child = {
+                    'name': os.path.basename(os.path.splitext(file_path)[0])+".mp4",
+                    'type': 'file',
+                    'path': output_file,
+                    'ext': ".mp4",
+                    'size': os.stat(output_file).st_size
+                }
+                return new_mp4_child, 200
+            else:
+                return JU.make_response("conversion error", 400)
         else:
             return JU.make_response(f"file '{file_path}' doesn't exists", 404)

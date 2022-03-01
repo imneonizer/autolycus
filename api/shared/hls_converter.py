@@ -9,7 +9,7 @@ class HlsConverter:
         self.ffprobe = ffprobe
     
     def exec(self, args):
-        args = ' '.join(inspect.cleandoc(args).split())
+        args = args.replace('\n', ' ').strip()
         command = f"{self.ffmpeg} {args}"
         return sp.check_output(command, shell=True).decode().strip().split("\n")
     
@@ -44,25 +44,28 @@ class HlsConverter:
         os.makedirs(output_dir, exist_ok=True)
         
         audio_mapping = ' '.join([f'-map 0:{i}' for i in range(len(self.get_audio_tracks(input_file))+1)])
-
-        self.exec(f""" \
-            -v error \
-            -i "{input_file}" \
-            -codec: copy \
-            -c:a copy \
-            {audio_mapping}
-            -start_number 0 \
-            -hls_time {length} \
-            -hls_list_size 0 \
-            -f hls \
-            "{output_file}"
-        """)
         
-        with open(os.path.join(output_dir, ".hlskeep"), "w") as f:
-            f.write(os.path.basename(input_file))
+        try:
+            self.exec(f""" \
+                -v error \
+                -i '{input_file}' \
+                -codec: copy \
+                -c:a copy \
+                {audio_mapping}
+                -start_number 0 \
+                -hls_time {length} \
+                -hls_list_size 0 \
+                -f hls \
+                "{output_file}"
+            """)
+            
+            with open(os.path.join(output_dir, ".hlskeep"), "w") as f:
+                f.write(os.path.basename(input_file))
         
-        if os.path.exists(output_file):
-            return output_file
+            if os.path.exists(output_file):
+                return output_file
+        except sp.CalledProcessError as e:
+            print(e)
     
     def convert_to_mp4(self, input_file, output_file):
         assert os.path.exists(input_file), f"{input_file} doesn't exists"
@@ -72,14 +75,17 @@ class HlsConverter:
         
         audio_mapping = ' '.join([f'-map 0:{i}' for i in range(len(self.get_audio_tracks(input_file))//2+1)])
         
-        self.exec(f""" \
-            -v error \
-            -i {input_file} \
-            -codec: copy -c:a copy \
-            {audio_mapping} \
-            {output_file}
-        """)
-        
+        try:
+            self.exec(f""" \
+                -v error \
+                -i "{input_file}" \
+                -codec: copy -c:a copy \
+                {audio_mapping} \
+                "{output_file}"
+            """)
+        except sp.CalledProcessError as e:
+            print(e)
+            
         if os.path.exists(output_file):
             return output_file
   

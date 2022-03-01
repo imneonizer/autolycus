@@ -85,17 +85,22 @@ class FileCard extends Component {
 
         convertMp4toHlsService(e.path).then(newHlsChild => {
             hide();
-            let alreadyPresent = false;
-            parent.children.forEach(function (item, index) {
-                if (item.type === 'hls' && item.name === newHlsChild.name){
-                    alreadyPresent = true;
-                    return;
+
+            if (newHlsChild){
+                let alreadyPresent = false;
+                parent.children.forEach(function (item, index) {
+                    if (item.type === 'hls' && item.name === newHlsChild.name){
+                        alreadyPresent = true;
+                        return;
+                    }
+                });
+                
+                if (alreadyPresent === false){
+                    parent.children.push(newHlsChild);
                 }
-              });
-            
-              if (alreadyPresent === false){
-                parent.children.push(newHlsChild);
-              }
+            }else{
+                cogoToast.error("unable to convert");
+            }
         })
     }
 
@@ -109,18 +114,22 @@ class FileCard extends Component {
         
         convertHlstoMp4Service(e).then(newMp4Child => {
             hide();
- 
-            let alreadyPresent = false;
-            parent.children.forEach(function (item, index) {
-                if (item.type === 'file' && item.name === newMp4Child.name){
-                    alreadyPresent = true;
-                    return;
-                }
-              });
 
-              if (alreadyPresent === false){
-                parent.children.push(newMp4Child);
-              }
+            if (newMp4Child){   
+                let alreadyPresent = false;
+                parent.children.forEach(function (item, index) {
+                    if (item.type === 'file' && item.name === newMp4Child.name){
+                        alreadyPresent = true;
+                        return;
+                    }
+                });
+
+                if (alreadyPresent === false){
+                    parent.children.push(newMp4Child);
+                }
+            }else{
+                cogoToast.error("unable to convert");
+            }
         })
 
     }
