@@ -1,23 +1,31 @@
 import React, { Component } from 'react';
 import "../../styles/FileManager.css";
-// import "../../styles/DarkTheme.css";
 import FileManagerViews from "./FileManagerViews";
 import FileManagerInfo from "./FileManagerInfo";
 import { FetchTorrents } from "./services/TorrentService";
 import StorageIndicator from "./StorageIndicator";
 import FetchStorageData from "./services/FetchStorageData";
+import Loader from 'react-loader-spinner';
+import ThreeDotLoader from "../ThreeDotLoader";
 
 class FileManager extends Component {
     constructor(props) {
         super(props);
-        this.state = {view: "Home", torrents: [], activeItem: {}, searchResults: [], usedBytes: 0, totalBytes: 0};
+        this.state = {
+            view: "Home",
+            torrents: [],
+            activeItem: {},
+            searchResults: [],
+            usedBytes: 0,
+            totalBytes: 0,
+            loading: true
+        };
 
         let auth = localStorage.getItem('autolycus-auth');
-
-        if (auth !== 'undefined') {
-            this.username = JSON.parse(localStorage.getItem('autolycus-auth')).username;
-        } else {
+        if (auth === undefined || auth === null) {
             this.username = 'unknown';
+        }else{
+            this.username = JSON.parse(localStorage.getItem('autolycus-auth')).username;
         }
 
         this.updateView = this.updateView.bind(this);
@@ -38,7 +46,11 @@ class FileManager extends Component {
     }
 
     componentDidMount() {
+        FetchStorageData().then(json => {this.setState(json)})
         this.storageTimer = setInterval(this.updateStorageState, 2000);
+        
+        this.updateTorrents()
+        this.setState({loading: false})
     }
 
     componentWillUnmount(){
@@ -130,6 +142,7 @@ class FileManager extends Component {
                     </div>
 
                     <div className="middle-section" id="middle-section">
+                        {this.state.loading && <ThreeDotLoader />}
                         <FileManagerViews username={this.username} updateActiveItemHover={this.updateActiveItemHover} view={this.state.view} torrents={this.state.torrents} tFetcher={this.tFetcher}/>
                     </div>
                         
