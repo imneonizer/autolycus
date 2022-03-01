@@ -11,10 +11,11 @@ function handleErrors(response) {
 
 function getAuthToken(validate=false){
     let auth = localStorage.getItem('autolycus-auth');
-    if (auth !== "undefined"){
+    if (auth === undefined || auth === null) {
+        return {access_token: ''};
+    }else{
         return JSON.parse(auth)
     }
-    return {access_token: ''};
 }
 
 function clearTokens(){
@@ -107,6 +108,8 @@ async function refreshAccessToken(){
 // refresh access token every 15 minute
 async function ValidateAuth(auto_refresh=false, interval=900){
     let auth = getAuthToken();
+    console.log(auth);
+
     return axios.get(uri()+"/auth/user-details", {
         headers: {
             'Content-Type': 'application/json',
