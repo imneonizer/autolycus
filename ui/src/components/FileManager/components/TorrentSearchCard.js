@@ -123,12 +123,12 @@ class SearchTorrent extends Component {
                 {this.state.isLoading && <ThreeDotLoader/>}
                 {this.props.searchResults && this.props.searchResults.map((item, idx) => {
                     return (
-                        <div class="torrent-search-result-card" key={idx}>
+                        <div className="torrent-search-result-card" key={idx}>
                             <div style={{display: 'flex'}}>
                                 <img className="search-result-magnet-icon svg-black" style={{paddingRight: '15px', width: '25px'}} src="/autolycus/icons/bx-magnet.svg"/>
                                 <div>
-                                    <p class="torrent-search-result-card-name" onClick={() => this.handleClick(item)}>{this.trimString(item.name, 30)}</p>
-                                    <div class="torrent-search-result-card-details">
+                                    <p className="torrent-search-result-card-name" onClick={() => this.handleClick(item)}>{this.trimString(item.name, 30)}</p>
+                                    <div className="torrent-search-result-card-details">
                                         <p>{item.size}</p>
                                         <p>↓ {item.seed}</p>
                                         <p>{item.created}</p>

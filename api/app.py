@@ -39,8 +39,10 @@ def create_app(config_name):
 
     api_bp = Blueprint('api', __name__)
     api = Api(api_bp)
-    # app.register_blueprint(api_bp, url_prefix='/api')
-    app.register_blueprint(api_bp, url_prefix='/')
+    
+    # in production url_prefix is added in nginx config
+    url_prefix = "/api" if os.environ.get('FLASK_ENVIRONMENT', 'dev') == 'dev' else "/"    
+    app.register_blueprint(api_bp, url_prefix=url_prefix)
 
     api.add_resource(Ping, '/ping')
     api.add_resource(Signup, '/auth/signup')

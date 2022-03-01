@@ -6,6 +6,9 @@ from shared.factories import db, fs, seedr
 from shared.utils import json_utils as JU
 from models.torrents import Torrent
 
+from collections import namedtuple
+import os, shutil
+
 class AddTorrent(Resource):
     @jwt_required()
     def get(self):
@@ -33,7 +36,20 @@ class RemoveTorrent(Resource):
     def get(self):
         Hash = request.args.get('hash', None)
         if not Hash: return JU.make_response("parameter '?hash=' required", 400)
+        
+        # delete torrent if exists in db
         status = seedr.remove_torrent(Hash, username=get_jwt_identity())
+        
+        # check if torrent still exists on disk
+        if not status:
+            download_path = os.path.join("/downloads", get_jwt_identity(), Hash)
+            if os.path.exists(download_path):
+                try:
+                    shutil.rmtree(download_path)
+                    if not os.path.exists(download_path):
+                        status = True
+                except: pass
+        
         if not status: return JU.make_response(f"torrent '{Hash}' not found", 404)
         return JU.make_response(f"torrent '{Hash}' removed", 200)
     
@@ -72,10 +88,18 @@ class FileStructure(Resource):
         Hash = request.args.get('hash', None)
         if not Hash: return JU.make_response("parameter '?hash=' required", 400)
         
+        # check if torrent exists in db
         torrent = Torrent.find_by_hash_and_username(Hash, username=get_jwt_identity())
+        
+        # check if torrent exists on disk
+        if not torrent:
+            download_path = os.path.join("/downloads", get_jwt_identity(), Hash)
+            if os.path.exists(download_path):
+                DummyTorrent = namedtuple('DummyTorrent', ['download_path'])
+                torrent = DummyTorrent(download_path)
+        
         if not torrent: return JU.make_response("torrent not found", 404)
 
         structure = fs.json_tree(torrent.download_path)
         if not structure: return JU.make_response("download path error", 404)
-
         return make_response(structure, 200)

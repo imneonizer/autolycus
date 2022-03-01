@@ -7,7 +7,7 @@ if [[ $1 == "--build" || $1 == "-b" ]];then
     echo "[exec] $CMD"
     $CMD
 elif [[ $1 == "--run" || $1 == "-r" ]];then
-    CMD="docker run --rm -it -v $(pwd):/app --net=host -v $(pwd)/downloads:/downloads --name $NAME --hostname $NAME $NAME bash"
+    CMD="docker run --rm -it -v $(pwd):/app --net=host --name $NAME --hostname $NAME $NAME bash"
     echo "[exec] $CMD"
     $CMD
 elif [[ $1 == "--attach" || $1 == "-a" ]];then

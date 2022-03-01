@@ -169,4 +169,39 @@ class TorrentClient:
     def list_torrents(self, hashes=None, username=None):
         if hashes:
             return [self.torrent_status(Hash, username) for Hash in hashes if self.torrent_status(Hash, username)]
-        return sorted([t.JSON for t in Torrent.find_by_username(username)], key=lambda k:k.get('added_time'), reverse=True)
+        
+        torrent_db = sorted([t.JSON for t in Torrent.find_by_username(username)], key=lambda k:k.get('added_time'), reverse=True)
+        
+        torrent_db_hash = [x.get('hash') for x in torrent_db]
+        torrent_disk_hash = os.listdir(os.path.join(self.default_save_path, username))
+        
+        # append unknown disk files which are removed from db
+        for h in torrent_disk_hash:
+            if h not in torrent_db_hash:
+                download_path = os.path.join(self.default_save_path, username, h)
+                download_size = sum(x.stat().st_size for x in os.scandir(download_path) if x.is_file())
+                try: name = os.listdir(download_path)[0]
+                except: name = 'Unknown'
+                
+                torrent_db.append({
+                    "added_time": os.path.getmtime(download_path),
+                    "download_path": download_path,
+                    "download_speed": 0,
+                    "downloaded_bytes": download_size,
+                    "hash": h,
+                    "magnet": 'magnet:?xt=urn:btih:'+h,
+                    "is_finished": True,
+                    "is_paused": False,
+                    "name": name,
+                    "username": username,
+                    "num_connections": -1,
+                    "num_peers": -1,
+                    "num_seeds": -1,
+                    "num_trackers": -1,
+                    "progress": 100,
+                    "queue_position": -1,
+                    "total_bytes": download_size,
+                    "upload_speed": 0
+                })
+        
+        return torrent_db
