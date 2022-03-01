@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import {getAuthToken} from "./FileManager/services/FileService";
-import {uri} from "../uri";
 import '../styles/VideoPlayer.css';
 
 class VideoPlayer extends Component {

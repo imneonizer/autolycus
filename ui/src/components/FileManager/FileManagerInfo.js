@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Home from "./components/Home";
-import {AuthLogout} from "../../services/LoginService";
 
 class FileManagerInfo extends Component {
     constructor(props){

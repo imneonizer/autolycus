@@ -7,7 +7,6 @@ import {getFileDetails} from "../services/FileService";
 import cogoToast from 'cogo-toast';
 import {getAuthToken} from "../services/FileService";
 import {uri} from "../../../uri";
-import VideoPlayer from "../../VideoPlayer";
 
 class Home extends Component {
     constructor(props) {
@@ -88,7 +87,7 @@ class Home extends Component {
     
     addItem(parent, child, data='none'){
         if (data === 'none'){
-            var data = this.state.data;
+            data = this.state.data;
         }
 
         if (data['children']){

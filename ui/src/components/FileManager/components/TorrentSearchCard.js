@@ -117,7 +117,7 @@ class SearchTorrent extends Component {
             <div>
                 <div className="add-magnet-div">
                     <input id="search-magnet-box" type="text" placeholder="Search Torrent" autoComplete="off" onKeyPress={event => {if (event.key === 'Enter') {this.handleTorrentSearch()}}} />
-                    <img className="add-magnet-icon" src="/autolycus/icons/bx-search.svg" onClick={this.handleTorrentSearch}/>
+                    <img alt='' className="add-magnet-icon" src="/autolycus/icons/bx-search.svg" onClick={this.handleTorrentSearch}/>
                 </div>
 
                 {this.state.isLoading && <ThreeDotLoader/>}
@@ -125,7 +125,7 @@ class SearchTorrent extends Component {
                     return (
                         <div className="torrent-search-result-card" key={idx}>
                             <div style={{display: 'flex'}}>
-                                <img className="search-result-magnet-icon svg-black" style={{paddingRight: '15px', width: '25px'}} src="/autolycus/icons/bx-magnet.svg"/>
+                                <img alt='' className="search-result-magnet-icon svg-black" style={{paddingRight: '15px', width: '25px'}} src="/autolycus/icons/bx-magnet.svg"/>
                                 <div>
                                     <p className="torrent-search-result-card-name" onClick={() => this.handleClick(item)}>{this.trimString(item.name, 30)}</p>
                                     <div className="torrent-search-result-card-details">

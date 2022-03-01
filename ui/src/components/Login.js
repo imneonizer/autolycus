@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {withRouter} from "react-router-dom";
 import '../styles/Login.css';
-import {AuthLogin, ValidateUsername, clearTokens} from '../services/LoginService';
+import {AuthLogin} from '../services/LoginService';
 import { DoesUserExists, DoesEmailExists, AuthSignup } from '../services/SignupService';
-import {uri} from "../uri";
 
 class Login extends React.Component {
     constructor(props) {
@@ -93,7 +92,7 @@ class Login extends React.Component {
                     
                     <div className="password-forgot-combined">
                         <p>Password</p>
-                        <a href="#" id="forgot-password-text" className="forgot-password">Forgot password ?</a>
+                        <a href="/" id="forgot-password-text" className="forgot-password">Forgot password ?</a>
                     </div>
 
                     <input type="password" id="login-password-box"value={this.state.password} onChange={this.handleChange('password')} placeholder="Password"></input>

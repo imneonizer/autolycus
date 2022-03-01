@@ -169,10 +169,10 @@ class FileCard extends Component {
     handlePaste(item){
         let path = JSON.parse(window.localStorage.getItem('autolycus_copy_path'));
         if (path){
-            if (item.type === "directory" && item.path != path.item.path){
+            if (item.type === "directory" && item.path !== path.item.path){
                 copyFile(path.item.path, item.path, path.iscut).then(response => {
                     response.json().then(json => {
-                        if (response.status == 200){
+                        if (response.status === 200){
                             this.props.addItem(item, path.item);
                             cogoToast.success("Pasted", {position: "top-center", hideAfter: 1});
                             if (path.iscut){
@@ -313,7 +313,7 @@ class FileCard extends Component {
             <div>
                 <div className="file-card" style={{cursor: "pointer"}} onClick={() => this.props.goBack()}>
                     <div className="file-card-info">
-                        <img style={{width: "20px"}} className="svg-black" src="/autolycus/icons/up-arrow.svg"/>
+                        <img alt='' style={{width: "20px"}} className="svg-black" src="/autolycus/icons/up-arrow.svg"/>
                         <p className="file-card-wrapper file-card-info-size">Folder Up</p>
                     </div>
                 </div>
@@ -323,9 +323,9 @@ class FileCard extends Component {
                     return (
                         <div className="file-card" id="file-card" key={idx}>
                             <div className="file-card-info">
-                                {item.type === "directory" && <img src="/autolycus/icons/mac-folder-icon.svg"/>}
-                                {item.type === "hls" && <img style={{width:"32px"}} src="/autolycus/icons/hls-file-icon.svg"/>}
-                                {item.type === "file" && <img style={{width:"32px"}} src={this.getFileIcon(item.ext)}/>}
+                                {item.type === "directory" && <img alt='' src="/autolycus/icons/mac-folder-icon.svg"/>}
+                                {item.type === "hls" && <img alt='' style={{width:"32px"}} src="/autolycus/icons/hls-file-icon.svg"/>}
+                                {item.type === "file" && <img alt='' style={{width:"32px"}} src={this.getFileIcon(item.ext)}/>}
 
                                 <div className="file-card-wrapper">
                                     <p className="file-card-info-name" onClick={() => this.props.updateCard(item, this.props.data)}>{this.trimString(item.name, 30)}</p>
@@ -345,51 +345,51 @@ class FileCard extends Component {
                                     
                                     <div style={{transform: "translate(0px, "+this.state.MenuTranslateY+")"}} className="torrent-card-menu-contents">
                                         <div onClick={() => this.handleDownload(item)} className="torrent-card-menu-contents-items">
-                                            <img className="svg-black" src="/autolycus/icons/bxs-cloud-download.svg"/>
+                                            <img alt='' className="svg-black" src="/autolycus/icons/bxs-cloud-download.svg"/>
                                             <p>Download</p>
                                         </div>
                                         
                                         <div onClick={() => this.handleDownload(item, true)} className="torrent-card-menu-contents-items">
-                                            <img className="svg-black" src="/autolycus/icons/bx-link-alt.svg"/>
+                                            <img alt='' className="svg-black" src="/autolycus/icons/bx-link-alt.svg"/>
                                             <p>Copy Link</p>
                                         </div>
 
                                         {[".mp4", ".mkv"].includes(item.ext) && 
                                             <div onClick={() => this.handleConvertMp4toHls(this.props.data, item)} className="torrent-card-menu-contents-items">
-                                                <img className="svg-black" src="/autolycus/icons/bx-convert-hls.svg"/>
+                                                <img alt='' className="svg-black" src="/autolycus/icons/bx-convert-hls.svg"/>
                                                 <p>Make HLS</p>
                                             </div>
                                         }
 
                                         {[".m3u8"].includes(item.ext) && 
                                             <div onClick={() => this.handleConvertHlstoMp4(this.props.data, item)} className="torrent-card-menu-contents-items">
-                                                <img className="svg-black" src="/autolycus/icons/bx-convert-hls.svg"/>
+                                                <img alt='' className="svg-black" src="/autolycus/icons/bx-convert-hls.svg"/>
                                                 <p>Make MP4</p>
                                             </div>
                                         }
 
                                         <div onClick={() => this.handleRename(item)} className="torrent-card-menu-contents-items">
-                                            <img className="svg-black" src="/autolycus/icons/bx-edit-alt.svg"/>
+                                            <img alt='' className="svg-black" src="/autolycus/icons/bx-edit-alt.svg"/>
                                             <p>Rename</p>
                                         </div>
 
                                         <div onClick={() => this.handleCopy(item)} className="torrent-card-menu-contents-items">
-                                            <img className="svg-black" src="/autolycus/icons/bx-copy-alt.svg"/>
+                                            <img alt='' className="svg-black" src="/autolycus/icons/bx-copy-alt.svg"/>
                                             <p>Copy</p>
                                         </div>
 
                                         <div onClick={() => this.handleCopy(item, true)} className="torrent-card-menu-contents-items">
-                                            <img className="svg-black" src="/autolycus/icons/bx-cut.svg"/>
+                                            <img alt='' className="svg-black" src="/autolycus/icons/bx-cut.svg"/>
                                             <p>Cut</p>
                                         </div>
 
                                         <div onClick={() => this.handlePaste(item)} className="torrent-card-menu-contents-items">
-                                            <img className="svg-black" src="/autolycus/icons/bx-paste.svg"/>
+                                            <img alt='' className="svg-black" src="/autolycus/icons/bx-paste.svg"/>
                                             <p>Paste</p>
                                         </div>
 
                                         <div onClick={() => this.handleDelete(item)} className="torrent-card-menu-contents-items">
-                                            <img className="svg-black" src="/autolycus/icons/bx-trash.svg"/>
+                                            <img alt='' className="svg-black" src="/autolycus/icons/bx-trash.svg"/>
                                             <p>Delete</p>
                                         </div>
                                     </div>

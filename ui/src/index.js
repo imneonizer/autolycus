@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.css';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from './views/Home';
-import ConfigureServer from './views/ConfigureServer';
 import './styles/DarkTheme.css';
 
 function App () {

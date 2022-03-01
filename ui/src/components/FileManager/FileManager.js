@@ -5,7 +5,6 @@ import FileManagerInfo from "./FileManagerInfo";
 import { FetchTorrents } from "./services/TorrentService";
 import StorageIndicator from "./StorageIndicator";
 import FetchStorageData from "./services/FetchStorageData";
-import Loader from 'react-loader-spinner';
 import ThreeDotLoader from "../ThreeDotLoader";
 
 class FileManager extends Component {
@@ -106,32 +105,32 @@ class FileManager extends Component {
                         <div className="left-section-menu">
 
                             <div className="left-section-logo">
-                                <img className="left-section-logo-icon svg-black" width="35px" src="/autolycus/icons/bx-meteor.svg"/>
+                                <img alt='' className="left-section-logo-icon svg-black" width="35px" src="/autolycus/icons/bx-meteor.svg"/>
                                 <h3 className="left-section-logo-text">Autolycus</h3>
                             </div>
 
                             <div className="left-section-menu-items" id="HomeNavButton" onClick={() => this.updateView('Home')}>
-                                <img className="left-section-menu-icons svg-black" src="/autolycus/icons/bx-home-alt.svg"/>
+                                <img alt='' className="left-section-menu-icons svg-black" src="/autolycus/icons/bx-home-alt.svg"/>
                                 <p style={{backgroundColor: "none"}} className="left-section-menu-texts">Home</p>
                             </div>
 
                             <div className="left-section-menu-items" id="SearchTorrentNavButton" onClick={() => this.updateView('SearchTorrent')}>
-                                <img className="left-section-menu-icons svg-black" src="/autolycus/icons/bx-search-alt.svg"/>
+                                <img alt='' className="left-section-menu-icons svg-black" src="/autolycus/icons/bx-search-alt.svg"/>
                                 <p className="left-section-menu-texts">Search</p>
                             </div>
                                 
                             <div className="left-section-menu-items" id="RecycleBinNavButton" onClick={() => this.updateView('RecycleBin')}>
-                                <img className="left-section-menu-icons svg-black" src="/autolycus/icons/bx-trash.svg"/>
+                                <img alt='' className="left-section-menu-icons svg-black" src="/autolycus/icons/bx-trash.svg"/>
                                 <p className="left-section-menu-texts">Recycle bin</p>
                             </div>
                         
                             <div className="left-section-menu-items" id="HelpNavButton" onClick={() => this.updateView('Help')}>
-                                <img className="left-section-menu-icons svg-black" src="/autolycus/icons/bx-help-circle.svg"/>
+                                <img alt='' className="left-section-menu-icons svg-black" src="/autolycus/icons/bx-help-circle.svg"/>
                                 <p className="left-section-menu-texts">Help</p>
                             </div>
 
                             <div className="left-section-menu-items" id="SettingsNavButton" onClick={() => this.updateView('Settings')}>
-                                <img className="left-section-menu-icons svg-black" src="/autolycus/icons/bx-slider-alt.svg"/>
+                                <img alt='' className="left-section-menu-icons svg-black" src="/autolycus/icons/bx-slider-alt.svg"/>
                                 <p className="left-section-menu-texts">Settings</p>
                             </div>
 

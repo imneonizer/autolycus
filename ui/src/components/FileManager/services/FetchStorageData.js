@@ -1,5 +1,4 @@
 import {uri} from "../../../uri";
-import {ValidateAuth} from "../../../services/LoginService";
 import axios from 'axios';
 
 function getAuthToken(validate=false){

@@ -1,5 +1,4 @@
 import {uri} from "../../../uri";
-import {ValidateAuth} from "../../../services/LoginService";
 
 function getAuthToken(validate=false){
     let auth = localStorage.getItem('autolycus-auth');

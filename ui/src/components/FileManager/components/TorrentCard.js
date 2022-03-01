@@ -114,10 +114,10 @@ class TorrentCard extends Component {
         let item = {path: this.props.data.download_path, type: 'directory'};
         let path = JSON.parse(window.localStorage.getItem('autolycus_copy_path'));
         if (path.item){
-            if (item.type === "directory" && item.path != path.item.path){
+            if (item.type === "directory" && item.path !== path.item.path){
                 copyFile(path.item.path, item.path, path.iscut).then(response => {
                     response.json().then(json => {
-                        if (response.status == 200){
+                        if (response.status === 200){
                             cogoToast.success("Pasted", {position: "top-center", hideAfter: 1});
                             window.localStorage.removeItem('autolycus_copy_path');
                         }else{
@@ -139,7 +139,7 @@ class TorrentCard extends Component {
         return(
             <div className="torrent-card" id="torrent-card" onMouseOver={() => this.props.updateActiveItemHover(this.props.data)} onMouseOut={() => this.props.updateActiveItemHover()}>
                 <div className="torrent-card-info" onClick={() => this.props.cardHandler(this.props.data)}>
-                    <img src="/autolycus/icons/mac-folder-icon.svg"/>
+                    <img alt='' src="/autolycus/icons/mac-folder-icon.svg"/>
                     <div className="torrent-card-wrapper">
                         <p className="torrent-card-info-name">{this.trimString(this.props.data.name, 30)}</p>
                         {!this.props.data.is_finished && <Progress percent={this.props.data.progress} status="active" />}
@@ -156,37 +156,37 @@ class TorrentCard extends Component {
                     {this.state.threeDotMenuVisible && (
                         <div className="torrent-card-menu-contents">
                             <div onClick={() => this.handleDownload(this.props.data, true)} className="torrent-card-menu-contents-items">
-                                <img className="svg-black" src="/autolycus/icons/bxs-cloud-download.svg"/>
+                                <img alt='' className="svg-black" src="/autolycus/icons/bxs-cloud-download.svg"/>
                                 <p>Download</p>
                             </div>
                             
                             <div className="torrent-card-menu-contents-items">
-                                <img className="svg-black" src="/autolycus/icons/bx-link-alt.svg"/>
+                                <img alt='' className="svg-black" src="/autolycus/icons/bx-link-alt.svg"/>
                                 <p>Copy Link</p>
                             </div>
 
                             <div className="torrent-card-menu-contents-items">
-                                <img className="svg-black" src="/autolycus/icons/bx-edit-alt.svg"/>
+                                <img alt='' className="svg-black" src="/autolycus/icons/bx-edit-alt.svg"/>
                                 <p>Rename</p>
                             </div>
 
                             <div className="torrent-card-menu-contents-items">
-                                <img className="svg-black" className="svg-black" src="/autolycus/icons/bx-copy-alt.svg"/>
+                                <img alt='' className="svg-black" src="/autolycus/icons/bx-copy-alt.svg"/>
                                 <p>Copy</p>
                             </div>
 
                             <div className="torrent-card-menu-contents-items">
-                                <img className="svg-black" src="/autolycus/icons/bx-cut.svg"/>
+                                <img alt='' className="svg-black" src="/autolycus/icons/bx-cut.svg"/>
                                 <p>Cut</p>
                             </div>
 
                             <div onClick={() => this.handlePaste()} className="torrent-card-menu-contents-items">
-                                <img className="svg-black" src="/autolycus/icons/bx-paste.svg"/>
+                                <img alt='' className="svg-black" src="/autolycus/icons/bx-paste.svg"/>
                                 <p>Paste</p>
                             </div>
 
                             <div onClick={this.handleDelete} className="torrent-card-menu-contents-items">
-                                <img className="svg-black" src="/autolycus/icons/bx-trash.svg"/>
+                                <img alt='' className="svg-black" src="/autolycus/icons/bx-trash.svg"/>
                                 <p>Delete</p>
                             </div>
                         </div>

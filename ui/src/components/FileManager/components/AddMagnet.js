@@ -21,7 +21,7 @@ class AddMagnet extends Component {
             <div>
                 <div className="add-magnet-div">
                     <input id="add-magnet-box" type="text" autoComplete="off" placeholder="Add Magnet Link" onKeyPress={event => {if (event.key === 'Enter') {this.handleMagnetSubmit()}}} />
-                    <img className="add-magnet-icon" src="/autolycus/icons/bxs-file-plus.svg" onClick={this.handleMagnetSubmit}/>
+                    <img alt='' className="add-magnet-icon" src="/autolycus/icons/bxs-file-plus.svg" onClick={this.handleMagnetSubmit}/>
                 </div>
                 {this.props.videoUrl && <VideoPlayer src={this.props.videoUrl} meta={this.props.videoMeta} />}
             </div>

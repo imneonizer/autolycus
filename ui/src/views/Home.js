@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Route} from "react-router-dom";
 import '../styles/Home.css';
 import Login from '../components/Login'
-import {ValidateAuth, clearTokens, refreshAccessToken} from "../services/LoginService";
+import {ValidateAuth} from "../services/LoginService";
 import ThreeDotLoader from "../components/ThreeDotLoader";
 import Dashboard from "./Dashboard";
 import {uri} from "../uri";
