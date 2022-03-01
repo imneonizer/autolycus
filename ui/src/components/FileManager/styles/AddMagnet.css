@@ -3,7 +3,7 @@
     display: flex;
 }
 
-#add-magnet-box {
+#add-magnet-box, #search-magnet-box {
     border: 0px solid red;
     padding: 20px;
     margin: 0px;
