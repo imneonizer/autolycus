@@ -2,6 +2,7 @@ from flask import request, send_file
 from flask_restful import Resource
 from shared.utils import json_utils as JU
 from models.public_urls import PublicURLS
+from shared.hls_converter import hls
 
 import time
 import os
@@ -17,8 +18,15 @@ class PublicHls(Resource):
         file_path = os.path.join(query.file_path, filename)
         if not os.path.exists(file_path): return JU.make_response(f"invalid path: {file_path}", 400)
         
-        if request.args.get('download', None):
-            return JU.make_response(f"hls needs to be converted to mp4 first", 200)
+        if request.args.get('download', None):        
+            if os.path.exists(file_path):
+                output_file = os.path.join(os.path.dirname(os.path.dirname(file_path)), os.path.splitext(os.path.basename(file_path))[0]+".mp4")
+                output_file = hls.convert_to_mp4(file_path, output_file)
+            
+            if output_file:
+                return send_file(output_file, mimetype='application/octet-stream', attachment_filename=os.path.basename(output_file), as_attachment=True)
+            else:
+                return JU.make_response("conversion error", 400)
         
         return send_file(file_path, mimetype='application/octet-stream', attachment_filename=os.path.basename(filename))
     
