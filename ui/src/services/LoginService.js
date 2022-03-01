@@ -108,7 +108,6 @@ async function refreshAccessToken(){
 // refresh access token every 15 minute
 async function ValidateAuth(auto_refresh=false, interval=900){
     let auth = getAuthToken();
-    console.log(auth);
 
     return axios.get(uri()+"/auth/user-details", {
         headers: {
