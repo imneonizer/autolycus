@@ -16,7 +16,7 @@ class SearchTorrent extends Component {
     }
 
     handleTorrentSearch(e){
-        let inputBox = document.getElementById("add-magnet-box");
+        let inputBox = document.getElementById("search-magnet-box");
         if (inputBox.value){
             this.setState({isLoading: true});
             this.props.updateSearchResults([]);
