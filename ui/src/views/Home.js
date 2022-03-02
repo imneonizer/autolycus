@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Route} from "react-router-dom";
 import '../styles/Home.css';
+import '../styles/Carousel.css';
 import Login from '../components/Login'
 import {ValidateAuth} from "../services/LoginService";
 import ThreeDotLoader from "../components/ThreeDotLoader";
@@ -11,7 +12,7 @@ import ConfigureServer from '../views/ConfigureServer';
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.state = {loading: true, authorized: false, apiDown: false};
+        this.state = {loading: true, authorized: false, apiDown: false, carouselImage: ''};
         this.pingAPI = this.pingAPI.bind(this);
         this.timer = null;
 
@@ -54,6 +55,10 @@ class Home extends Component {
         
     }
 
+    handleCarousel = (url) => {
+        this.setState({carouselImage: url})
+    }
+
     render () {
         if (this.state.apiDown){
             return (<ConfigureServer />)
@@ -65,7 +70,14 @@ class Home extends Component {
             return (
                 <div>
                     <div className="home-section">
-                        <div className="carousel-section"></div>
+                        <div className="carousel-section">
+                            <div className="carousel-image-box">
+                                <img src={this.state.carouselImage}></img>
+                            </div>
+                            <div className="carousel-switcher">
+                                {/* <div className="carousel-circle-button" onClick={() => this.handleCarousel("https://via.placeholder.com/600")} /> */}
+                            </div>
+                        </div>
                         <div className="login-section">
                             <div className="login-form">
                                 <Login />
