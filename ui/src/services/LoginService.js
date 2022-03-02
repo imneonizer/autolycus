@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function getAuthToken(validate=false){
     let auth = localStorage.getItem('autolycus-auth');
-    if (auth === undefined || auth === null) {
+    if (auth === undefined || auth === null || auth === 'undefined' ) {
         return {access_token: ''};
     }else{
         return JSON.parse(auth)
