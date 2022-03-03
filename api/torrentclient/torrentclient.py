@@ -8,6 +8,8 @@ import urllib.parse
 from models.torrents import Torrent
 import re
 
+from shared.utils import get_dir_size
+
 class TorrentClient:
     def __init__(self, app=None, default_save_path="/downloads"):
         self.app = app
@@ -34,7 +36,11 @@ class TorrentClient:
                         s = t.status()
                         Hash = str(s.info_hash).lower()
                         torrent = Torrent.find_by_hash(Hash)
-                        if not torrent: continue
+                        if not torrent:
+                            # forcefully remove from lt_session
+                            self.lt_session.remove_torrent(t)
+                            self.remove_path(t.save_path())
+                            continue
 
                         torrent.update_to_db(Hash, dict(
                             download_speed=s.download_rate,
@@ -179,7 +185,7 @@ class TorrentClient:
         for h in torrent_disk_hash:
             if h not in torrent_db_hash:
                 download_path = os.path.join(self.default_save_path, username, h)
-                download_size = sum(x.stat().st_size for x in os.scandir(download_path) if x.is_file())
+                download_size = get_dir_size(download_path)
                 try: name = os.listdir(download_path)[0]
                 except: name = 'Unknown'
                 
