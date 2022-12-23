@@ -56,6 +56,24 @@
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
+**Note:**
+
+- This project started as a personal project to learn about react and docker. This was my first time working with react so the code might not be the best, I have certainly learned a lot from this project and maintaining or updating it is just too much work for me, so I have decided to open source it.
+
+- I have been using [qBittorrent](https://www.qbittorrent.org/) for a long time now, but I always felt that it was missing something, I wanted to be able to stream the content from my server remotely, so I decided to build this application.
+
+- I am not updating this project anymore, but I have plans to develop a new version of this project in the future, I will be using [Next.js](https://nextjs.org/) for the frontend, [FastAPI](https://fastapi.tiangolo.com/) for the backend with [TailwindCSS](https://tailwindcss.com/) for styling and MongoDB for the database.
+
+- Currently this project sends a get request at fixed intervals to get the updates, that's not the best way to do it, I will be using web sockets to get real time updates.
+
+- I have already started to build the core of the application as a separate module, you can check it out [here](https://github.com/imneonizer/libtorrentx) (It's able to utilize the full potential of libtorrent and is blazing fast).
+
+- `libtorrentx` also supports pause and resume of downloads, so you can pause the download and resume it later, and there will be a caching mechanism so that you don't have to download the entire file again if it's already downloaded by other users.
+
+- The libtorrent module in this repository is now updated to use more connection threads, so that the download speed is increased (Make sure to use full magnet uri which also includes the trackers).
+
+
+
 
 ![App Home](images/mobile-views-combined.png)
 

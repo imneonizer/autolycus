@@ -1,4 +1,4 @@
-let API_URL = 'http://localhost:5000/api'
+let API_URL = '/api'
 
 function uri(){
     let uri = localStorage.getItem('autolycus-uri');
