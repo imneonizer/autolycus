@@ -1,3 +1,5 @@
+A new version is in active development and is available here https://github.com/algofly-oss/autolycus
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
@@ -57,6 +59,8 @@
 
 ## About The Project
 **Note:**
+
+- A new version is in active development and is available here https://github.com/algofly-oss/autolycus
 
 - This project started as a personal project to learn about react and docker. This was my first time working with react so the code might not be the best, I have certainly learned a lot from this project and maintaining or updating it is just too much work for me, so I have decided to open source it.
 
