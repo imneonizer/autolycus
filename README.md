@@ -23,7 +23,7 @@ A new version is in active development and is available here https://github.com/
     <a href="https://github.com/imneonizer/autolycus"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://youtu.be/A64dRyOJoqw">View Demo</a>
+    <a href="https://www.youtube.com/watch?v=iPUBuC5M-bI">View Demo</a>
     ·
     <a href="https://github.com/imneonizer/autolycus/issues">Report Bug</a>
     ·
